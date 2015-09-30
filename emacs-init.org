@@ -3,6 +3,12 @@
 #+EMAIL: mohsenil85@gmail.com 
 #+OPTIONS: toc:3 num:nil ^:nil
 
+I used `brew cask install emacs-mac` to get this version of emacs
+* Load Custom file
+this file is written to by m-x customize
+#+BEGIN_SRC emacs-lisp
+(require 'custom)
+#+END_SRC 
 * Packages
 ** Configure package archives
 Use MELPA and the org archives. Put them first to avoid installed gnu
@@ -574,12 +580,10 @@ configuration
 
 
 
-* Key Bindings
 * Slime
     ** fill out
 
 * OSX specific 
-  taken from prelude-osx.el link
 handle meta as command
   #+BEGIN_SRC emacs=lisp
 (setq mac-command-modifier 'super)
@@ -592,6 +596,15 @@ use pbcopy.el
       :config
       (turn-on-pbcopy))
 
+  #+END_SRC
+toggle fullscreen
+  #+BEGIN_SRC emacs=lisp
+(defun toggle-fullscreen ()
+  "Toggle full screen"
+  (interactive)
+  (set-frame-parameter
+     nil 'fullscreen
+     (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
   #+END_SRC
 
 * PROGRAMMING
@@ -710,13 +723,6 @@ version, perhaps from the emacs-starter-kit prior to that.
 ** Auto-fill (wrap) in text modes.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-#+END_SRC
-** Allow narrowing
-This allows you to focus in on a part of a file and make your buffer
-only show this part. Useful for doing buffer global search and
-replace, for example, when you only want to impact a part of a file.
-#+BEGIN_SRC emacs-lisp
-(put 'narrow-to-region 'disabled nil)
 #+END_SRC
 ** Dealing with and cleanup of whitespace
 Helper function for cleaning whitespace from buffers.
@@ -914,6 +920,12 @@ with a trailing =~= turd.
 #+END_SRC
 
 * UI
+** inital frame size
+   use odd numbers
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(height . 51 )) 
+(add-to-list 'default-frame-alist '(width . 181 )) 
+#+END_SRC
 ** tool bars, menu bars, and pop ups
 #+BEGIN_SRC emacs-lisp
 (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
