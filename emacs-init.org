@@ -1,41 +1,202 @@
-#+TITLE: Emacs Configuration
-#+AUTHOR: Seth Falcon
-#+EMAIL: seth@userprimary.net
+#+TITLE: My Special Emacs Configuration
+#+AUTHOR: logan mohseni
+#+EMAIL: mohsenil85@gmail.com 
 #+OPTIONS: toc:3 num:nil ^:nil
+
+* Packages
+** Configure package archives
+Use MELPA and the org archives. Put them first to avoid installed gnu
+packages if there are newer ones from melpa available.
 
-# table of contents down to level 2
-# no section numbers
-# don't use TeX syntax for sub and superscripts.
-# See http://orgmode.org/manual/Export-options.html
+If we have a net connection, we'll refresh the package list on
+startup.
 
-* Emacs Configuration in Org-Mode
-  Why? Because I needed to earn another nerd merit badge; Because I
-  had declared emacs config bankcrupcy and needed to rewrite things
-  anyway; Because while I liked the tidiness of the each thing configured in its
-  own file approach (e.g. emacs-prelude), I find the numerous files
-  (each with license header in the prelude case) to end feeling
-  cluttered. So having the config in a single file keeps things
-  simple. The org-mode format allows things to be labeled, documented,
-  and folded for easier maintenance.
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/"))
 
-  The whole thing is driven by the following =init.el=
+  (add-to-list 'package-archives
+               '("org" . "http://orgmode.org/elpa/"))
 
-  #+begin_example
-  ;; init.el for this setup. Must use Emacs 24
-  (org-babel-load-file
-  (expand-file-name "emacs-init.org"
-                   user-emacs-directory))
-  #+end_example
+  (setq my-onlinep nil)
+  (unless
+      (condition-case nil
+          (delete-process
+           (make-network-process
+            :name "my-check-internet"
+            :host "melpa.milkbox.net"
+            :service 80))
+        (error t))
+    (setq my-onlinep t))
 
-  Customizations set using Emacs' customization system go here.
-  #+BEGIN_SRC emacs-lisp
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  #+END_SRC
+(package-initialize)
+;  (when my-onlinep
+;    (package-refresh-contents)
+;    (package-initialize))
+#+END_SRC
+** Setup use-package
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "~/.emacs.d/vendor/use-package")
+  (require 'use-package)
+#+END_SRC
+** Packages and their configuration
+   To force a package to get installed if it isn't already available, add
+   =:ensure=. To provide configuration you can use either =:init= or
+   =:config=. The =:init= form runs even when package loading is
+   deferred. The =:config= form *only* runs after the module has been
+   loaded (so might be more appropriate for calling functions defined in
+   the module, e.g.)
+   
+   There are helpers to =:bind= keys, setup =:mode= hooks, and modify
+   =:load-path=.
+   evil leader is required before evil
+    #+BEGIN_SRC emacs-lisp
+(use-package evil-leader
+:ensure
+:config
+(progn
+(global-evil-leader-mode 1)
+(evil-leader/set-leader ",")))
+    #+END_SRC
+   main evil
+    #+BEGIN_SRC emacs-lisp
+    (use-package evil
+      :ensure
+      :config
+      (evil-mode 1))
+    #+END_SRC
+*** tao theme
+    #+BEGIN_SRC emacs-lisp
+    (use-package basic-theme :ensure)
+    (load-theme 'basic)
+
+    #+END_SRC
+*** TODO helm from tuhdo
+*** yasnippets everywere 
+*** page break lines
+        #+BEGIN_SRC emacs-lisp
+    (use-package page-break-lines
+      :ensure
+      :config
+      (global-page-break-lines-mode))
+    #+END_SRC
+
+*** Various edit modes
+    #+BEGIN_SRC emacs-lisp :tangle yes
+(use-package ag :ensure)
+(use-package markdown-mode :ensure)
+;;(use-package paredit :ensure)
+    #+END_SRC
+*** org-mode 
+    Since use-package detects the version of org that comes with Emacs, I
+    ended up running an install from MELPA manually. I've also cloned the
+    org git repo into the vendor dir to have access to the contribs.
+    #+BEGIN_SRC emacs-lisp
+(use-package org
+  :ensure
+  :mode ("\\.org$" . org-mode)
+  :load-path "~/.emacs.d/vendor/org-mode/contrib/lisp"
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb))
+  :init
+  (setq
+   org-directory "~/org"
+   org-mobile-inbox-for-pull "~/org/from-mobile.org"
+   org-mobile-directory "~/Dropbox/MobileOrg"
+   org-agenda-files (quote ("~/org/logan.org"))
+   org-enforce-todo-dependencies t
+   org-velocity-bucket "~/org/solutions.org"
+   org-default-notes-file (concat org-directory "/notes.org")
+   org-log-done t
+   ;; this prevents org-mode from adding leading whitespace to code
+   ;; blocks after editing
+   org-src-preserve-indentation t)
+  
+  ;; where to refile
+  (setq org-refile-targets
+        '((nil . (:level . 1))
+          ("solutions.org" . (:level . 1))
+          ("seth.org" . (:level . 1))
+          ("seth-sometime.org" . (:level . 1))
+          ("seth-ref.org" . (:level . 1))))
+  
+  (setq org-refile-use-outline-path 'file)
+  )
+
+(use-package org-velocity
+  :bind (("C-c 0" . org-velocity-read))
+  )
+
+(defun my/org-capture ()
+  (interactive)
+  (org-capture nil "j"))
+
+(defun my/one-on-one ()
+    (interactive)
+    (with-temp-buffer
+      (setq default-directory "~/Notebook/org/1:1")
+      (call-interactively 'ido-find-file)
+      (setq current-one-on-one (buffer-file-name))
+      (org-capture nil "x")))
+
+(defun my/meeting ()
+    (interactive)
+    (with-temp-buffer
+      (setq default-directory "~/Notebook/org/meetings")
+      (call-interactively 'ido-find-file)
+      (setq current-one-on-one (buffer-file-name))
+      (org-capture nil "m")))
+
+(use-package org-capture
+  :bind (("C-c 1" . my/org-capture)
+         ("C-c 2" . my/one-on-one)
+         ("C-c 3" . org-capture)
+         ("C-c 4" . my/meeting)
+         )
+  :init
+  (setq
+   ;; capture setup
+   org-capture-templates
+   '(("t" "Todo" entry
+      (file+headline (concat org-directory "/seth.org") "Next Action")
+      "* TODO %?\n  %i\n  %a")
+     ("s" "Solution" entry
+      (file+headline (concat org-directory "/solutions.org"))
+      "* %?\nEntered on %U\n  %i\n  %a")
+     ("j" "Journal" entry
+      (file (concat org-directory "/journal.org"))
+      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n")
+     ("z" "Testing" entry
+      (file (concat org-directory "/test-cap.org"))
+      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n")
+     ("x" "1:1 Note" entry
+      (file current-one-on-one)
+      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n" :prepend t :unnarrowed t)
+     ("m" "Meeting Notes" entry
+      (file current-meeting)
+      "* [%<%d-%b-%Y %H:%M>] %?\n** Attendees\n** Notes%i\n" :prepend t :unnarrowed t)
+     ("f" "Journal with file link" entry
+      (file+datetree (concat org-directory "/journal.org"))
+      "* [%<%H:%M>] %?\n%i\n%a\n")
+     )
+   )
+  )
+
+    #+END_SRC
+    
+
 * Defuns
 Helper functions to use either in an editing session or to help with
 configuration
 #+BEGIN_SRC emacs-lisp
 (require 'cl)
+
+(defun save-init-org ()
+(org-babel-load-file
+ (expand-file-name "emacs-init.org"
+                   user-emacs-directory)))
 
 (defun add-hook-to-modes (modes hook)
   (dolist (mode modes)
@@ -406,147 +567,33 @@ configuration
       (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
         (kill-buffer buffer))))
    #+END_SRC
+
+* Org Mode
+** TODO fill this out
+
+
+
+
 * Key Bindings
-These are shamelessly borrowed from the [[http://batsov.com/prelude/][emacs-prelude]] project.
-#+BEGIN_SRC emacs-lisp
-;; For Mac OS X systems
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'meta))
+* Slime
+    ** fill out
 
-;; Font size
-(define-key global-map (kbd "C-+") 'text-scale-increase)
-(define-key global-map (kbd "C--") 'text-scale-decrease)
+* OSX specific 
+  taken from prelude-osx.el link
+handle meta as command
+  #+BEGIN_SRC emacs=lisp
+(setq mac-command-modifier 'super)
+(setq mac-option-modifier 'meta)
+  #+END_SRC
+use pbcopy.el
+  #+BEGIN_SRC emacs=lisp
+    (use-package pbcopy
+      :ensure
+      :config
+      (turn-on-pbcopy))
 
-;; File finding
-(global-set-key (kbd "C-x f") 'prelude-recentf-ido-find-file)
-(global-set-key (kbd "C-c r") 'bury-buffer)
-(global-set-key (kbd "M-`") 'file-cache-minibuffer-complete)
-
-;; Window switching. (C-x o goes to the next window)
-(global-set-key (kbd "C-x O") (lambda ()
-                                (interactive)
-                                (other-window -1))) ;; back one
-
-;; Indentation help
-(global-set-key (kbd "C-x ^") 'join-line)
-(global-set-key (kbd "C-M-\\") 'prelude-indent-region-or-buffer)
-
-;; Start proced in a similar manner to dired
-(global-set-key (kbd "C-x p") 'proced)
-
-;; Start eshell or switch to it if it's active.
-(global-set-key (kbd "C-x m") 'eshell)
-
-;; Start a new eshell even if one is active.
-(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
-
-;; Start a regular shell if you prefer that.
-(global-set-key (kbd "C-x M-m") 'shell)
-
-;; If you want to be able to M-x without meta
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
-
-;; Fetch the contents at a URL, display it raw.
-(global-set-key (kbd "C-x C-h") 'prelude-view-url)
-
-;; A complementary binding to the apropos-command(C-h a)
-(global-set-key (kbd "C-h A") 'apropos)
-
-;; Should be able to eval-and-replace anywhere.
-(global-set-key (kbd "C-c e") 'prelude-eval-and-replace)
-
-;; Activate occur easily inside isearch
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda () (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp
-                 isearch-string
-               (regexp-quote isearch-string))))))
-
-;; cycle through buffers
-(global-set-key (kbd "<C-tab>") 'bury-buffer)
-
-;; use hippie-expand instead of dabbrev
-(global-set-key (kbd "M-/") 'hippie-expand)
-
-;; replace buffer-menu with ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-;; swap windows
-(global-set-key (kbd "C-c s") 'prelude-swap-windows)
-
-;; duplicate the current line or region
-(global-set-key (kbd "C-c d") 'prelude-duplicate-current-line-or-region)
-
-;; rename buffer & visited file
-(global-set-key (kbd "C-c r") 'prelude-rename-file-and-buffer)
-
-;; open an ansi-term buffer
-(global-set-key (kbd "C-x t") 'prelude-visit-term-buffer)
-
-;; kill other buffers
-(global-set-key (kbd "C-c k o") 'prelude-kill-other-buffers)
-
-;; search with google
-(global-set-key (kbd "C-c g") 'prelude-google)
-
-;; open in external application
-(global-set-key (kbd "C-c o") 'prelude-open-with)
-
-;; toggle menu-bar visibility
-(global-set-key (kbd "<f12>") 'menu-bar-mode)
-
-;; real Emacs hackers don't use the arrow keys
-;; (global-set-key (kbd "<up>") (lambda ()
-;;                                (interactive)
-;;                                (message "Arrow key navigation is disabled. Use C-p instead.")))
-;; (global-set-key (kbd "<down>") (lambda ()
-;;                                  (interactive)
-;;                                  (message "Arrow key navigation is disabled. Use C-n instead.")))
-;; (global-set-key (kbd "<left>") (lambda ()
-;;                                  (interactive)
-;;                                  (message "Arrow key navigation is disabled. Use C-b instead.")))
-;; (global-set-key (kbd "<right>") (lambda ()
-;;                                   (interactive)
-;;                                   (message "Arrow key navigation is disabled. Use C-f instead.")))
-
-#+END_SRC
-
-* System environment PATH for OS X
-There are [[http://emacswiki.org/emacs/EmacsApp#toc2][various approaches]] to setting PATH in Emacs on OS X. I opted
-for a non-automagic approach because =~/.MacOSX/environment.plist=
-seems annoying to deal. Having PATH set in a simple explicit way seems
-like it will be easier to debug, even if it means having to remember
-to update it occationally.
-#+BEGIN_SRC emacs-lisp
-(if (eq system-type 'darwin)
-    (let* ((path-elts
-            '("/Users/seth/bin"
-              "/Users/seth/.rbenv/bin"
-              "/usr/local/bin"
-              "/usr/local/sbin"
-              "/usr/local/share/python"
-              "/usr/texbin"))
-           (orig-path (getenv "PATH"))
-           (orig-path-elts (split-string orig-path ":"))
-           (new-path-elts orig-path-elts)
-           new-path)
-      ;; add path-elts if not already in PATH
-      (mapc (lambda (elt) (add-to-list 'new-path-elts elt)) path-elts)
-      (setq new-path (reduce (lambda (elt acc) (concat elt ":" acc)) new-path-elts))
-      (setenv "PATH" new-path)
-      ;; also set exec-path to be same
-      (mapc (lambda (elt) (add-to-list 'exec-path elt))
-    new-path-elts)))
-#+END_SRC
-
-In order to use =emacsclient= you have to start the server. You want
-this.
-#+BEGIN_SRC emacs-lisp
-(server-start)
-#+END_SRC
-
+  #+END_SRC
+
 * PROGRAMMING
 ** imenu symbol lookup
 This bit of magic binds =M-i= to a function that knows how to identify
@@ -654,6 +701,7 @@ version, perhaps from the emacs-starter-kit prior to that.
 #+BEGIN_SRC emacs-lisp
 (setq-default c-basic-offset 4)
 #+END_SRC
+
 * Dealing with text
 ** No tabs, please.
 #+BEGIN_SRC emacs-lisp
@@ -761,6 +809,7 @@ the time.
                                            try-complete-lisp-symbol-partially
                                            try-complete-lisp-symbol))
    #+END_SRC
+
 * Buffers and Files
 ** ido mode shortcut config: magic file opening and such
 This provides a really nice fuzzy matching/search for opening files
@@ -863,6 +912,7 @@ with a trailing =~= turd.
       recentf-max-menu-items 15)
 (recentf-mode t)
 #+END_SRC
+
 * UI
 ** tool bars, menu bars, and pop ups
 #+BEGIN_SRC emacs-lisp
@@ -884,14 +934,20 @@ with a trailing =~= turd.
 #+BEGIN_SRC  emacs-lisp
 (setq ring-bell-function (lambda () (message "*beep*")))
 #+END_SRC
+** narrow-to-region
+   this is what i'm trying to learn.  C-x n p to narrow and
+C-x n w to widen to a page (delineated by ^L chars)
+#+BEGIN_SRC emacs-lisp
+(put 'narrow-to-page 'disabled nil)
+#+END_SRC 
 ** scrolling
 Here are some tweaks for how scrolling behaves. Adjusted values set in
 emacs-prelude which sets =scroll-conservatively= to 10000. I think I
 like the default better where you get recentering in more cases.
 #+BEGIN_SRC emacs-lisp
-(setq scroll-margin 0
-      scroll-conservatively 0
-      scroll-preserve-screen-position 1)
+;(setq scroll-margin 0
+;      scroll-conservatively 0
+;      scroll-preserve-screen-position 1)
 #+END_SRC
 ** Mode line defaults
 #+BEGIN_SRC emacs-lisp
@@ -901,11 +957,11 @@ like the default better where you get recentering in more cases.
 #+END_SRC
 ** Font
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil
-                    :family "Inconsolata"
-                    :height 225
-                    :weight 'normal)
-
+;(set-face-attribute 'default nil
+;                    :family "Inconsolata"
+;                    :height 225
+;                    :weight 'normal)
+;
 #+END_SRC
 ** FIXME: Color theme selection, line and paren highlighting
 #+BEGIN_SRC emacs-lisp
@@ -913,524 +969,4 @@ like the default better where you get recentering in more cases.
   (setq show-paren-style 'parenthesis)
   (global-hl-line-mode -1)
 #+END_SRC
-* Add-on Packages
-Add on packages are installed via package.el from
-the [[http://melpa.milkbox.net/][MELPA]] archive using John Wiegley's [[https://github.com/jwiegley/use-package][use-package]] which provides a
-nice way of loading/installing/configuring packages.
-
-In this latest emacs init.el rewrite, I also came across [[http://cask.readthedocs.org/en/latest/index.html][Cask]] which is
-a bundler-esque solution for emacs packages. Docs look pretty good,
-but I liked the config integration of use-package which feels like a
-better fit for init.el management.
-** Configure package archives
-Use MELPA and the org archives. Put them first to avoid installed gnu
-packages if there are newer ones from melpa available.
-
-If we have a net connection, we'll refresh the package list on
-startup.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/"))
-
-  (add-to-list 'package-archives
-               '("org" . "http://orgmode.org/elpa/"))
-
-  (setq my-onlinep nil)
-  (unless
-      (condition-case nil
-          (delete-process
-           (make-network-process
-            :name "my-check-internet"
-            :host "melpa.milkbox.net"
-            :service 80))
-        (error t))
-    (setq my-onlinep t))
-
-  (when my-onlinep
-    (package-refresh-contents)
-    (package-initialize))
-#+END_SRC
-** Setup use-package
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/vendor/use-package")
-  (require 'use-package)
-#+END_SRC
-** Packages and their configuration
-To force a package to get installed if it isn't already available, add
-=:ensure=. To provide configuration you can use either =:init= or
-=:config=. The =:init= form runs even when package loading is
-deferred. The =:config= form *only* runs after the module has been
-loaded (so might be more appropriate for calling functions defined in
-the module, e.g.)
-
-There are helpers to =:bind= keys, setup =:mode= hooks, and modify
-=:load-path=.
-*** solarized theme
-#+BEGIN_SRC emacs-lisp
-    (use-package color-theme-sanityinc-solarized
-      :ensure
-      :config
-      (load-theme 'sanityinc-solarized-dark t))
-
-#+END_SRC
-*** Eric Merritt's [[https://github.com/ericbmerritt/projmake-mode][projmake]]
-To add projmake support to a mode you want to add something like this
-to your mode hook:
-#+BEGIN_SRC :tangle no
-(defun my-mode-hook ()
-    (projmake-mode)
-    (projmake-search-load-project))
-
-(add-hook '<mode>-mode-hook 'my-mode-hook)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (use-package projmake-mode
-    :ensure
-    :init
-    (setq projmake-project-descs
-          '(("Rebar" "rebar.config" "nice -n5 rebar skip_deps=true compile")))
-    )
-
-  (defun projmake-enable ()
-    )
-
-#+END_SRC
-*** erlang
-#+BEGIN_SRC emacs-lisp
-  (use-package erlang
-    :config
-    (add-hook 'erlang-mode-hook 'my-erlang-mode-hook)
-   :ensure)
-
-  (defun my-erlang-mode-hook ()
-    (if (buffer-file-name)
-        ;; projmake breaks org-mode code block editing. need to
-        ;; investigate
-        (progn
-          (linum-mode))
-      (message "skipping ephemeral buffer"))
-    )
-
-  (defun my-erlang-mode-hook/with-projmake ()
-    (if (buffer-file-name)
-        ;; projmake breaks org-mode code block editing. need to
-        ;; investigate
-        (progn
-          (projmake-mode)
-          (projmake-search-load-project)
-          (projmake-enable))
-      (message "skipping projmake for ephemeral buffer"))
-    )
-
-#+END_SRC
-*** ess
-#+BEGIN_SRC emacs-lisp
-  (use-package ess
-    :ensure
-    :mode ("\\.Rd" . Rd-mode)
-    :config
-    (setq ess-S-assign-key (kbd "C-=")
-          ess-r-versions '("R-")
-          ess-use-inferior-program-name-in-buffer-name t
-          ess-eval-visibly-p nil
-          inferior-R-args "--no-save --no-restore -q"
-          ess-nuke-trailing-whitespace-p 'ask)
-    ;; leave my underscore key alone!
-    ;; (ess-toggle-underscore t)
-    ;; (ess-toggle-underscore nil)
-    (add-hook 'ess-mode-hook
-              (lambda ()
-                (ess-set-style 'C++ 'quiet)
-                (add-hook 'local-write-file-hooks
-                          (lambda ()
-                            (ess-nuke-trailing-whitespace)))
-                (setq fill-column 72)))
-    )
-
-#+END_SRC
-*** ocaml via tuareg-mode
-#+BEGIN_SRC emacs-lisp
-(use-package utop
-  :ensure)
-
-(use-package merlin
-  :ensure)
-
-(use-package tuareg
-  :ensure
-  :config
-  (add-hook 'tuareg-mode-hook 'tuareg-imenu-set-imenu)
-  (setq auto-mode-alist
-        (append '(("\\.ml[ily]?$" . tuareg-mode)
-                  ("\\.topml$" . tuareg-mode))
-                auto-mode-alist))
-  (autoload 'utop-setup-ocaml-buffer "utop" "Toplevel for OCaml" t)
-  (add-hook 'tuareg-mode-hook 'utop-setup-ocaml-buffer)
-  (add-hook 'tuareg-mode-hook 'merlin-mode)
-  (setq merlin-use-auto-complete-mode t)
-  (setq merlin-error-after-save nil)
-  )
-
-#+END_SRC
-*** haskell
-#+BEGIN_SRC emacs-lisp
-(use-package haskell-mode
- :ensure
- :init
- (custom-set-variables
-     '(haskell-mode-hook '(turn-on-haskell-indentation))))
-#+END_SRC
-*** rust
-#+BEGIN_SRC emacs-lisp
-(use-package rust-mode
-  :config
-  (add-hook 'rust-mode-hook 'my-rust-mode-hook)
-  :ensure)
-
-(defun my-rust-mode-hook ()
-  (linum-mode))
-
-#+END_SRC
-*** toml
-#+BEGIN_SRC emacs-lisp
-(use-package toml-mode :ensure)
-#+END_SRC
-*** magit and magithub
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure
-    :bind ("C-x g" . magit-status))
-
-#+END_SRC
-*** chrome browser integration for editing text areas in Emacs
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package edit-server
-    :ensure)
-  ;; edit-server-start
-
-#+END_SRC
-*** smex
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure
-    :bind (("M-x" . smex)
-           ("M-X" . execute-extended-command)))
-#+END_SRC
-*** auto-complete
-    This [[http://cx4a.org/software/auto-complete/manual.html][auto-complete]] mode looks worth a try at some point
-*** fill column inidicator (fci-mode)
-This mode, enabled using =M-x fci-mode= puts a vertical line
-indicating the fill column. Can be useful to keep you honest about
-long lines of code.
-#+BEGIN_SRC emacs-lisp :tangle no
-(use-package fill-column-indicator
-  :ensure
-  :init
-  (setq fci-rule-column 80))
-#+END_SRC
-*** Various edit modes that I don't yet customize
-#+BEGIN_SRC emacs-lisp :tangle yes
-(use-package ruby-mode :ensure)
-(use-package nginx-mode :ensure)
-(use-package lua-mode :ensure)
-(use-package ag :ensure)
-(use-package haml-mode :ensure)
-(use-package markdown-mode :ensure)
-;;(use-package paredit :ensure)
-(use-package sass-mode :ensure)
-(use-package scss-mode :ensure)
-(use-package yaml-mode :ensure)
-#+END_SRC
-*** org-mode 
-Since use-package detects the version of org that comes with Emacs, I
-ended up running an install from MELPA manually. I've also cloned the
-org git repo into the vendor dir to have access to the contribs.
-#+BEGIN_SRC emacs-lisp
-(use-package org
-  :ensure
-  :mode ("\\.org$" . org-mode)
-  :load-path "~/.emacs.d/vendor/org-mode/contrib/lisp"
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c b" . org-iswitchb))
-  :init
-  (setq
-   org-directory "~/Notebook/org"
-   org-mobile-inbox-for-pull "~/Notebook/org/from-mobile.org"
-   org-mobile-directory "~/Dropbox/MobileOrg"
-   org-agenda-files (quote ("~/Notebook/org/seth.org"))
-   org-enforce-todo-dependencies t
-   org-velocity-bucket "~/Notebook/org/solutions.org"
-   org-default-notes-file (concat org-directory "/notes.org")
-   org-log-done t
-   ;; this prevents org-mode from adding leading whitespace to code
-   ;; blocks after editing
-   org-src-preserve-indentation t)
-  
-  ;; where to refile
-  (setq org-refile-targets
-        '((nil . (:level . 1))
-          ("solutions.org" . (:level . 1))
-          ("seth.org" . (:level . 1))
-          ("seth-sometime.org" . (:level . 1))
-          ("seth-ref.org" . (:level . 1))))
-  
-  (setq org-refile-use-outline-path 'file)
-  )
-
-(use-package org-velocity
-  :bind (("C-c 0" . org-velocity-read))
-  )
-
-(defun my/org-capture ()
-  (interactive)
-  (org-capture nil "j"))
-
-(defun my/one-on-one ()
-    (interactive)
-    (with-temp-buffer
-      (setq default-directory "~/Notebook/org/1:1")
-      (call-interactively 'ido-find-file)
-      (setq current-one-on-one (buffer-file-name))
-      (org-capture nil "x")))
-
-(defun my/meeting ()
-    (interactive)
-    (with-temp-buffer
-      (setq default-directory "~/Notebook/org/meetings")
-      (call-interactively 'ido-find-file)
-      (setq current-one-on-one (buffer-file-name))
-      (org-capture nil "m")))
-
-(use-package org-capture
-  :bind (("C-c 1" . my/org-capture)
-         ("C-c 2" . my/one-on-one)
-         ("C-c 3" . org-capture)
-         ("C-c 4" . my/meeting)
-         )
-  :init
-  (setq
-   ;; capture setup
-   org-capture-templates
-   '(("t" "Todo" entry
-      (file+headline (concat org-directory "/seth.org") "Next Action")
-      "* TODO %?\n  %i\n  %a")
-     ("s" "Solution" entry
-      (file+headline (concat org-directory "/solutions.org"))
-      "* %?\nEntered on %U\n  %i\n  %a")
-     ("j" "Journal" entry
-      (file (concat org-directory "/journal.org"))
-      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n")
-     ("z" "Testing" entry
-      (file (concat org-directory "/test-cap.org"))
-      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n")
-     ("x" "1:1 Note" entry
-      (file current-one-on-one)
-      "* [%<%d-%b-%Y %H:%M>] %?\n%i\n" :prepend t :unnarrowed t)
-     ("m" "Meeting Notes" entry
-      (file current-meeting)
-      "* [%<%d-%b-%Y %H:%M>] %?\n** Attendees\n** Notes%i\n" :prepend t :unnarrowed t)
-     ("f" "Journal with file link" entry
-      (file+datetree (concat org-directory "/journal.org"))
-      "* [%<%H:%M>] %?\n%i\n%a\n")
-     )
-   )
-  )
-
-#+END_SRC
-* Random misc add ons and such
-** wrangler
-#+BEGIN_SRC emacs-lisp
-;; wrangler Erlang code refactor tool
-;; (add-to-list 'load-path "/usr/local/share/wrangler/elisp")
-;; (require 'wrangler)
-#+END_SRC
-** Activity logger that I don't use
-#+BEGIN_SRC emacs-lisp
-(defvar activity-log-file-prefix "~/ACTILOG"
-  "prefix for file containing activity log")
-
-(defun actilog (log)
-       (interactive "sLog: ")
-       (save-excursion
-        (set-buffer (find-file-noselect
-                     (format "%s-%s" activity-log-file-prefix
-                             (format-time-string "%m-%d"))))
-        (goto-char (point-max))
-        (insert (format "%s %s\n" (format-time-string "[%H:%M]") log))
-        (save-buffer)))
-
-(global-set-key [f12] 'actilog)
-#+END_SRC
-* Junk Drawer
-#+BEGIN_SRC emacs-lisp :tangle no
-(require 'rspec-mode)
-
-;; lua!
-(setq auto-mode-alist (cons '("\\.lua$" . lua-mode) auto-mode-alist))
-(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-
-;; http-twiddle
-(require 'http-twiddle)
-
-(defun chomp (str)
-      "Chomp leading and tailing whitespace from STR."
-      (let ((s (if (symbolp str) (symbol-name str) str)))
-        (replace-regexp-in-string
-         "\\(^[[:space:]\n]*\\|[[:space:]\n]*$\\)" "" s)))
-#+END_SRC
-* mu4e
-#+BEGIN_SRC emacs-lisp :tangle yes
-;;----------------------------------------------------------
-;; ---- BEGIN Email client ----
-;;----------------------------------------------------------
-
-;; mu index --rebuild --maildir=~/Mail
-
-;; something about ourselves
-(setq
- user-mail-address "seth@chef.io"
- user-full-name  "Seth Falcon")
-
-;; sending mail -- replace USERNAME with your gmail username
-;; also, make sure the gnutls command line utils are installed
-;; package 'gnutls-bin' in Debian/Ubuntu
-
-(setq 
-    message-send-mail-function 'smtpmail-send-it
-    starttls-use-gnutls t
-    smtpmail-debug-info t
-    smtpmail-debug-verb t
-    smtpmail-stream-type 'ssl
-    starttls-extra-arguments '("--x509cafile" "/usr/local/etc/openssl/cert.pem")
-    smtpmail-default-smtp-server "smtp.gmail.com"
-    smtpmail-smtp-user "seth@chef.io"
-    smtpmail-smtp-server "smtp.gmail.com"
-    smtpmail-smtp-service 465)
-(require 'smtpmail)
-
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
-
-;; default
-(setq mu4e-maildir "~/Mail")
-(setq mu4e-drafts-folder "/opscode/[Gmail].Drafts")
-(setq mu4e-sent-folder   "/opscode/[Gmail].Sent Mail")
-(setq mu4e-trash-folder  "/opscode/[Gmail].Trash")
-(setq mu4e-refile-folder  "/opscode/Zero")
-(setq mu4e-view-show-addresses t)
-;; don't save message to Sent Messages, Gmail/IMAP takes care of this
-(setq mu4e-sent-messages-behavior 'delete)
-
-;; multi-account config.
-(defvar my-mu4e-account-alist
-  '(("opscode"
-     (mu4e-drafts-folder "/opscode/[Gmail].Drafts")
-     (mu4e-sent-folder   "/opscode/[Gmail].Sent Mail")
-     (mu4e-trash-folder  "/opscode/[Gmail].Trash")
-     (mu4e-refile-folder  "/opscode/Zero")
-
-     (user-mail-address "seth@chefio.com")
-     (mu4e-compose-signature
-      "Seth Falcon | Engineering Lead - Continuous Delivery | @sfalcon\n       CHEF | http://www.chef.io/ ")
-     (smtpmail-smtp-server "opscode-gmail")
-     (smtpmail-smtp-user "seth@opscode.com"))
-    ("userprimary"
-     (mu4e-drafts-folder "/userprimary/[Gmail].Drafts")
-     (mu4e-sent-folder   "/userprimary/[Gmail].Sent Mail")
-     (mu4e-trash-folder  "/userprimary/[Gmail].Trash")
-     (mu4e-refile-folder  "/userprimary/Zero")
-
-     (user-mail-address "seth@userprimary.net")
-     (mu4e-compose-signature "Seth Falcon | @sfalcon | http://userprimary.net/")
-     (smtpmail-smtp-server "userprimary-gmail")
-     (smtpmail-smtp-user "seth@userprimary.net"))))
-
-(defun my-mu4e-set-account ()
-       "Set the account for composing a message."
-       (interactive)
-       (let* ((account
-               (if mu4e-compose-parent-message
-                   (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-                     (string-match "/\\(.*?\\)/" maildir)
-                     (match-string 1 maildir))
-                 (completing-read (format "Compose with account: (%s) "
-                                          (mapconcat #'(lambda (var) (car var)) my-mu4e-account-alist "/"))
-                                  (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
-                                  nil t nil nil (caar my-mu4e-account-alist))))
-              (account-vars (cdr (assoc account my-mu4e-account-alist))))
-         (if account-vars
-             (mapc #'(lambda (var)
-                       (set (car var) (cadr var)))
-                   account-vars)
-           (error "No email account found"))))
-
-(add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account)
-
-
-;; setup some handy shortcuts
-;; you can quickly switch to your Inbox -- press ``ji''
-;; then, when you want archive some messages, move them to
-;; the 'All Mail' folder by pressing ``ma''.
-
-(setq mu4e-maildir-shortcuts
-      '( ("/opscode/INBOX"               . ?c)
-         ("/userprimary/INBOX"           . ?u)
-         ))
-
-(add-to-list 'mu4e-bookmarks
-             '("maildir:/Nagios date:today..now flag:unread AND NOT flag:trashed" "Nagios Today" ?n))
-
-(add-to-list 'mu4e-bookmarks
-             '("(to:seth@chef.io OR to:seth@opscode.com OR to:seth@getchef.com) maildir:/INBOX flag:unread AND NOT flag:trashed" "Unread for me" ?m))
-
-
-;; allow for updating mail using 'U' in the main view:
-(setq mu4e-get-mail-command "true")
-
-;; don't keep message buffers around
-(setq message-kill-buffer-on-exit t)
-
- (setq mu4e-html2text-command
- "textutil -stdin -format html -convert txt -stdout")
-
-;;----------------------------------------------------------
-;; ---- END Email client ----
-;;----------------------------------------------------------
-#+END_SRC
-* Prelude programming stuff
-FIXME: organize this stuff
-  #+BEGIN_SRC emacs-lisp
-(defun prelude-local-comment-auto-fill ()
-  (set (make-local-variable 'comment-auto-fill-only-comments) t)
-  (auto-fill-mode t))
-
-(defun prelude-add-watchwords ()
-  (font-lock-add-keywords
-   nil '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
-          1 font-lock-warning-face t))))
-
-;; show the name of the current function definition in the modeline
-(require 'which-func)
-(which-func-mode 1)
-
-(defun prelude-prog-mode-hook ()
-  "Default coding hook, useful with any programming language."
-  ;; (flyspell-prog-mode)
-  (prelude-local-comment-auto-fill)
-  ;;(prelude-turn-on-whitespace)
-  (prelude-turn-on-abbrev)
-  (prelude-add-watchwords))
-;;  ;; keep the whitespace decent all the time
-;;  (add-hook 'before-save-hook 'whitespace-cleanup nil t))
-
-;; in Emacs 24 programming major modes generally derive
-;; from a common mode named prog-mode
-(add-hook 'prog-mode-hook 'prelude-prog-mode-hook)
-
-  #+END_SRC
-* Problems
-
+
