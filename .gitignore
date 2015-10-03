@@ -10,3 +10,13 @@ vendor
 /abbrev_defs
 /bookmarks
 /recentf~
+ac-comphist.dat
+backups/*
+elpa/*
+emacs-init.el
+helm-doc.org
+index.html
+projectile-bookmarks.eld
+recentf/*
+recentf~
+vendor/*

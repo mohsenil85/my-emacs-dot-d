@@ -14,10 +14,10 @@
     #+BEGIN_SRC emacs-lisp
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/"))
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
 
 (add-to-list 'package-archives
-	     '("org" . "http://orgmode.org/elpa/"))
+             '("org" . "http://orgmode.org/elpa/"))
 
 (package-initialize)
     #+END_SRC
@@ -33,35 +33,38 @@
 (use-package better-defaults :ensure)
 (use-package markdown-mode :ensure)
    #+END_SRC
-   
-   page break lines
+   
+*** page break lines
     #+BEGIN_SRC emacs-lisp
 (use-package page-break-lines
   :ensure
   :config
   (global-page-break-lines-mode))
     #+END_SRC
-    
-   magit
+    
+*** magit
     #+BEGIN_SRC emacs-lisp
 (use-package magit :ensure
 :bind ("C-x g" . magit-status))
     #+END_SRC
-    persistent scratch
+    
+*** persistent scratch
     #+BEGIN_SRC emacs-lisp
 (use-package persistent-scratch :ensure
 :config (persistent-scratch-setup-default))
     #+END_SRC
-    recursive narrow
+    
+*** recursive narrow
     #+BEGIN_SRC emacs-lisp
       (use-package recursive-narrow :ensure
         :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
                ("C-x n w" . recursive-widen-dwim)))
     #+END_SRC
-
-   * evil 
-** evil-leader
-   evil leader is required before evil
+    
+    
+** evil
+*** evil-leader
+    evil leader is required before evil
     #+BEGIN_SRC emacs-lisp
 (use-package evil-leader
 :ensure
@@ -70,135 +73,232 @@
 (global-evil-leader-mode 1)
 (evil-leader/set-leader ",")))
     #+END_SRC
-** main evil
+    
+*** main evil
     #+BEGIN_SRC emacs-lisp
-    (use-package evil
-      :ensure
-      :config
-      (evil-mode 1))
+     (use-package evil
+       :ensure
+       :config
+       (evil-mode 1))
     #+END_SRC
-* helm
-  taken from http://tuhdo.github.io/helm-intro.html
-** things i need to remember
+    
+    
+*** vimmish folds
+    #+BEGIN_SRC emacs-lisp
+      (use-package vimish-fold
+        :ensure
+        :config
+        (progn
+          (evil-leader/set-key "ff" 'vimish-fold)
+          (evil-leader/set-key "fd" 'vimish-fold-delete)
+          ))
+    #+END_SRC
+    
+    
+** helm
+   taken from http://tuhdo.github.io/helm-intro.html
+   things i need to remember
 - C-h f, which runs describe-function
 - C-h v, which runs describe-variable
 - C-h w, which runs where-is
-** helm proper
+*** helm proper
     #+BEGIN_SRC emacs-lisp
-      (use-package helm
-        :ensure
-        :demand
-        :config
-        (require 'helm)
-        (require 'helm-config)
-        (setq helm-M-x-fuzzy-match t)
-        (setq helm-split-window-inside-p t)
-        (setq helm-ff-file-name-history-use-recentf t)
-        (setq helm-autoresize-mode t)
+       (use-package helm
+         :ensure
+         :demand
+         :config
+         (require 'helm)
+         (require 'helm-config)
+         (setq helm-M-x-fuzzy-match t)
+         (setq helm-split-window-inside-p t)
+         (setq helm-ff-file-name-history-use-recentf t)
+         (setq helm-autoresize-mode t)
 
-        (helm-mode 1)
-        :bind (
-               ("M-x" . helm-M-x)
-               ("C-c h" . helm-command-prefix)
-               ("C-x b" . helm-mini)
-               ("M-y" . helm-show-kill-ring)
-               ("C-x C-f" . helm-find-files)
-               ("C-c h o" . helm-occur)
-               )
-        )
+         (helm-mode 1)
+         :bind (
+                ("M-x" . helm-M-x)
+                ("C-c h" . helm-command-prefix)
+                ("C-x b" . helm-mini)
+                ("M-y" . helm-show-kill-ring)
+                ("C-x C-f" . helm-find-files)
+                ("C-c h o" . helm-occur)
+                )
+         )
     #+END_SRC
-
-** helm-projectile
-   #+BEGIN_SRC emacs-lisp
-     (use-package projectile
-       :ensure
-       :config (progn
-                 (projectile-global-mode)
-                 (setq projectile-completion-system 'helm)
-                 (helm-projectile-on)))
-   #+END_SRC
- 
-**** ac mode
+    
+*** helm-projectile
     #+BEGIN_SRC emacs-lisp
+      (use-package projectile
+        :ensure
+        :config (progn
+                  (projectile-global-mode)
+                  (setq projectile-completion-system 'helm)
+                  (helm-projectile-on)))
+    #+END_SRC
+    
+** ac mode
+   #+BEGIN_SRC emacs-lisp
 (use-package auto-complete
   :ensure
   :config (ac-config-default))
-    #+END_SRC
-**** lisp
-    #+BEGIN_SRC emacs-lisp
-      (use-package paredit
-        :ensure
-        :config 
-        (progn
-	  (enable-paredit-mode)
-	  (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-	  (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-	  (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-	  (add-hook 'slime-repl-mode-hook             #'enable-paredit-mode)
-	  (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-	  (add-hook 'scheme-mode-hook           #'enable-paredit-mode)))
+   #+END_SRC
+   
+** lisp
+   #+BEGIN_SRC emacs-lisp
+    (use-package paredit
+      :ensure
+      :config 
+      (progn
+        (enable-paredit-mode)
+        (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+        (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+        (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+        (add-hook 'slime-repl-mode-hook             #'enable-paredit-mode)
+        (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+        (add-hook 'scheme-mode-hook           #'enable-paredit-mode)))
 
-      (use-package smartparens
-        :ensure
-        :init (require 'smartparens-config)
-        :config (smartparens-strict-mode 1))
+    (use-package smartparens
+      :ensure
+      :init (require 'smartparens-config)
+      :config (smartparens-strict-mode 1))
 
-      (use-package evil-smartparens
-        :ensure
-        :config (progn
-		  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+    (use-package evil-smartparens
+      :ensure
+      :config (progn
+                (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
-      (use-package rainbow-delimiters
-        :ensure
-        :config
-        (progn
-	  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-	  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-	  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
-
-
-      (use-package slime
-        :ensure
-        :load-path  "~/.emacs.d/vendor/slime"
-        :config (progn
-		  (setq inferior-lisp-program "/usr/local/bin/sbcl")
-		  (require 'slime-autoloads)
-		  (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-		  (setq slime-contribs '(slime-fancy slime-fuzzy))
-		  (slime-setup)
-		  )
-        :bind (("C-c s" . slime-selector)
-	       ("C-SPC" . slime-complete-symbol)
-	       ))
-
-      (use-package log4slime
-        :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
-
-      (use-package ac-slime
-        :ensure
-        :config (progn
-		  (add-hook 'slime-mode-hook 'set-up-slime-ac)
-		  (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-		  (eval-after-load "auto-complete"
-		    '(add-to-list 'ac-modes 'slime-repl-mode))))
-
-      ;;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
-      ;; Replace "sbcl" with the path to your implementation
+    (use-package rainbow-delimiters
+      :ensure
+      :config
+      (progn
+        (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+        (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+        (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 
-    #+END_SRC
-**** org-mode
+    (use-package slime
+      :ensure
+      :load-path  "~/.emacs.d/vendor/slime"
+      :config (progn
+                (setq inferior-lisp-program "/usr/local/bin/sbcl")
+                (require 'slime-autoloads)
+                (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+                (setq slime-contribs '(slime-fancy slime-fuzzy))
+                (slime-setup)
+                )
+      :bind (("C-c s" . slime-selector)
+                                            ;("C-SPC" . slime-complete-symbol)
+             ))
 
-     #+BEGIN_SRC emacs-lisp
-       (use-package org 
-         :ensure)
-       (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((lisp . t)))
+    (use-package log4slime
+      :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
 
-     #+END_SRC
-     
-
+    (use-package ac-slime
+      :ensure
+      :config (progn
+                (add-hook 'slime-mode-hook 'set-up-slime-ac)
+                (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+                (eval-after-load "auto-complete"
+                  '(add-to-list 'ac-modes 'slime-repl-mode))))
+
+    ;;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+    ;; Replace "sbcl" with the path to your implementation
+
+
+   #+END_SRC
+   
+   
+** org-mode
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package org 
+       :ensure)
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((lisp . t)))
+
+   #+END_SRC
+   
+   
+* emacs
+
+** name
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Logan Mohseni")
+(setq user-mail-address "mohsenil85@gmail.com")
+#+END_SRC
+   
+** inital frame size
+   use odd numbers
+#+BEGIN_SRC emacs-lisp
+;(add-to-list 'default-frame-alist '(height . 51 )) 
+;(add-to-list 'default-frame-alist '(width . 177 )) 
+#+END_SRC
+** tool bars, menu bars, and pop ups
+#+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+#+END_SRC
+** cursor and startup screen
+#+BEGIN_SRC emacs-lisp
+  (blink-cursor-mode -1)
+  ;; disable startup screen
+  (setq inhibit-startup-screen t)
+  (setq inhibit-startup-echo-area-message "USERNAME")
+  (setq inhibit-startup-message t)
+#+END_SRC
+** mark mode
+#+BEGIN_SRC emacs-lisp
+(transient-mark-mode t)
+#+END_SRC
+** Asking questions
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-dialog-box nil)
+#+END_SRC
+** silence bell
+   #+BEGIN_SRC  emacs-lisp
+(setq ring-bell-function nil)
+   #+END_SRC
+** narrow-to-region
+   this is what i'm trying to learn.  
+   C-x n p to narrow and
+   C-x n w to widen to a page (delineated by ^L chars)
+   #+BEGIN_SRC emacs-lisp
+;(put 'narrow-to-page 'disabled nil)
+   #+END_SRC 
+** Mode line defaults
+#+BEGIN_SRC emacs-lisp
+(line-number-mode t)
+(column-number-mode t)
+(size-indication-mode t)
+#+END_SRC
+** line and paren highlighting
+   #+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+  (setq show-paren-style 'parenthesis)
+   #+END_SRC
+** color theme
+   #+BEGIN_SRC emacs-lisp
+(use-package gandalf-theme :ensure)
+;(use-package slime-theme :ensure)
+;(use-package greymatters-theme :ensure)
+;(use-package minimal-theme :ensure)
+(load-theme 'gandalf)
+   #+END_SRC
+** bindings
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-o") 'other-window)
+   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+   #+END_SRC
+** registers
+   #+BEGIN_SRC emacs-lisp
+(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
+   #+END_SRC
+
+   
+
 * functionaria 
   Helper functions to use either in an editing session or to help with
   configuration
@@ -212,7 +312,7 @@
 (defun add-hook-to-modes (modes hook)
   (dolist (mode modes)
     (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-	      hook)))
+              hook)))
 
 (defun halt ()
   (interactive)
@@ -221,14 +321,14 @@
 
 (defun my-whitespace-mode-hook ()
   (setq whitespace-action '(auto-cleanup)
-	whitespace-style  '(face tabs trailing lines-tail empty)
-	;; use fill-column value instead
-	whitespace-line-column nil)
+        whitespace-style  '(face tabs trailing lines-tail empty)
+        ;; use fill-column value instead
+        whitespace-line-column nil)
   (whitespace-mode))
 
 (defun my-makefile-mode-hook ()
   (setq indent-tabs-mode t
-	tab-width 4))
+        tab-width 4))
   #+END_SRC
   
 * osx specific 
@@ -251,64 +351,3 @@
        (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
   #+END_SRC
   
-* emacs
-** inital frame size
-   use odd numbers
-#+BEGIN_SRC emacs-lisp
-;(add-to-list 'default-frame-alist '(height . 51 )) 
-;(add-to-list 'default-frame-alist '(width . 177 )) 
-#+END_SRC
-** tool bars, menu bars, and pop ups
-#+BEGIN_SRC emacs-lisp
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-  (when (fboundp mode) (funcall mode -1)))
-#+END_SRC
-** cursor and startup screen
-#+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode -1)
-  ;; disable startup screen
-  (setq inhibit-startup-screen t)
-  (setq inhibit-startup-echo-area-message "USERNAME")
-  (setq inhibit-startup-message t)
-#+END_SRC
-** Asking questions
-#+BEGIN_SRC emacs-lisp
-(defalias 'yes-or-no-p 'y-or-n-p)
-(setq use-dialog-box nil)
-#+END_SRC
-** silence bell
-   #+BEGIN_SRC  emacs-lisp
-(setq ring-bell-function nil)
-   #+END_SRC
-** narrow-to-region
-   this is what i'm trying to learn.  
-   C-x n p to narrow and
-   C-x n w to widen to a page (delineated by ^L chars)
-   #+BEGIN_SRC emacs-lisp
-(put 'narrow-to-page 'disabled nil)
-   #+END_SRC 
-** Mode line defaults
-#+BEGIN_SRC emacs-lisp
-(line-number-mode t)
-(column-number-mode t)
-(size-indication-mode t)
-#+END_SRC
-** line and paren highlighting
-   #+BEGIN_SRC emacs-lisp
-  (show-paren-mode t)
-  (setq show-paren-style 'parenthesis)
-   #+END_SRC
-** color theme
-   #+BEGIN_SRC emacs-lisp
-;(use-package gandalf-theme :ensure)
-;(use-package slime-theme :ensure)
-;(use-package greymatters-theme :ensure)
-;(use-package minimal-theme :ensure)
-(load-theme 'minimal-light)
-   #+END_SRC
-** registers
-   #+BEGIN_SRC emacs-lisp
-(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-   #+END_SRC
-
-   
