@@ -5,22 +5,20 @@
 
 * packages
 *** Configure package archives
-    Use MELPA and the org archives. Put them first to avoid installed gnu
-    packages if there are newer ones from melpa available.
-    
-    If we have a net connection, we'll refresh the package list on
-    startup.
-    
     #+BEGIN_SRC emacs-lisp
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 
-(add-to-list 'package-archives
-             '("org" . "http://orgmode.org/elpa/"))
+;;(add-to-list 'package-archives
+             ;;'("org" . "http://orgmode.org/elpa/"))
 
 (package-initialize)
     #+END_SRC
+    
+    #+RESULTS:
+    : t
+
 *** Setup use-package
     #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/vendor/use-package")
@@ -66,12 +64,13 @@
 *** evil-leader
     evil leader is required before evil
     #+BEGIN_SRC emacs-lisp
-(use-package evil-leader
-:ensure
-:config
-(progn
-(global-evil-leader-mode 1)
-(evil-leader/set-leader ",")))
+      (use-package evil-leader
+      :ensure
+      :config
+      (progn
+      (global-evil-leader-mode 1)
+      (evil-leader/set-leader "<SPC>")
+      (evil-leader/set-key "r" 'remember)))
     #+END_SRC
     
 *** main evil
@@ -83,7 +82,11 @@
     #+END_SRC
     
     
-*** vimmish folds
+*** evil-org
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-org :ensure :init (require 'evil-org))  
+    #+END_SRC
+*** vimmish fold
     #+BEGIN_SRC emacs-lisp
       (use-package vimish-fold
         :ensure
@@ -103,27 +106,26 @@
 - C-h w, which runs where-is
 *** helm proper
     #+BEGIN_SRC emacs-lisp
-       (use-package helm
-         :ensure
-         :demand
-         :config
-         (require 'helm)
-         (require 'helm-config)
-         (setq helm-M-x-fuzzy-match t)
-         (setq helm-split-window-inside-p t)
-         (setq helm-ff-file-name-history-use-recentf t)
-         (setq helm-autoresize-mode t)
-
-         (helm-mode 1)
-         :bind (
-                ("M-x" . helm-M-x)
-                ("C-c h" . helm-command-prefix)
-                ("C-x b" . helm-mini)
-                ("M-y" . helm-show-kill-ring)
-                ("C-x C-f" . helm-find-files)
-                ("C-c h o" . helm-occur)
-                )
-         )
+      (use-package helm
+        :ensure
+        :demand
+        :config
+        (progn
+          (require 'helm)
+          (require 'helm-config)
+          (setq helm-M-x-fuzzy-match t)
+          (setq helm-move-to-line-cycle-in-source t)
+          (setq helm-split-window-in-side-p t)
+          (setq helm-ff-file-name-history-use-recentf t)
+          (setq helm-autoresize-mode t)
+          (helm-mode 1))
+        :bind
+        (("M-x" . helm-M-x)
+               ("C-c h" . helm-command-prefix)
+               ("C-x b" . helm-mini)
+               ("M-y" . helm-show-kill-ring)
+               ("C-x C-f" . helm-find-files)
+               ("C-c h o" . helm-occur)))
     #+END_SRC
     
 *** helm-projectile
@@ -135,128 +137,277 @@
                   (setq projectile-completion-system 'helm)
                   (helm-projectile-on)))
     #+END_SRC
-    
+
+
+*** helm-swoop
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-swoop 
+    :ensure
+    :config
+    (progn
+      (global-set-key (kbd "M-i") 'helm-swoop)
+      (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+      (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+      (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+
+      ;; When doing isearch, hand the word over to helm-swoop
+      (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+      ;; From helm-swoop to helm-multi-swoop-all
+      (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+      ;; When doing evil-search, hand the word over to helm-swoop
+      ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
+
+      ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+      (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+
+      ;; Move up and down like isearch
+      (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+      (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+      (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+      (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+      ;; Save buffer when helm-multi-swoop-edit complete
+      (setq helm-multi-swoop-edit-save t)
+
+      ;; If this value is t, split window inside the current window
+      (setq helm-swoop-split-with-multiple-windows nil)
+
+      ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+      (setq helm-swoop-split-direction 'split-window-vertically)
+
+      ;; If nil, you can slightly boost invoke speed in exchange for text color
+      (setq helm-swoop-speed-or-color nil)
+
+      ;; ;; Go to the opposite side of line from the end or beginning of line
+      (setq helm-swoop-move-to-line-cycle t)
+
+      ;; Optional face for line numbers
+      ;; Face name is `helm-swoop-line-number-face`
+      (setq helm-swoop-use-line-number-face t)))
+#+END_SRC
 ** ac mode
    #+BEGIN_SRC emacs-lisp
 (use-package auto-complete
   :ensure
   :config (ac-config-default))
    #+END_SRC
-   
+
 ** lisp
    #+BEGIN_SRC emacs-lisp
-    (use-package paredit
-      :ensure
-      :config 
-      (progn
-        (enable-paredit-mode)
-        (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-        (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-        (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-        (add-hook 'slime-repl-mode-hook             #'enable-paredit-mode)
-        (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-        (add-hook 'scheme-mode-hook           #'enable-paredit-mode)))
+     (use-package paredit
+       :ensure
+       :config 
+       (progn
+         (enable-paredit-mode)
+         (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+         (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+         (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+         (add-hook 'slime-repl-mode-hook             #'enable-paredit-mode)
+         (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+         (add-hook 'scheme-mode-hook           #'enable-paredit-mode)))
 
-    (use-package smartparens
-      :ensure
-      :init (require 'smartparens-config)
-      :config (smartparens-strict-mode 1))
+     (use-package smartparens
+       :ensure
+       :init (require 'smartparens-config)
+       :config (smartparens-strict-mode 1))
 
-    (use-package evil-smartparens
-      :ensure
-      :config (progn
-                (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+     (use-package evil-smartparens
+       :ensure
+       :config (progn
+                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
-    (use-package rainbow-delimiters
-      :ensure
-      :config
-      (progn
-        (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-        (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-        (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+     (use-package rainbow-delimiters
+       :ensure
+       :config
+       (progn
+         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+         (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
 
-    (use-package slime
-      :ensure
-      :load-path  "~/.emacs.d/vendor/slime"
-      :config (progn
-                (setq inferior-lisp-program "/usr/local/bin/sbcl")
-                (require 'slime-autoloads)
-                (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                (setq slime-contribs '(slime-fancy slime-fuzzy))
-                (slime-setup)
-                )
-      :bind (("C-c s" . slime-selector)
-                                            ;("C-SPC" . slime-complete-symbol)
-             ))
+     (use-package slime
+       :ensure
+       :load-path  "~/.emacs.d/vendor/slime"
+       :config (progn
+                 (setq inferior-lisp-program "/usr/local/bin/sbcl")
+                 (require 'slime-autoloads)
+                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+                 (setq slime-contribs '(slime-fancy slime-fuzzy))
+                 (slime-setup)
+                 )
+       :bind (("C-c s" . slime-selector)
+                                             ;("C-SPC" . slime-complete-symbol)
+              ))
 
-    (use-package log4slime
-      :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
+     (use-package log4slime
+       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
 
-    (use-package ac-slime
-      :ensure
-      :config (progn
-                (add-hook 'slime-mode-hook 'set-up-slime-ac)
-                (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-                (eval-after-load "auto-complete"
-                  '(add-to-list 'ac-modes 'slime-repl-mode))))
+     (use-package ac-slime
+       :ensure
+       :config (progn
+                 (add-hook 'slime-mode-hook 'set-up-slime-ac)
+                 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+                 (eval-after-load "auto-complete"
+                   '(add-to-list 'ac-modes 'slime-repl-mode))))
 
-    ;;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
-    ;; Replace "sbcl" with the path to your implementation
+     ;;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+     ;; Replace "sbcl" with the path to your implementation
 
 
    #+END_SRC
    
    
 ** org-mode
-   
    #+BEGIN_SRC emacs-lisp
      (use-package org 
-       :ensure)
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((lisp . t)))
+       :ensure
+       :config
+       (progn
+         (setq org-catch-invisible-edits t)
+
+         (setq org-M-RET-may-split-line nil)
+
+         (setq org-default-notes-file "~/org/refile.org")
+         (setq  org-agenda-files (quote ("~/org")))
+         (setq  org-agenda-ndays 7)
+         ;(setq  add-hook 'org-capture-mode-hook 'evil-insert-state)
+         (setq  org-deadline-warning-days 14)
+         (setq  org-agenda-show-all-dates t)
+         (setq  org-agenda-skip-deadline-if-done t)
+         (setq  org-agenda-skip-scheduled-if-done t)
+         (setq  org-agenda-start-on-weekday nil)
+         (setq  org-reverse-note-order t)
+         ;;(setq  org-fast-tag-selection-single-key (quote expert))
+     ;;    (setq org-todo-keywords
+     ;;          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+     ;;                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
+     ;;    
+     ;;    (setq org-todo-keyword-faces
+     ;;          (quote (("TODO" :foreground "red" :weight bold)
+     ;;                  ("NEXT" :foreground "blue" :weight bold)
+     ;;                  ("DONE" :foreground "forest green" :weight bold)
+     ;;                  ("WAITING" :foreground "orange" :weight bold)
+     ;;                  ("HOLD" :foreground "magenta" :weight bold)
+     ;;                  ("CANCELLED" :foreground "forest green" :weight bold)
+     ;;                  ("MEETING" :foreground "forest green" :weight bold)
+     ;;                  ("PHONE" :foreground "forest green" :weight bold))))
+     ;;    (setq org-todo-state-tags-triggers
+     ;;          (quote (("CANCELLED" ("CANCELLED" . t))
+     ;;                  ("WAITING" ("WAITING" . t))
+     ;;                  ("HOLD" ("WAITING") ("HOLD" . t))
+     ;;                  (done ("WAITING") ("HOLD"))
+     ;;                  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+     ;;                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+     ;;                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+     ;;
+         (setq org-capture-templates
+               (quote (("t" "todo" entry (file "~/org/refile.org")
+                        "* TODO %?\n%U\n%a\n")
+                       ("r" "respond" entry (file "~/org/refile.org")
+                        "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :immediate-finish t)
+                       ("n" "note" entry (file "~/org/refile.org")
+                        "* %? :NOTE:\n%U\n%a\n")
+                       ("j" "Journal" entry (file+datetree "~/org/diary.org")
+                        "* %?\n%U\n" )
+                       ("w" "org-protocol" entry (file "~/org/refile.org")
+                        "* TODO Review %c\n%U\n" :immediate-finish t)
+                       ("m" "Meeting" entry (file "~/org/refile.org")
+                        "* MEETING with %? :MEETING:\n%U")
+                       ("p" "Phone call" entry (file "~/org/refile.org")
+                        "* PHONE %? :PHONE:\n%U" )
+                       )))
+         
+
+         ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+         (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                          (org-agenda-files :maxlevel . 9))))
+         ;; Use full outline paths for refile targets - we file directly with IDO
+         (setq org-refile-use-outline-path t)
+         ;; Targets complete directly with IDO
+     ;;    (setq org-outline-path-complete-in-steps nil)
+         ;; Allow refile to create parent tasks with confirmation
+         (setq org-refile-allow-creating-parent-nodes (quote confirm))
+         ;; Tags with fast selection keys
+         (setq org-tag-alist (quote ((:startgroup)
+                                     ("@errand" . ?e)
+                                     ("@office" . ?o)
+                                     ("@home" . ?H)
+                                     (:endgroup)
+                                     ("waiting" . ?w)
+                                     ("hold" . ?h)
+                                     ("personal" . ?p)
+                                     ("work" . ?W)
+                                     ("note" . ?n)
+                                     ("cancelled" . ?c)
+                                     ("flagged" . ??))))
+
+          (setq org-mobile-directory "~/Dropbox/org/")
+         )
+       :bind (
+              ("C-c l" . org-store-link)
+              ("C-c a" . org-agenda)
+              ("C-c c" . org-capture)
+              ("C-c b" . org-buffer-list)))
+   #+END_SRC
+
+   #+RESULTS:
+
+   #+BEGIN_SRC emacs-lisp
+     ;(org-babel-do-load-languages
+     ; 'org-babel-load-languages
+     ; '(lisp . t))
 
    #+END_SRC
+
+   #+RESULTS:
+
    
    
-* emacs
-
+*** DONE apply upgrades
+*** brew, and app store
+ emacs
 ** name
-#+BEGIN_SRC emacs-lisp
-(setq user-full-name "Logan Mohseni")
-(setq user-mail-address "mohsenil85@gmail.com")
-#+END_SRC
+   #+BEGIN_SRC emacs-lisp
+     (setq user-full-name "Logan Mohseni")
+     (setq user-mail-address "mohsenil85@gmail.com")
+   #+END_SRC
    
-** inital frame size
-   use odd numbers
+** inital buffer
 #+BEGIN_SRC emacs-lisp
-;(add-to-list 'default-frame-alist '(height . 51 )) 
-;(add-to-list 'default-frame-alist '(width . 177 )) 
+(setq initial-buffer-choice "~/org")
+;(setq initial-buffer-choice "~/org/notes.org")
+
 #+END_SRC
+** inital frame size
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'initial-frame-alist '(height . 51 )) 
+     (add-to-list 'initial-frame-alist '(width . 177 )) 
+     (add-to-list 'initial-frame-alist '(top . 1 )) 
+     (add-to-list 'initial-frame-alist '(left . 1 )) 
+   #+END_SRC
 ** tool bars, menu bars, and pop ups
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-#+END_SRC
+   #+END_SRC
 ** cursor and startup screen
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (blink-cursor-mode -1)
   ;; disable startup screen
   (setq inhibit-startup-screen t)
   (setq inhibit-startup-echo-area-message "USERNAME")
   (setq inhibit-startup-message t)
-#+END_SRC
+   #+END_SRC
 ** mark mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 (transient-mark-mode t)
-#+END_SRC
+   #+END_SRC
 ** Asking questions
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq use-dialog-box nil)
-#+END_SRC
+   #+END_SRC
 ** silence bell
    #+BEGIN_SRC  emacs-lisp
 (setq ring-bell-function nil)
@@ -269,11 +420,11 @@
 ;(put 'narrow-to-page 'disabled nil)
    #+END_SRC 
 ** Mode line defaults
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 (line-number-mode t)
 (column-number-mode t)
 (size-indication-mode t)
-#+END_SRC
+   #+END_SRC
 ** line and paren highlighting
    #+BEGIN_SRC emacs-lisp
   (show-paren-mode t)
@@ -281,11 +432,11 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-(use-package gandalf-theme :ensure)
+;(use-package gandalf-theme :ensure)
 ;(use-package slime-theme :ensure)
 ;(use-package greymatters-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'gandalf)
+;(load-theme 'basic)
    #+END_SRC
 ** bindings
    #+BEGIN_SRC emacs-lisp
@@ -295,10 +446,11 @@
 ** registers
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
+(set-register ?j (cons 'file "~/org/notes.org"))
+(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
    #+END_SRC
-
-   
-
+   
+
 * functionaria 
   Helper functions to use either in an editing session or to help with
   configuration
@@ -333,21 +485,37 @@
   
 * osx specific 
   handle meta as command
-  use pbcopy.el
   toggle fullscreen
   #+BEGIN_SRC emacs-lisp
     (setq mac-command-modifier 'meta)
     (setq mac-option-modifier 'super)
+    (setq mac-control-modifier 'control)
+    (setq mac-function-modifier 'hyper)
     (use-package helm-itunes :ensure)
-    (use-package pbcopy
-      :ensure
-      :config
-      (turn-on-pbcopy))
     (defun toggle-fullscreen ()
       "Toggle full screen"
       (interactive)
       (set-frame-parameter
        nil 'fullscreen
        (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+    (defun pbcopy ()
+      (interactive)
+      (call-process-region (point) (mark) "pbcopy")
+      (setq deactivate-mark t))
+
+    (defun pbpaste ()
+      (interactive)
+      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+    (defun pbcut ()
+      (interactive)
+      (pbcopy)
+      (delete-region (region-beginning) (region-end)))
+
+    (global-set-key (kbd "H-c") 'pbcopy)
+    (global-set-key (kbd "H-v") 'pbpaste)
+    (global-set-key (kbd "H-x") 'pbcut)
+    (global-set-key (kbd "H-i") 'load-init-file)
+
   #+END_SRC
   
