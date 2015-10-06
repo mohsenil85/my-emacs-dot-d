@@ -3,6 +3,8 @@
 #+EMAIL: mohsenil85@gmail.com 
 #+OPTIONS: toc:3 num:nil ^:nil
 
+# [[https://github.com/mohsenil85/my-emacs-dot-d/blob/master/emacs-init.org][url]]
+
 * packages
 *** Configure package archives
     #+BEGIN_SRC emacs-lisp
@@ -130,13 +132,18 @@
     
 *** helm-projectile
     #+BEGIN_SRC emacs-lisp
-      (use-package projectile
+      (use-package projectile :ensure)
+      (use-package helm-projectile
         :ensure
         :config (progn
                   (projectile-global-mode)
                   (setq projectile-completion-system 'helm)
                   (helm-projectile-on)))
     #+END_SRC
+
+    #+RESULTS:
+    : t
+
 
 
 *** helm-swoop
@@ -300,24 +307,24 @@
      ;;                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
      ;;                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
      ;;
-         (setq org-capture-templates
-               (quote (("t" "todo" entry (file "~/org/refile.org")
-                        "* TODO %?\n%U\n%a\n")
-                       ("r" "respond" entry (file "~/org/refile.org")
-                        "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :immediate-finish t)
-                       ("n" "note" entry (file "~/org/refile.org")
-                        "* %? :NOTE:\n%U\n%a\n")
-                       ("j" "Journal" entry (file+datetree "~/org/diary.org")
-                        "* %?\n%U\n" )
-                       ("w" "org-protocol" entry (file "~/org/refile.org")
-                        "* TODO Review %c\n%U\n" :immediate-finish t)
-                       ("m" "Meeting" entry (file "~/org/refile.org")
-                        "* MEETING with %? :MEETING:\n%U")
-                       ("p" "Phone call" entry (file "~/org/refile.org")
-                        "* PHONE %? :PHONE:\n%U" )
-                       )))
-         
-
+     ;;    (setq org-capture-templates
+     ;;          (quote (("t" "todo" entry (file "~/org/refile.org")
+     ;;                   "* TODO %?\n%U\n%a\n")
+     ;;                  ("r" "respond" entry (file "~/org/refile.org")
+     ;;                   "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :immediate-finish t)
+     ;;                  ("n" "note" entry (file "~/org/refile.org")
+     ;;                   "* %? :NOTE:\n%U\n%a\n")
+     ;;                  ("j" "Journal" entry (file+datetree "~/org/diary.org")
+     ;;                   "* %?\n%U\n" )
+     ;;                  ("w" "org-protocol" entry (file "~/org/refile.org")
+     ;;                   "* TODO Review %c\n%U\n" :immediate-finish t)
+     ;;                  ("m" "Meeting" entry (file "~/org/refile.org")
+     ;;                   "* MEETING with %? :MEETING:\n%U")
+     ;;                  ("p" "Phone call" entry (file "~/org/refile.org")
+     ;;                   "* PHONE %? :PHONE:\n%U" )
+     ;;                  )))
+     ;;    
+     ;;
          ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
          (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                           (org-agenda-files :maxlevel . 9))))
@@ -328,18 +335,18 @@
          ;; Allow refile to create parent tasks with confirmation
          (setq org-refile-allow-creating-parent-nodes (quote confirm))
          ;; Tags with fast selection keys
-         (setq org-tag-alist (quote ((:startgroup)
-                                     ("@errand" . ?e)
-                                     ("@office" . ?o)
-                                     ("@home" . ?H)
-                                     (:endgroup)
-                                     ("waiting" . ?w)
-                                     ("hold" . ?h)
-                                     ("personal" . ?p)
-                                     ("work" . ?W)
-                                     ("note" . ?n)
-                                     ("cancelled" . ?c)
-                                     ("flagged" . ??))))
+     ;;    (setq org-tag-alist (quote ((:startgroup)
+     ;;                                ("@errand" . ?e)
+     ;;                                ("@office" . ?o)
+     ;;                                ("@home" . ?H)
+     ;;                                (:endgroup)
+     ;;                                ("waiting" . ?w)
+     ;;                                ("hold" . ?h)
+     ;;                                ("personal" . ?p)
+     ;;                                ("work" . ?W)
+     ;;                                ("note" . ?n)
+     ;;                                ("cancelled" . ?c)
+     ;;                                ("flagged" . ??))))
 
           (setq org-mobile-directory "~/Dropbox/org/")
          )
