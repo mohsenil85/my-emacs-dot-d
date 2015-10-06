@@ -10,8 +10,8 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 
-;;(add-to-list 'package-archives
-             ;;'("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/"))
 
 (package-initialize)
     #+END_SRC
@@ -366,12 +366,14 @@
 *** DONE apply upgrades
 *** brew, and app store
  emacs
+* emacs
 ** name
-   #+BEGIN_SRC emacs-lisp
-     (setq user-full-name "Logan Mohseni")
-     (setq user-mail-address "mohsenil85@gmail.com")
-   #+END_SRC
-   
+*** 
+  #+BEGIN_SRC emacs-lisp
+    (setq user-full-name "Logan Mohseni")
+    (setq user-mail-address "mohsenil85@gmail.com")
+  #+END_SRC
+  
 ** inital buffer
 #+BEGIN_SRC emacs-lisp
 (setq initial-buffer-choice "~/org")

@@ -23,3 +23,5 @@ vendor/*
 /notes
 /places
 /.persistent-scratch
+/.org-id-locations
+/ido.last
