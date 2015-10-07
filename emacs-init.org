@@ -42,6 +42,13 @@
   (global-page-break-lines-mode))
     #+END_SRC
     
+*** better-defaults
+#+BEGIN_SRC emacs-lisp
+  (use-package better-defaults :ensure )
+#+END_SRC
+
+#+RESULTS:
+
 *** magit
     #+BEGIN_SRC emacs-lisp
 (use-package magit :ensure
@@ -115,21 +122,33 @@
         (progn
           (require 'helm)
           (require 'helm-config)
+          (setq helm-ff-transformer-show-only-basename nil)
+          (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+
           (setq helm-M-x-fuzzy-match t)
+          (setq helm-buffers-fuzzy-matching t)
+          (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
           (setq helm-move-to-line-cycle-in-source t)
+          
+      (autoload 'helm-descbinds      "helm-descbinds" t)
+      (autoload 'helm-eshell-history "helm-eshell"    t)
+      (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
           (setq helm-split-window-in-side-p t)
           (setq helm-ff-file-name-history-use-recentf t)
-          (setq helm-autoresize-mode t)
+      (setq helm-autoresize-mode t)
+
           (helm-mode 1))
         :bind
         (("M-x" . helm-M-x)
                ("C-c h" . helm-command-prefix)
                ("C-x b" . helm-mini)
+               ("C-x C-b" . helm-buffers-list)
+               ("C-x C-r" . helm-recentf)
                ("M-y" . helm-show-kill-ring)
                ("C-x C-f" . helm-find-files)
                ("C-c h o" . helm-occur)))
     #+END_SRC
-    
+
 *** helm-projectile
     #+BEGIN_SRC emacs-lisp
       (use-package projectile :ensure)
@@ -192,6 +211,8 @@
       ;; Face name is `helm-swoop-line-number-face`
       (setq helm-swoop-use-line-number-face t)))
 #+END_SRC
+*** helm-ac
+
 ** ac mode
    #+BEGIN_SRC emacs-lisp
 (use-package auto-complete
@@ -205,13 +226,13 @@
        :ensure
        :config 
        (progn
-         (enable-paredit-mode)
-         (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-         (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-         (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-         (add-hook 'slime-repl-mode-hook             #'enable-paredit-mode)
-         (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-         (add-hook 'scheme-mode-hook           #'enable-paredit-mode)))
+         (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+         (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+         (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+         (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+         (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+         (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+         ))
 
      (use-package smartparens
        :ensure
@@ -242,12 +263,10 @@
                  (setq slime-contribs '(slime-fancy slime-fuzzy))
                  (slime-setup)
                  )
-       :bind (("C-c s" . slime-selector)
-                                             ;("C-SPC" . slime-complete-symbol)
-              ))
+       )
 
-     (use-package log4slime
-       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
+     ;;     (use-package log4slime
+     ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
 
      (use-package ac-slime
        :ensure
@@ -257,11 +276,11 @@
                  (eval-after-load "auto-complete"
                    '(add-to-list 'ac-modes 'slime-repl-mode))))
 
-     ;;(load (expand-file-name "~/.quicklisp/slime-helper.el"))
-     ;; Replace "sbcl" with the path to your implementation
-
-
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
    
    
 ** org-mode
@@ -274,105 +293,106 @@
 
          (setq org-M-RET-may-split-line nil)
 
+         (setq org-hide-leading-stars t)
+         (setq org-log-done 'note)
+         (setq org-log-into-drawer t)
+         (setq org-show-hierarchy-above (quote ((default . t))))
+         (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
          (setq org-default-notes-file "~/org/refile.org")
          (setq  org-agenda-files (quote ("~/org")))
          (setq  org-agenda-ndays 7)
-         ;(setq  add-hook 'org-capture-mode-hook 'evil-insert-state)
+                                             ;(setq  add-hook 'org-capture-mode-hook 'evil-insert-state)
          (setq  org-deadline-warning-days 14)
          (setq  org-agenda-show-all-dates t)
          (setq  org-agenda-skip-deadline-if-done t)
          (setq  org-agenda-skip-scheduled-if-done t)
          (setq  org-agenda-start-on-weekday nil)
          (setq  org-reverse-note-order t)
-         ;;(setq  org-fast-tag-selection-single-key (quote expert))
-     ;;    (setq org-todo-keywords
-     ;;          (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-     ;;                  (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING"))))
-     ;;    
-     ;;    (setq org-todo-keyword-faces
-     ;;          (quote (("TODO" :foreground "red" :weight bold)
-     ;;                  ("NEXT" :foreground "blue" :weight bold)
-     ;;                  ("DONE" :foreground "forest green" :weight bold)
-     ;;                  ("WAITING" :foreground "orange" :weight bold)
-     ;;                  ("HOLD" :foreground "magenta" :weight bold)
-     ;;                  ("CANCELLED" :foreground "forest green" :weight bold)
-     ;;                  ("MEETING" :foreground "forest green" :weight bold)
-     ;;                  ("PHONE" :foreground "forest green" :weight bold))))
-     ;;    (setq org-todo-state-tags-triggers
-     ;;          (quote (("CANCELLED" ("CANCELLED" . t))
-     ;;                  ("WAITING" ("WAITING" . t))
-     ;;                  ("HOLD" ("WAITING") ("HOLD" . t))
-     ;;                  (done ("WAITING") ("HOLD"))
-     ;;                  ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-     ;;                  ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-     ;;                  ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-     ;;
-     ;;    (setq org-capture-templates
-     ;;          (quote (("t" "todo" entry (file "~/org/refile.org")
-     ;;                   "* TODO %?\n%U\n%a\n")
-     ;;                  ("r" "respond" entry (file "~/org/refile.org")
-     ;;                   "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :immediate-finish t)
-     ;;                  ("n" "note" entry (file "~/org/refile.org")
-     ;;                   "* %? :NOTE:\n%U\n%a\n")
-     ;;                  ("j" "Journal" entry (file+datetree "~/org/diary.org")
-     ;;                   "* %?\n%U\n" )
-     ;;                  ("w" "org-protocol" entry (file "~/org/refile.org")
-     ;;                   "* TODO Review %c\n%U\n" :immediate-finish t)
-     ;;                  ("m" "Meeting" entry (file "~/org/refile.org")
-     ;;                   "* MEETING with %? :MEETING:\n%U")
-     ;;                  ("p" "Phone call" entry (file "~/org/refile.org")
-     ;;                   "* PHONE %? :PHONE:\n%U" )
-     ;;                  )))
-     ;;    
-     ;;
+
+         (setq org-todo-keywords
+               '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d@!)" "CANCELED(c@)")))
+
+         ;;(setq org-agenda-start-with-follow-mode t)
+         (setq org-use-tag-inheritance t)
+         (setq org-capture-templates
+               (quote (
+                       ("W" "work note" entry
+                        (file+headline "~/org/work.org" "notes")
+                        "* %?\n%U\n%a\n:PROPERTIES:\n:TAGS:work \n:END:\n")
+                       ("n" "note" entry
+                        (file+headline "~/org/notes.org" "notes")
+                        "* %?\n%U\n%a\n")
+                       ("w" "work" entry
+                        (file+headline "~/org/work.org" "tasks")
+                        "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
+                       ("t" "todo" entry
+                        (file+headline "~/org/notes.org" "todo")
+                        "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
+                       ("s" "shopping" checkitem
+                        (file+headline "~/org/notes.org" "shopping")
+                        "- [ ] %?\n")
+                       ("j" "journal" entry (file+datetree "~/org/journal.org")
+                        "* %?\n%U\n")
+                       ("d" "daily" entry (file "~/org/notes.rg")
+                        "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                       ("w" "weekly" entry (file "~/org/notes.org")
+                        "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1w/5d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                       ("h" "habit" entry (file "~/org/notes.org")
+                        "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                       )))
+
+         ;;want to archive when done with a note
+
+         ;; (defun my-hook ()
+         ;;   (my-org-archive-done-tasks)
+         ;;   (message "archived some shit")
+         ;;   )
+
+         ;; (setq org-after-todo-state-change-hook 'my-hook)
+
+
          ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
          (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                           (org-agenda-files :maxlevel . 9))))
          ;; Use full outline paths for refile targets - we file directly with IDO
          (setq org-refile-use-outline-path t)
          ;; Targets complete directly with IDO
-     ;;    (setq org-outline-path-complete-in-steps nil)
+                                             ;(setq org-outline-path-complete-in-steps nil)
          ;; Allow refile to create parent tasks with confirmation
          (setq org-refile-allow-creating-parent-nodes (quote confirm))
-         ;; Tags with fast selection keys
-     ;;    (setq org-tag-alist (quote ((:startgroup)
-     ;;                                ("@errand" . ?e)
-     ;;                                ("@office" . ?o)
-     ;;                                ("@home" . ?H)
-     ;;                                (:endgroup)
-     ;;                                ("waiting" . ?w)
-     ;;                                ("hold" . ?h)
-     ;;                                ("personal" . ?p)
-     ;;                                ("work" . ?W)
-     ;;                                ("note" . ?n)
-     ;;                                ("cancelled" . ?c)
-     ;;                                ("flagged" . ??))))
 
-          (setq org-mobile-directory "~/Dropbox/org/")
-         )
+         (setq org-mobile-directory "~/Dropbox/org/"))
        :bind (
               ("C-c l" . org-store-link)
               ("C-c a" . org-agenda)
               ("C-c c" . org-capture)
-              ("C-c b" . org-buffer-list)))
+              ))
+
+     ;;put all DONE into archive
+     (defun my-org-archive-done-tasks ()
+       (interactive)
+       (unless
+           (org-map-entries 'org-archive-subtree "/DONE" 'file)))
+
+
+     ;; (add-hook 'org-mode-hook
+     ;;           (lambda ()
+     ;;             (add-hook 'after-save-hook 'my-org-archive-done-tasks 'make-it-local)))
+
    #+END_SRC
 
    #+RESULTS:
+   : my-org-archive-done-tasks
 
    #+BEGIN_SRC emacs-lisp
-     ;(org-babel-do-load-languages
-     ; 'org-babel-load-languages
-     ; '(lisp . t))
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((lisp . t)))
 
    #+END_SRC
 
    #+RESULTS:
 
-   
-   
-*** DONE apply upgrades
-*** brew, and app store
- emacs
 * emacs
 ** name
 *** 
@@ -383,17 +403,25 @@
   
 ** inital buffer
 #+BEGIN_SRC emacs-lisp
-(setq initial-buffer-choice "~/org")
-;(setq initial-buffer-choice "~/org/notes.org")
-
+  ;(setq initial-buffer-choice "~/org")
+  ;(setq initial-buffer-choice "~/org/notes.org")
+  (org-agenda-list)
+  ;(delete-other-windows)
+  ;(org-agenda-day-view)
 #+END_SRC
+
+#+RESULTS:
+
 ** inital frame size
    #+BEGIN_SRC emacs-lisp
-     (add-to-list 'initial-frame-alist '(height . 51 )) 
-     (add-to-list 'initial-frame-alist '(width . 177 )) 
-     (add-to-list 'initial-frame-alist '(top . 1 )) 
-     (add-to-list 'initial-frame-alist '(left . 1 )) 
+     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
+     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
+     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
+     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
    #+END_SRC
+
+   #+RESULTS:
+
 ** tool bars, menu bars, and pop ups
    #+BEGIN_SRC emacs-lisp
 (scroll-bar-mode -1)
@@ -434,6 +462,15 @@
 (column-number-mode t)
 (size-indication-mode t)
    #+END_SRC
+** line-wraping
+#+BEGIN_SRC emacs-lisp
+(global-visual-line-mode t)
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
 ** line and paren highlighting
    #+BEGIN_SRC emacs-lisp
   (show-paren-mode t)
@@ -443,9 +480,9 @@
    #+BEGIN_SRC emacs-lisp
 ;(use-package gandalf-theme :ensure)
 ;(use-package slime-theme :ensure)
-;(use-package greymatters-theme :ensure)
+(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-;(load-theme 'basic)
+(load-theme 'adwaita)
    #+END_SRC
 ** bindings
    #+BEGIN_SRC emacs-lisp
@@ -455,9 +492,14 @@
 ** registers
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-(set-register ?j (cons 'file "~/org/notes.org"))
+(set-register ?t (cons 'file "~/org/todo.org"))
+(set-register ?r (cons 'file "~/org/refile.org"))
 (set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
    #+END_SRC
+
+   #+RESULTS:
+   : (file . ~/Projects/lisp/drogue/drogue.lisp)
+
    
 
 * functionaria 
