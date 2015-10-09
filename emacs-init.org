@@ -67,20 +67,52 @@
         :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
                ("C-x n w" . recursive-widen-dwim)))
     #+END_SRC
-    
+*** deft org
+#+BEGIN_SRC emacs-lisp
+  (use-package deft 
+    :ensure
+    :config (progn
+              (setq
+               deft-extension "org"
+               deft-directory "~/org/"
+               deft-text-mode 'org-mode)
+              (global-set-key (kbd "H-d") 'deft)))
+#+END_SRC
+*** org-ac
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-ac
+        :ensure
+        :init
+        (progn
+          (require 'org-ac)
+          ;; Make config suit for you. About the config item, eval the following sexp.
+          ;; (customize-group "org-ac")
+          (org-ac/config-default)
+          ) )  
+    #+END_SRC
     
 ** evil
 *** evil-leader
     evil leader is required before evil
     #+BEGIN_SRC emacs-lisp
-      (use-package evil-leader
-      :ensure
-      :config
-      (progn
-      (global-evil-leader-mode 1)
-      (evil-leader/set-leader "<SPC>")
-      (evil-leader/set-key "r" 'remember)))
+            (use-package evil-leader
+            :ensure
+            :config
+            (progn
+            (global-evil-leader-mode 1)
+            (evil-leader/set-leader "<SPC>")
+            (evil-leader/set-key "c" 'org-capture)
+            (evil-leader/set-key "<SPC>" 'org-agenda-list)
+            (evil-leader/set-key "o" (lambda ()
+                                       ((interactive)
+                                        (find-file "~/org/organizer.org")
+                                        )))
+      ))
     #+END_SRC
+
+    #+RESULTS:
+    : t
+
     
 *** main evil
     #+BEGIN_SRC emacs-lisp
@@ -90,7 +122,10 @@
        (evil-mode 1))
     #+END_SRC
     
-    
+*** evil-rsi
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
+    #+END_SRC
 *** evil-org
     #+BEGIN_SRC emacs-lisp
       (use-package evil-org :ensure :init (require 'evil-org))  
@@ -310,36 +345,71 @@
          (setq  org-reverse-note-order t)
 
          (setq org-todo-keywords
-               '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d@!)" "CANCELED(c@)")))
+               (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                       (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+
+         
+
+         (setq org-todo-state-tags-triggers
+               (quote (("CANCELLED" ("CANCELLED" . t))
+                       ("WAITING" ("WAITING" . t))
+                       ("HOLD" ("WAITING") ("HOLD" . t))
+                       (done ("WAITING") ("HOLD"))
+                       ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                       ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                       ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+
 
          ;;(setq org-agenda-start-with-follow-mode t)
          (setq org-use-tag-inheritance t)
          (setq org-capture-templates
-               (quote (
-                       ("W" "work note" entry
-                        (file+headline "~/org/work.org" "notes")
-                        "* %?\n%U\n%a\n:PROPERTIES:\n:TAGS:work \n:END:\n")
-                       ("n" "note" entry
-                        (file+headline "~/org/notes.org" "notes")
-                        "* %?\n%U\n%a\n")
-                       ("w" "work" entry
-                        (file+headline "~/org/work.org" "tasks")
-                        "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
-                       ("t" "todo" entry
-                        (file+headline "~/org/notes.org" "todo")
-                        "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
-                       ("s" "shopping" checkitem
-                        (file+headline "~/org/notes.org" "shopping")
-                        "- [ ] %?\n")
-                       ("j" "journal" entry (file+datetree "~/org/journal.org")
-                        "* %?\n%U\n")
-                       ("d" "daily" entry (file "~/org/notes.rg")
-                        "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
-                       ("w" "weekly" entry (file "~/org/notes.org")
-                        "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1w/5d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
-                       ("h" "habit" entry (file "~/org/notes.org")
+               (quote (("t" "todo" entry (file+headline "~/org/organizer.org" "inbox")
+                        "* TODO %?\n%U\n%a\n" )
+                       ("n" "note" entry (file+headline "~/org/organizer.org" "inbox")
+                        "* %? :NOTE:\n%U\n%a\n" )
+                       ("j" "journal" entry (file+datetree "~/org/organizer.org")
+                        "* %?\n%U\n" )
+                       ("h" "habit" entry (file+datetree "~/git/org/organizer.org")
                         "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+                       ("s" "shopping" checkitem
+                        (file+headline "~/org/organizer.org" "shopping")
+                        "- [ ] %?\n")
+
                        )))
+
+         ;;TODO take this out
+
+
+         ;; (setq org-capture-templates
+         ;;       (quote (
+         ;;               ("t" "todo" entry
+         ;;                (file+headline "~/org/organizer.org" "inbox")
+         ;;                "* TODO %?\n%U\n")
+         ;;               ("n" "note" entry
+         ;;                (file+headline "~/org/organizer.org" "inbox")
+         ;;                "* %?\n%U\n%a\n")
+         ;;               ("W" "work note" entry
+         ;;                (file+headline "~/org/work.org" "work notes")
+         ;;                "* %?\n%U\n%a\n:PROPERTIES:\n:TAGS:work \n:END:\n")
+         ;;               ("w" "work todo" entry
+         ;;                (file+headline "~/org/work.org" "tasks")
+         ;;                "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
+         ;;               ("T" "Today" entry
+         ;;                (file+headline "~/org/organizer.org" "inbox")
+         ;;                "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .>>\")\n")
+         ;;               ("s" "shopping" checkitem
+         ;;                (file+headline "~/org/organizer.org" "shopping")
+         ;;                "- [ ] %?\n")
+         ;;               ("j" "journal" entry (file+datetree "~/org/organizer.org")
+         ;;                "* %?\n%U\n")
+         ;;               ("d" "daily" entry (file+datetree "~/org/organizer.org")
+         ;;                "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+         ;;               ("e" "weekly" entry (file+datetree "~/org/organizer.org")
+         ;;                "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1w/5d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+         ;;               ("h" "habit" entry (file+datetree "~/org/organizer.org")
+         ;;                "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
+         ;;               )))
 
          ;;want to archive when done with a note
 
@@ -360,6 +430,8 @@
                                              ;(setq org-outline-path-complete-in-steps nil)
          ;; Allow refile to create parent tasks with confirmation
          (setq org-refile-allow-creating-parent-nodes (quote confirm))
+
+         
 
          (setq org-mobile-directory "~/Dropbox/org/"))
        :bind (
@@ -406,8 +478,8 @@
   ;(setq initial-buffer-choice "~/org")
   ;(setq initial-buffer-choice "~/org/notes.org")
   (org-agenda-list)
-  ;(delete-other-windows)
-  ;(org-agenda-day-view)
+  (delete-other-windows)
+  (org-agenda-day-view)
 #+END_SRC
 
 #+RESULTS:
@@ -482,7 +554,7 @@
 ;(use-package slime-theme :ensure)
 (use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'adwaita)
+;(load-theme 'basic)
    #+END_SRC
 ** bindings
    #+BEGIN_SRC emacs-lisp
