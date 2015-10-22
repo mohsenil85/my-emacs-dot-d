@@ -4,9 +4,11 @@
 #+OPTIONS: toc:3 num:nil ^:nil
 
 # [[https://github.com/mohsenil85/my-emacs-dot-d/blob/master/emacs-init.org][url]]
-
+
 * packages
+** package config 
 *** Configure package archives
+
     #+BEGIN_SRC emacs-lisp
 (require 'package)
 (add-to-list 'package-archives
@@ -29,10 +31,16 @@
     
 ** Misc packages
    #+BEGIN_SRC emacs-lisp
-(use-package ag :ensure)
-(use-package better-defaults :ensure)
-(use-package markdown-mode :ensure)
+          (use-package ag :ensure)
+          (use-package better-defaults :ensure)
+          (use-package markdown-mode :ensure)
+          ;;(use-package auctex :ensure  )
+     (require 'tex)
    #+END_SRC
+
+   #+RESULTS:
+   : tex
+
    
 *** page break lines
     #+BEGIN_SRC emacs-lisp
@@ -42,6 +50,19 @@
   (global-page-break-lines-mode))
     #+END_SRC
     
+*** flycheck
+#+begin_src emacs-lisp
+  (use-package
+    flycheck
+    :ensure
+    :config
+    (progn
+      (add-hook 'after-init-hook #'global-flycheck-mode)))
+#+end_src
+
+#+RESULTS:
+: t
+
 *** better-defaults
 #+BEGIN_SRC emacs-lisp
   (use-package better-defaults :ensure )
@@ -502,21 +523,25 @@
    #+END_SRC
 ** cursor and startup screen
    #+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode -1)
-  ;; disable startup screen
-  (setq inhibit-startup-screen t)
-  (setq inhibit-startup-echo-area-message "USERNAME")
-  (setq inhibit-startup-message t)
+     (blink-cursor-mode -1)
+     (setq inhibit-startup-screen t)
+     (setq inhibit-startup-echo-area-message "USERNAME")
+     (setq inhibit-startup-message t)
    #+END_SRC
+
+
 ** mark mode
    #+BEGIN_SRC emacs-lisp
-(transient-mark-mode t)
+     (transient-mark-mode t)
    #+END_SRC
 ** Asking questions
    #+BEGIN_SRC emacs-lisp
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq use-dialog-box nil)
    #+END_SRC
+
+   #+RESULTS:
+
 ** silence bell
    #+BEGIN_SRC  emacs-lisp
 (setq ring-bell-function nil)
@@ -551,11 +576,16 @@
 ** color theme
    #+BEGIN_SRC emacs-lisp
 ;(use-package gandalf-theme :ensure)
+;(use-package warm-night-theme :ensure)
 ;(use-package slime-theme :ensure)
-(use-package basic-theme :ensure)
+;(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-;(load-theme 'basic)
+(load-theme 'whiteboard)
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
 ** bindings
    #+BEGIN_SRC emacs-lisp
    (global-set-key (kbd "M-o") 'other-window)

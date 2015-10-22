@@ -25,3 +25,12 @@ vendor/*
 /.persistent-scratch
 /.org-id-locations
 /ido.last
+/smex-items
+/#emacs-init.el#
+/emacs-init.aux
+/emacs-init.log
+/emacs-init.out
+/emacs-init.pdf
+/emacs-init.tex
+/emacs-init.toc
+semanticdb/
