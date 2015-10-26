@@ -34,3 +34,8 @@ vendor/*
 /emacs-init.tex
 /emacs-init.toc
 semanticdb/
+/.signature
+/dict/ada-mode
+/dict/c-mode
+/url/cookies
+/dict/go-mode

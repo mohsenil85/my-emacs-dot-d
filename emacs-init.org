@@ -42,14 +42,44 @@
    : tex
 
    
-*** page break lines
+*** yasnippet
     #+BEGIN_SRC emacs-lisp
-(use-package page-break-lines
-  :ensure
-  :config
-  (global-page-break-lines-mode))
-    #+END_SRC
-    
+      (use-package yasnippet
+        :ensure
+        :config
+        (progn
+          (require 'yasnippet)
+          (yas-global-mode 1)))
+
+
+      (use-package common-lisp-snippets
+        :ensure
+        :config (require 'common-lisp-snippets))
+#+END_SRC
+
+    #+RESULTS:
+    : t
+
+*** elfeed
+#+BEGIN_SRC emacs-lisp
+  (use-package
+    elfeed :ensure
+    :config (evil-set-initial-state 'elfeed-show 'emacs)
+    :bind ("C-x w" . elfeed)
+    )
+#+END_SRC
+*** powerline
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline 
+    :ensure
+    :config (progn
+              (require 'powerline)
+              (powerline-center-evil-theme)))
+#+END_SRC
+
+#+RESULTS:
+: t
+
 *** flycheck
 #+begin_src emacs-lisp
   (use-package
@@ -101,17 +131,44 @@
 #+END_SRC
 *** org-ac
     #+BEGIN_SRC emacs-lisp
-      (use-package org-ac
-        :ensure
-        :init
-        (progn
-          (require 'org-ac)
-          ;; Make config suit for you. About the config item, eval the following sexp.
-          ;; (customize-group "org-ac")
-          (org-ac/config-default)
-          ) )  
+;;      (use-package org-ac
+;;        :ensure
+;;        :init
+;;        (progn
+;;          (require 'org-ac)
+;;          ;; Make config suit for you. About the config item, eval the following sexp.
+;;          ;; (customize-group "org-ac")
+;;          (org-ac/config-default)
+;;          ) )  
     #+END_SRC
     
+*** page-break-lines
+#+begin_src emacs-lisp
+          (use-package page-break-lines :ensure :config (page-break-lines-mode 1))
+
+#+end_src
+
+#+RESULTS:
+: t
+
+*** diminish
+#+begin_src emacs-lisp
+  (use-package
+    diminish
+    :ensure
+    :config
+    (progn
+      (diminish 'helm-mode)
+      (diminish 'evil-smartparens-mode)
+      (diminish 'evil-rsi-mode)
+      (diminish 'smartparens-mode)
+      (diminish 'smartparens-mode)
+      (diminish 'undo-tree-mode)
+      (diminish 'paredit-mode)
+      (diminish 'visual-line-mode)
+      
+      ))
+#+end_src
 ** evil
 *** evil-leader
     evil leader is required before evil
@@ -171,38 +228,65 @@
 - C-h w, which runs where-is
 *** helm proper
     #+BEGIN_SRC emacs-lisp
-      (use-package helm
-        :ensure
-        :demand
-        :config
-        (progn
-          (require 'helm)
-          (require 'helm-config)
-          (setq helm-ff-transformer-show-only-basename nil)
-          (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+            (use-package helm
+              :ensure
+              :demand
+              :config
+              (progn
+                (require 'helm)
+                (require 'helm-config)
+                (setq helm-ff-transformer-show-only-basename nil)
+                (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
 
-          (setq helm-M-x-fuzzy-match t)
-          (setq helm-buffers-fuzzy-matching t)
-          (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
-          (setq helm-move-to-line-cycle-in-source t)
-          
-      (autoload 'helm-descbinds      "helm-descbinds" t)
-      (autoload 'helm-eshell-history "helm-eshell"    t)
-      (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
-          (setq helm-split-window-in-side-p t)
-          (setq helm-ff-file-name-history-use-recentf t)
-      (setq helm-autoresize-mode t)
+                (setq helm-M-x-fuzzy-match t)
+                (setq helm-recentf-fuzzy-match t)
+                (setq helm-mode-fuzzy-match t)
+                (setq helm-buffers-fuzzy-matching t)
+                (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
+                (setq helm-move-to-line-cycle-in-source t)
 
-          (helm-mode 1))
-        :bind
-        (("M-x" . helm-M-x)
+                
+                (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+                (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+                (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+                (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+               (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
+
+                (autoload 'helm-descbinds      "helm-descbinds" t)
+                (autoload 'helm-eshell-history "helm-eshell"    t)
+                (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
+
+                
+
+                
+
+
+                (setq helm-autoresize-mode t)
+                (setq helm-split-window-in-side-p t)
+                (setq helm-ff-file-name-history-use-recentf t)
+                (setq helm-autoresize-mode t)
+
+                (helm-mode 1))
+              :bind
+              (("M-x" . helm-M-x)
                ("C-c h" . helm-command-prefix)
                ("C-x b" . helm-mini)
+               ("C-h SPC" . helm-all-mark-rings)
+               ("C-c h x" . helm-register)
+               ("C-c h g" . helm-google-suggest)
+
                ("C-x C-b" . helm-buffers-list)
                ("C-x C-r" . helm-recentf)
                ("M-y" . helm-show-kill-ring)
                ("C-x C-f" . helm-find-files)
                ("C-c h o" . helm-occur)))
+
+            (use-package helm-descbinds :ensure :config
+              (progn
+                (require 'helm-descbinds)
+                (helm-descbinds-mode)
+                )
+              )
     #+END_SRC
 
 *** helm-projectile
@@ -271,10 +355,19 @@
 
 ** ac mode
    #+BEGIN_SRC emacs-lisp
-(use-package auto-complete
-  :ensure
-  :config (ac-config-default))
+     (use-package auto-complete
+       :ensure
+       :config
+       (progn
+         (require 'auto-complete-config)
+         (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
+
+         (ac-config-default)))
    #+END_SRC
+
+   #+RESULTS:
+   : t
+
 
 ** lisp
    #+BEGIN_SRC emacs-lisp
@@ -293,7 +386,7 @@
      (use-package smartparens
        :ensure
        :init (require 'smartparens-config)
-       :config (smartparens-strict-mode 1))
+       :config (smartparens-global-strict-mode 1))
 
      (use-package evil-smartparens
        :ensure
@@ -323,12 +416,16 @@
 
      ;;     (use-package log4slime
      ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
+     (use-package fuzzy :ensure )
+
+     (defun my-slime-ac-thing ()
+       (set-up-slime-ac t))
 
      (use-package ac-slime
        :ensure
        :config (progn
-                 (add-hook 'slime-mode-hook 'set-up-slime-ac)
-                 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+                 (add-hook 'slime-mode-hook 'my-slime-ac-thing)
+                 (add-hook 'slime-repl-mode-hook 'my-slime-ac-thing)
                  (eval-after-load "auto-complete"
                    '(add-to-list 'ac-modes 'slime-repl-mode))))
 
@@ -348,16 +445,16 @@
          (setq org-catch-invisible-edits t)
 
          (setq org-M-RET-may-split-line nil)
+         (setq org-return-follows-link t)
 
          (setq org-hide-leading-stars t)
-         (setq org-log-done 'note)
+         ;;(setq org-log-done 'note)
          (setq org-log-into-drawer t)
          (setq org-show-hierarchy-above (quote ((default . t))))
          (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
-         (setq org-default-notes-file "~/org/refile.org")
+         (setq org-default-notes-file "~/org/organizer.org")
          (setq  org-agenda-files (quote ("~/org")))
          (setq  org-agenda-ndays 7)
-                                             ;(setq  add-hook 'org-capture-mode-hook 'evil-insert-state)
          (setq  org-deadline-warning-days 14)
          (setq  org-agenda-show-all-dates t)
          (setq  org-agenda-skip-deadline-if-done t)
@@ -389,15 +486,27 @@
                         "* TODO %?\n%U\n%a\n" )
                        ("n" "note" entry (file+headline "~/org/organizer.org" "inbox")
                         "* %? :NOTE:\n%U\n%a\n" )
-                       ("j" "journal" entry (file+datetree "~/org/organizer.org")
-                        "* %?\n%U\n" )
-                       ("h" "habit" entry (file+datetree "~/git/org/organizer.org")
+                       ("h" "habit" entry (file+datetree "~/org/organizer.org")
                         "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"%<<%Y-%m-%d %a .+1d/3d>>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n")
                        ("s" "shopping" checkitem
                         (file+headline "~/org/organizer.org" "shopping")
                         "- [ ] %?\n")
 
                        )))
+
+         (setq org-agenda-custom-commands
+           '(("O" "Office block agenda"
+              ((agenda "" ((org-agenda-ndays 1))) 
+                           ;; limits the agenda display to a single day
+               (tags-todo "+PRIORITY=\"A\"")
+               (tags-todo "computer|office|phone")
+               (tags "project+CATEGORY=\"elephants\"")
+               (tags "review" ((org-agenda-files '("~/org/organizer.org"))))
+                               ;; limits the tag search to the file circuspeanuts.org
+               (todo "WAITING"))
+              ((org-agenda-compact-blocks t))) ;; options set here apply to the entire block
+             ;; ...other commands here
+             ))
 
          ;;TODO take this out
 
@@ -529,10 +638,10 @@
      (setq inhibit-startup-message t)
    #+END_SRC
 
-
+   
 ** mark mode
    #+BEGIN_SRC emacs-lisp
-     (transient-mark-mode t)
+     ;;;(transient-mark-mode t)
    #+END_SRC
 ** Asking questions
    #+BEGIN_SRC emacs-lisp
@@ -576,11 +685,11 @@
 ** color theme
    #+BEGIN_SRC emacs-lisp
 ;(use-package gandalf-theme :ensure)
-;(use-package warm-night-theme :ensure)
+(use-package warm-night-theme :ensure)
 ;(use-package slime-theme :ensure)
 ;(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'whiteboard)
+(load-theme 'warm-night)
    #+END_SRC
 
    #+RESULTS:
@@ -594,8 +703,8 @@
 ** registers
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-(set-register ?t (cons 'file "~/org/todo.org"))
-(set-register ?r (cons 'file "~/org/refile.org"))
+(set-register ?o (cons 'file "~/org/organizer.org"))
+(set-register ?z (cons 'file "~/.zshrc"))
 (set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
    #+END_SRC
 
@@ -608,33 +717,48 @@
   Helper functions to use either in an editing session or to help with
   configuration
   #+BEGIN_SRC emacs-lisp
-(require 'cl)
+    (require 'cl)
 
-(defun load-init-file ()
-  (interactive)
-  (load-file "/Users/lmohseni/.emacs.d/init.el"))
+    (defun load-init-file ()
+      (interactive)
+      (load-file "/Users/lmohseni/.emacs.d/init.el"))
 
-(defun add-hook-to-modes (modes hook)
-  (dolist (mode modes)
-    (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-              hook)))
+    (defun add-hook-to-modes (modes hook)
+      (dolist (mode modes)
+        (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+                  hook)))
 
-(defun halt ()
-  (interactive)
-  (save-some-buffers)
-  (kill-emacs))
+    (defun halt ()
+      (interactive)
+      (save-some-buffers)
+      (kill-emacs))
 
-(defun my-whitespace-mode-hook ()
-  (setq whitespace-action '(auto-cleanup)
-        whitespace-style  '(face tabs trailing lines-tail empty)
-        ;; use fill-column value instead
-        whitespace-line-column nil)
-  (whitespace-mode))
+    (defun my-whitespace-mode-hook ()
+      (setq whitespace-action '(auto-cleanup)
+            whitespace-style  '(face tabs trailing lines-tail empty)
+            ;; use fill-column value instead
+            whitespace-line-column nil)
+      (whitespace-mode))
 
-(defun my-makefile-mode-hook ()
-  (setq indent-tabs-mode t
-        tab-width 4))
+    (defun my-makefile-mode-hook ()
+      (setq indent-tabs-mode t
+            tab-width 4))
+
+    (defun make-region-read-only (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only t)))
+
+    (defun make-region-read-write (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only nil)))
+
   #+END_SRC
+
+  #+RESULTS:
+  : make-region-read-write
+
   
 * osx specific 
   handle meta as command
@@ -670,5 +794,80 @@
     (global-set-key (kbd "H-x") 'pbcut)
     (global-set-key (kbd "H-i") 'load-init-file)
 
+    ;;recomended by brew
+    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+      (normal-top-level-add-subdirs-to-load-path))
+
   #+END_SRC
   
+* mu4e stuff
+#+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/builds/mu/mu4e")
+    (require 'smtpmail)
+
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+  (setq mail-user-agent 'mu4e-user-agent)
+
+
+  (require 'org-mu4e)
+
+    ; smtp
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials
+          '(("imap.gmail.com" 587 nil nil))
+          smtpmail-default-smtp-server "imap.gmail.com"
+          smtpmail-smtp-server "imap.gmail.com"
+          smtpmail-smtp-service 587
+          smtpmail-debug-info t)
+
+    (require 'mu4e)
+
+    (setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
+
+    (setq mu4e-drafts-folder "/Drafts")
+    (setq mu4e-sent-folder   "/Sent Items")
+    (setq mu4e-trash-folder  "/Trash")
+    (setq message-signature-file "~/.emacs.d/.signature") ; put your signature in this file
+
+    ; get mail
+    (setq mu4e-get-mail-command "mbsync -a "
+          mu4e-html2text-command "w3m -T text/html"
+          mu4e-update-interval 120
+          mu4e-headers-auto-update t
+          mu4e-compose-signature-auto-include nil)
+
+    (setq mu4e-maildir-shortcuts
+          '( ("Inbox"        . ?i)
+             ("Sent Items"   . ?s)
+             ("Trash"        . ?t)
+             ("Drafts"       . ?d)))
+
+    ;; show images
+    (setq mu4e-show-images t)
+
+    ;; use imagemagick, if available
+    (when (fboundp 'imagemagick-register-types)
+      (imagemagick-register-types))
+
+    ;; general emacs mail settings; used when composing e-mail
+    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
+    (setq mu4e-reply-to-address "mohsenil85@gmail.com"
+        user-mail-address "mohsenil85@gmail.com"
+        user-full-name  "Logan Mohseni")
+
+    ;; don't save message to Sent Messages, IMAP takes care of this
+    ; (setq mu4e-sent-messages-behavior 'delete)
+
+    ;; spell check
+    (add-hook 'mu4e-compose-mode-hook
+            (defun my-do-compose-stuff ()
+               "My settings for message composition."
+               (set-fill-column 80)
+               (flyspell-mode)))
+
+    (global-set-key (kbd "H-m") 'mu4e)
+#+END_SRC
+
+#+RESULTS:
+: mu4e
+
