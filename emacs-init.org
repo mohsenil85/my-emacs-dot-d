@@ -162,6 +162,10 @@
       (diminish 'evil-smartparens-mode)
       (diminish 'evil-rsi-mode)
       (diminish 'smartparens-mode)
+      (diminish 'page-break-lines-mode)
+      (diminish 'evil-org-mode)
+      (diminish 'flycheck-mode)
+      (diminish 'yas-minor-mode)
       (diminish 'smartparens-mode)
       (diminish 'undo-tree-mode)
       (diminish 'paredit-mode)
@@ -169,6 +173,10 @@
       
       ))
 #+end_src
+
+#+RESULTS:
+: t
+
 ** evil
 *** evil-leader
     evil leader is required before evil
@@ -194,10 +202,14 @@
     
 *** main evil
     #+BEGIN_SRC emacs-lisp
-     (use-package evil
-       :ensure
-       :config
-       (evil-mode 1))
+      (use-package evil
+        :ensure
+        :config
+        (progn
+          (add-to-list 'evil-emacs-state-modes 'info-mode)
+          (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
+          (add-to-list 'evil-emacs-state-modes 'elfeed-view-mode)
+          (evil-mode 1)))
     #+END_SRC
     
 *** evil-rsi
@@ -352,6 +364,14 @@
       (setq helm-swoop-use-line-number-face t)))
 #+END_SRC
 *** helm-ac
+*** helm-ack
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm-ack
+        :ensure)
+          
+    #+END_SRC
+
+    #+RESULTS:
 
 ** ac mode
    #+BEGIN_SRC emacs-lisp
@@ -417,15 +437,11 @@
      ;;     (use-package log4slime
      ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
      (use-package fuzzy :ensure )
-
-     (defun my-slime-ac-thing ()
-       (set-up-slime-ac t))
-
-     (use-package ac-slime
+          (use-package ac-slime
        :ensure
        :config (progn
-                 (add-hook 'slime-mode-hook 'my-slime-ac-thing)
-                 (add-hook 'slime-repl-mode-hook 'my-slime-ac-thing)
+                 (add-hook 'slime-mode-hook 'set-up-slime-ac)
+                 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
                  (eval-after-load "auto-complete"
                    '(add-to-list 'ac-modes 'slime-repl-mode))))
 
@@ -684,12 +700,12 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-;(use-package gandalf-theme :ensure)
-(use-package warm-night-theme :ensure)
+(use-package gandalf-theme :ensure)
+;(use-package warm-night-theme :ensure)
 ;(use-package slime-theme :ensure)
 ;(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'warm-night)
+(load-theme 'gandalf)
    #+END_SRC
 
    #+RESULTS:
