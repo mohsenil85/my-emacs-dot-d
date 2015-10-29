@@ -19,6 +19,8 @@
  '(exec-path
    (quote
     ("/Users/lmohseni/.rvm/gems/ruby-2.1.2/bin" "/Users/lmohseni/.rvm/gems/ruby-2.1.2@global/bin" "/Users/lmohseni/.rvm/rubies/ruby-2.1.2/bin" "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/opt/X11/bin" "/usr/texbin" "/Users/lmohseni/.rvm/bin" "/opt/homebrew-cask/Caskroom/emacs-mac/emacs-24.5-z-mac-5.11/Emacs.app/Contents/MacOS/libexec" "/opt/homebrew-cask/Caskroom/emacs-mac/emacs-24.5-z-mac-5.11/Emacs.app/Contents/MacOS/bin" "/Users/lmohseni/.bin")))
+ '(git-gutter:window-width -1)
+ '(global-git-gutter-mode t)
  '(global-highlight-changes-mode nil)
  '(global-hl-line-mode t)
  '(helm-locate-command "mdfind %s %s")
@@ -31,14 +33,17 @@
      ("n" "Agenda and all TODO's"
       ((agenda "" nil)
        (alltodo "" nil))
-      nil))))
+      nil))) t)
  '(org-agenda-files (quote ("~/org/work.org" "~/org/organizer.org"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(git-gutter:added ((t (:foreground "medium sea green" :weight bold))))
+ '(git-gutter:deleted ((t (:foreground "tomato" :weight bold))))
+ '(git-gutter:modified ((t (:foreground "violet red" :weight bold))))
+ '(git-gutter:separator ((t (:foreground "deep sky blue" :weight bold)))))
 (require 'ob-tangle)
 ;;(setq debug-on-error t)
 (org-babel-load-file

@@ -502,6 +502,7 @@
          (setq org-return-follows-link t)
 
          (setq org-hide-leading-stars t)
+         (setq org-indent-mode t)
          ;;(setq org-log-done 'note)
          (setq org-log-into-drawer t)
          (setq org-show-hierarchy-above (quote ((default . t))))
