@@ -34,7 +34,10 @@
       ((agenda "" nil)
        (alltodo "" nil))
       nil))) t)
- '(org-agenda-files (quote ("~/org/work.org" "~/org/organizer.org"))))
+ '(org-agenda-files (quote ("~/org/work.org" "~/org/organizer.org")))
+ '(projectile-global-mode t)
+ '(projectile-mode-line (quote (:eval (format " %s" (projectile-project-name)))))
+ '(projectile-switch-project-action (quote helm-projectile-find-file)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -43,7 +46,9 @@
  '(git-gutter:added ((t (:foreground "medium sea green" :weight bold))))
  '(git-gutter:deleted ((t (:foreground "tomato" :weight bold))))
  '(git-gutter:modified ((t (:foreground "violet red" :weight bold))))
- '(git-gutter:separator ((t (:foreground "deep sky blue" :weight bold)))))
+ '(git-gutter:separator ((t (:foreground "deep sky blue" :weight bold))))
+ '(mode-line-inactive ((t (:background "gray50" :foreground "gray83"))))
+ '(powerline-active2 ((t (:background "grey40" :foreground "PaleGreen1")))))
 (require 'ob-tangle)
 ;;(setq debug-on-error t)
 (org-babel-load-file

@@ -158,14 +158,304 @@
     
 *** page-break-lines
 #+begin_src emacs-lisp
-  (use-package page-break-lines :ensure :config (page-break-lines-mode 1))
+  (use-package page-break-lines :ensure :config (global-page-break-lines-mode 1))
 
 #+end_src
 
 #+RESULTS:
 : t
+
+* emacs
+** name
+*** 
+  #+BEGIN_SRC emacs-lisp
+    (setq user-full-name "Logan Mohseni")
+    (setq user-mail-address "mohsenil85@gmail.com")
+  #+END_SRC
+  
+** inital buffer
+#+BEGIN_SRC emacs-lisp
+  ;(setq initial-buffer-choice "~/org")
+  (setq initial-buffer-choice "~/org/organizer.org")
+;  (org-agenda-list)
+;  (delete-other-windows)
+;  (org-agenda-day-view)
+#+END_SRC
+
+#+RESULTS:
+
+** inital frame size
+   #+BEGIN_SRC emacs-lisp
+     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
+     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
+     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
+     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
+   #+END_SRC
+
+   #+RESULTS:
+
+** tool bars, menu bars, and pop ups
+   #+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+   #+END_SRC
+** cursor and startup screen
+   #+BEGIN_SRC emacs-lisp
+     (blink-cursor-mode -1)
+     (setq inhibit-startup-screen t)
+     (setq inhibit-startup-echo-area-message "USERNAME")
+     (setq inhibit-startup-message t)
+   #+END_SRC
+
+   
+** mark mode
+   #+BEGIN_SRC emacs-lisp
+     ;;;(transient-mark-mode t)
+   #+END_SRC
+** Asking questions
+   #+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-dialog-box nil)
+   #+END_SRC
+
+   #+RESULTS:
+
+** silence bell
+   #+BEGIN_SRC  emacs-lisp
+(setq ring-bell-function nil)
+   #+END_SRC
+** narrow-to-region
+   this is what i'm trying to learn.  
+   C-x n p to narrow and
+   C-x n w to widen to a page (delineated by ^L chars)
+   #+BEGIN_SRC emacs-lisp
+;(put 'narrow-to-page 'disabled nil)
+   #+END_SRC 
+** Mode line defaults
+   #+BEGIN_SRC emacs-lisp
+(line-number-mode t)
+(column-number-mode t)
+(size-indication-mode t)
+   #+END_SRC
+** line-wraping
+#+BEGIN_SRC emacs-lisp
+(global-visual-line-mode t)
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** line and paren highlighting
+   #+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+  (setq show-paren-style 'parenthesis)
+   #+END_SRC
+** color theme
+   #+BEGIN_SRC emacs-lisp
+(use-package gandalf-theme :ensure)
+;(use-package warm-night-theme :ensure)
+;(use-package slime-theme :ensure)
+;(use-package basic-theme :ensure)
+;(use-package minimal-theme :ensure)
+(load-theme 'gandalf)
+   #+END_SRC
+
+   #+RESULTS:
+   : t
+
+** bindings
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-o") 'other-window)
+   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+   #+END_SRC
+** registers
+   #+BEGIN_SRC emacs-lisp
+(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
+(set-register ?o (cons 'file "~/org/organizer.org"))
+(set-register ?w (cons 'file "~/org/work.org"))
+(set-register ?z (cons 'file "~/.zshrc"))
+(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
+   #+END_SRC
+
+   #+RESULTS:
+   : (file . ~/Projects/lisp/drogue/drogue.lisp)
+
+   
+
+* functionaria 
+  Helper functions to use either in an editing session or to help with
+  configuration
+  #+BEGIN_SRC emacs-lisp
+    (require 'cl)
+
+(defun my-put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
+
+    (defun load-init-file ()
+      (interactive)
+      (load-file "/Users/lmohseni/.emacs.d/init.el"))
+
+    (defun add-hook-to-modes (modes hook)
+      (dolist (mode modes)
+        (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+                  hook)))
+
+    (defun halt ()
+      (interactive)
+      (save-some-buffers)
+      (kill-emacs))
+
+    (defun my-whitespace-mode-hook ()
+      (setq whitespace-action '(auto-cleanup)
+            whitespace-style  '(face tabs trailing lines-tail empty)
+            ;; use fill-column value instead
+            whitespace-line-column nil)
+      (whitespace-mode))
+
+    (defun my-makefile-mode-hook ()
+      (setq indent-tabs-mode t
+            tab-width 4))
+
+    (defun make-region-read-only (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only t)))
+
+    (defun make-region-read-write (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only nil)))
+
+  #+END_SRC
+
+  #+RESULTS:
+  : make-region-read-write
+
+  
+* osx specific 
+  handle meta as command
+  toggle fullscreen
+  #+BEGIN_SRC emacs-lisp
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super)
+    (setq mac-control-modifier 'control)
+    (setq mac-function-modifier 'hyper)
+    (use-package helm-itunes :ensure)
+    (defun toggle-fullscreen ()
+      "Toggle full screen"
+      (interactive)
+      (set-frame-parameter
+       nil 'fullscreen
+       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+    (defun pbcopy ()
+      (interactive)
+      (call-process-region (point) (mark) "pbcopy")
+      (setq deactivate-mark t))
+
+    (defun pbpaste ()
+      (interactive)
+      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+    (defun pbcut ()
+      (interactive)
+      (pbcopy)
+      (delete-region (region-beginning) (region-end)))
+
+    (global-set-key (kbd "H-c") 'pbcopy)
+    (global-set-key (kbd "H-v") 'pbpaste)
+    (global-set-key (kbd "H-x") 'pbcut)
+    (global-set-key (kbd "H-i") 'load-init-file)
+
+    ;;recomended by brew
+    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+      (normal-top-level-add-subdirs-to-load-path))
+
+  #+END_SRC
+  
+* mu4e stuff
+#+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/builds/mu/mu4e")
+    (require 'smtpmail)
+
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+  (setq mail-user-agent 'mu4e-user-agent)
+
+
+  (require 'org-mu4e)
+
+    ; smtp
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials
+          '(("imap.gmail.com" 587 nil nil))
+          smtpmail-default-smtp-server "imap.gmail.com"
+          smtpmail-smtp-server "imap.gmail.com"
+          smtpmail-smtp-service 587
+          smtpmail-debug-info t)
+
+    (require 'mu4e)
+
+    (setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
+
+    (setq mu4e-drafts-folder "/Drafts")
+    (setq mu4e-sent-folder   "/Sent Items")
+    (setq mu4e-trash-folder  "/Trash")
+    (setq message-signature-file "~/.emacs.d/.signature") ; put your signature in this file
+
+    ; get mail
+    (setq mu4e-get-mail-command "mbsync -a "
+          mu4e-html2text-command "w3m -T text/html"
+          mu4e-update-interval 120
+          mu4e-headers-auto-update t
+          mu4e-compose-signature-auto-include nil)
+
+    (setq mu4e-maildir-shortcuts
+          '( ("Inbox"        . ?i)
+             ("Sent Items"   . ?s)
+             ("Trash"        . ?t)
+             ("Drafts"       . ?d)))
+
+    ;; show images
+    (setq mu4e-show-images t)
+
+    ;; use imagemagick, if available
+    (when (fboundp 'imagemagick-register-types)
+      (imagemagick-register-types))
+
+    ;; general emacs mail settings; used when composing e-mail
+    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
+    (setq mu4e-reply-to-address "mohsenil85@gmail.com"
+        user-mail-address "mohsenil85@gmail.com"
+        user-full-name  "Logan Mohseni")
+
+    ;; don't save message to Sent Messages, IMAP takes care of this
+    ; (setq mu4e-sent-messages-behavior 'delete)
+
+    ;; spell check
+    (add-hook 'mu4e-compose-mode-hook
+            (defun my-do-compose-stuff ()
+               "My settings for message composition."
+               (set-fill-column 80)
+               (flyspell-mode)))
+
+    (global-set-key (kbd "H-m") 'mu4e)
+#+END_SRC
+
+#+RESULTS:
+: mu4e
     
-*** diminish
+* diminish
+must be at very end?
 #+begin_src emacs-lisp
   (use-package
     diminish
@@ -177,13 +467,15 @@
       (diminish 'evil-rsi-mode)
       (diminish 'smartparens-mode)
       (diminish 'page-break-lines-mode)
+      (diminish 'org-indent-mode)
+      (diminish 'git-gutter-mode)
       (diminish 'evil-org-mode)
       (diminish 'flycheck-mode)
       (diminish 'yas-minor-mode)
       (diminish 'smartparens-mode)
       (diminish 'undo-tree-mode)
       (diminish 'paredit-mode)
-      (diminish 'visual-line-mode)
+      (diminish 'visual-line-mode
       
       ))
 #+end_src
@@ -649,293 +941,4 @@
    #+END_SRC
 
    #+RESULTS:
-
-* emacs
-** name
-*** 
-  #+BEGIN_SRC emacs-lisp
-    (setq user-full-name "Logan Mohseni")
-    (setq user-mail-address "mohsenil85@gmail.com")
-  #+END_SRC
-  
-** inital buffer
-#+BEGIN_SRC emacs-lisp
-  ;(setq initial-buffer-choice "~/org")
-  (setq initial-buffer-choice "~/org/organizer.org")
-;  (org-agenda-list)
-;  (delete-other-windows)
-;  (org-agenda-day-view)
-#+END_SRC
-
-#+RESULTS:
-
-** inital frame size
-   #+BEGIN_SRC emacs-lisp
-     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
-     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
-     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
-     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
-   #+END_SRC
-
-   #+RESULTS:
-
-** tool bars, menu bars, and pop ups
-   #+BEGIN_SRC emacs-lisp
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-   #+END_SRC
-** cursor and startup screen
-   #+BEGIN_SRC emacs-lisp
-     (blink-cursor-mode -1)
-     (setq inhibit-startup-screen t)
-     (setq inhibit-startup-echo-area-message "USERNAME")
-     (setq inhibit-startup-message t)
-   #+END_SRC
-
-   
-** mark mode
-   #+BEGIN_SRC emacs-lisp
-     ;;;(transient-mark-mode t)
-   #+END_SRC
-** Asking questions
-   #+BEGIN_SRC emacs-lisp
-(defalias 'yes-or-no-p 'y-or-n-p)
-(setq use-dialog-box nil)
-   #+END_SRC
-
-   #+RESULTS:
-
-** silence bell
-   #+BEGIN_SRC  emacs-lisp
-(setq ring-bell-function nil)
-   #+END_SRC
-** narrow-to-region
-   this is what i'm trying to learn.  
-   C-x n p to narrow and
-   C-x n w to widen to a page (delineated by ^L chars)
-   #+BEGIN_SRC emacs-lisp
-;(put 'narrow-to-page 'disabled nil)
-   #+END_SRC 
-** Mode line defaults
-   #+BEGIN_SRC emacs-lisp
-(line-number-mode t)
-(column-number-mode t)
-(size-indication-mode t)
-   #+END_SRC
-** line-wraping
-#+BEGIN_SRC emacs-lisp
-(global-visual-line-mode t)
-
-#+END_SRC
-
-#+RESULTS:
-: t
-
-** line and paren highlighting
-   #+BEGIN_SRC emacs-lisp
-  (show-paren-mode t)
-  (setq show-paren-style 'parenthesis)
-   #+END_SRC
-** color theme
-   #+BEGIN_SRC emacs-lisp
-(use-package gandalf-theme :ensure)
-;(use-package warm-night-theme :ensure)
-;(use-package slime-theme :ensure)
-;(use-package basic-theme :ensure)
-;(use-package minimal-theme :ensure)
-(load-theme 'gandalf)
-   #+END_SRC
-
-   #+RESULTS:
-   : t
-
-** bindings
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "M-o") 'other-window)
-   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
-   #+END_SRC
-** registers
-   #+BEGIN_SRC emacs-lisp
-(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-(set-register ?o (cons 'file "~/org/organizer.org"))
-(set-register ?w (cons 'file "~/org/work.org"))
-(set-register ?z (cons 'file "~/.zshrc"))
-(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
-   #+END_SRC
-
-   #+RESULTS:
-   : (file . ~/Projects/lisp/drogue/drogue.lisp)
-
-   
-
-* functionaria 
-  Helper functions to use either in an editing session or to help with
-  configuration
-  #+BEGIN_SRC emacs-lisp
-    (require 'cl)
-
-(defun my-put-file-name-on-clipboard ()
-  "Put the current file name on the clipboard"
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (with-temp-buffer
-        (insert filename)
-        (clipboard-kill-region (point-min) (point-max)))
-      (message filename))))
-
-    (defun load-init-file ()
-      (interactive)
-      (load-file "/Users/lmohseni/.emacs.d/init.el"))
-
-    (defun add-hook-to-modes (modes hook)
-      (dolist (mode modes)
-        (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-                  hook)))
-
-    (defun halt ()
-      (interactive)
-      (save-some-buffers)
-      (kill-emacs))
-
-    (defun my-whitespace-mode-hook ()
-      (setq whitespace-action '(auto-cleanup)
-            whitespace-style  '(face tabs trailing lines-tail empty)
-            ;; use fill-column value instead
-            whitespace-line-column nil)
-      (whitespace-mode))
-
-    (defun my-makefile-mode-hook ()
-      (setq indent-tabs-mode t
-            tab-width 4))
-
-    (defun make-region-read-only (start end)
-      (interactive "*r")
-      (let ((inhibit-read-only t))
-        (put-text-property start end 'read-only t)))
-
-    (defun make-region-read-write (start end)
-      (interactive "*r")
-      (let ((inhibit-read-only t))
-        (put-text-property start end 'read-only nil)))
-
-  #+END_SRC
-
-  #+RESULTS:
-  : make-region-read-write
-
-  
-* osx specific 
-  handle meta as command
-  toggle fullscreen
-  #+BEGIN_SRC emacs-lisp
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
-    (setq mac-control-modifier 'control)
-    (setq mac-function-modifier 'hyper)
-    (use-package helm-itunes :ensure)
-    (defun toggle-fullscreen ()
-      "Toggle full screen"
-      (interactive)
-      (set-frame-parameter
-       nil 'fullscreen
-       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-    (defun pbcopy ()
-      (interactive)
-      (call-process-region (point) (mark) "pbcopy")
-      (setq deactivate-mark t))
-
-    (defun pbpaste ()
-      (interactive)
-      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
-
-    (defun pbcut ()
-      (interactive)
-      (pbcopy)
-      (delete-region (region-beginning) (region-end)))
-
-    (global-set-key (kbd "H-c") 'pbcopy)
-    (global-set-key (kbd "H-v") 'pbpaste)
-    (global-set-key (kbd "H-x") 'pbcut)
-    (global-set-key (kbd "H-i") 'load-init-file)
-
-    ;;recomended by brew
-    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-      (normal-top-level-add-subdirs-to-load-path))
-
-  #+END_SRC
-  
-* mu4e stuff
-#+BEGIN_SRC emacs-lisp
-    (add-to-list 'load-path "~/builds/mu/mu4e")
-    (require 'smtpmail)
-
-    (setq mu4e-mu-binary "/usr/local/bin/mu")
-  (setq mail-user-agent 'mu4e-user-agent)
-
-
-  (require 'org-mu4e)
-
-    ; smtp
-    (setq message-send-mail-function 'smtpmail-send-it
-          smtpmail-starttls-credentials
-          '(("imap.gmail.com" 587 nil nil))
-          smtpmail-default-smtp-server "imap.gmail.com"
-          smtpmail-smtp-server "imap.gmail.com"
-          smtpmail-smtp-service 587
-          smtpmail-debug-info t)
-
-    (require 'mu4e)
-
-    (setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
-
-    (setq mu4e-drafts-folder "/Drafts")
-    (setq mu4e-sent-folder   "/Sent Items")
-    (setq mu4e-trash-folder  "/Trash")
-    (setq message-signature-file "~/.emacs.d/.signature") ; put your signature in this file
-
-    ; get mail
-    (setq mu4e-get-mail-command "mbsync -a "
-          mu4e-html2text-command "w3m -T text/html"
-          mu4e-update-interval 120
-          mu4e-headers-auto-update t
-          mu4e-compose-signature-auto-include nil)
-
-    (setq mu4e-maildir-shortcuts
-          '( ("Inbox"        . ?i)
-             ("Sent Items"   . ?s)
-             ("Trash"        . ?t)
-             ("Drafts"       . ?d)))
-
-    ;; show images
-    (setq mu4e-show-images t)
-
-    ;; use imagemagick, if available
-    (when (fboundp 'imagemagick-register-types)
-      (imagemagick-register-types))
-
-    ;; general emacs mail settings; used when composing e-mail
-    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
-    (setq mu4e-reply-to-address "mohsenil85@gmail.com"
-        user-mail-address "mohsenil85@gmail.com"
-        user-full-name  "Logan Mohseni")
-
-    ;; don't save message to Sent Messages, IMAP takes care of this
-    ; (setq mu4e-sent-messages-behavior 'delete)
-
-    ;; spell check
-    (add-hook 'mu4e-compose-mode-hook
-            (defun my-do-compose-stuff ()
-               "My settings for message composition."
-               (set-fill-column 80)
-               (flyspell-mode)))
-
-    (global-set-key (kbd "H-m") 'mu4e)
-#+END_SRC
-
-#+RESULTS:
-: mu4e
 
