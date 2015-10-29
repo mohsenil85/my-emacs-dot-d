@@ -74,7 +74,7 @@
     :ensure
     :config (progn
               (require 'powerline)
-              (powerline-center-evil-theme)))
+              (powerline-default-theme)))
 #+END_SRC
 
 #+RESULTS:
@@ -475,7 +475,7 @@ must be at very end?
       (diminish 'smartparens-mode)
       (diminish 'undo-tree-mode)
       (diminish 'paredit-mode)
-      (diminish 'visual-line-mode
+      (diminish 'visual-line-mode)
       
       ))
 #+end_src
