@@ -15,7 +15,7 @@
     ("/opt/homebrew-cask/Caskroom/eclipse-jee/4.5/Eclipse.app/Contents/Eclipse/eclim")))
  '(elfeed-feeds
    (quote
-    ("http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.nytimes.com/services/xml/rss/nyt/InternationalHome.xml" "http://www.npr.org/rss/rss.php?id=2" "http://www.npr.org/rss/rss.php?id=1004")))
+    ("http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=2" "http://www.npr.org/rss/rss.php?id=1004")))
  '(exec-path
    (quote
     ("/Users/lmohseni/.rvm/gems/ruby-2.1.2/bin" "/Users/lmohseni/.rvm/gems/ruby-2.1.2@global/bin" "/Users/lmohseni/.rvm/rubies/ruby-2.1.2/bin" "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/opt/X11/bin" "/usr/texbin" "/Users/lmohseni/.rvm/bin" "/opt/homebrew-cask/Caskroom/emacs-mac/emacs-24.5-z-mac-5.11/Emacs.app/Contents/MacOS/libexec" "/opt/homebrew-cask/Caskroom/emacs-mac/emacs-24.5-z-mac-5.11/Emacs.app/Contents/MacOS/bin" "/Users/lmohseni/.bin")))

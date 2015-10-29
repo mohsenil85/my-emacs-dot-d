@@ -100,6 +100,20 @@
 
 #+RESULTS:
 
+*** git-gutter-fringe
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure
+    :config
+    (progn
+      (require 'git-gutter-fringe)
+      (global-git-gutter-mode t)))
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
 *** magit
     #+BEGIN_SRC emacs-lisp
 (use-package magit :ensure
@@ -144,13 +158,13 @@
     
 *** page-break-lines
 #+begin_src emacs-lisp
-          (use-package page-break-lines :ensure :config (page-break-lines-mode 1))
+  (use-package page-break-lines :ensure :config (page-break-lines-mode 1))
 
 #+end_src
 
 #+RESULTS:
 : t
-
+    
 *** diminish
 #+begin_src emacs-lisp
   (use-package
@@ -206,11 +220,13 @@
         :ensure
         :config
         (progn
-          (add-to-list 'evil-emacs-state-modes 'info-mode)
-          (add-to-list 'evil-emacs-state-modes 'elfeed-search-mode)
-          (add-to-list 'evil-emacs-state-modes 'elfeed-view-mode)
+          (setq evil-default-state 'emacs)
           (evil-mode 1)))
     #+END_SRC
+
+    #+RESULTS:
+    : t
+
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp
@@ -303,13 +319,16 @@
 
 *** helm-projectile
     #+BEGIN_SRC emacs-lisp
-      (use-package projectile :ensure)
-      (use-package helm-projectile
-        :ensure
-        :config (progn
-                  (projectile-global-mode)
-                  (setq projectile-completion-system 'helm)
-                  (helm-projectile-on)))
+            (use-package projectile :ensure
+              :config
+              (progn
+               (setq projectile-switch-project-action 'helm-projectile)))
+            (use-package helm-projectile
+              :ensure
+              :config (progn
+                        (projectile-global-mode)
+                        (setq projectile-completion-system 'helm)
+                        (helm-projectile-on)))
     #+END_SRC
 
     #+RESULTS:
@@ -371,18 +390,18 @@
           
     #+END_SRC
 
-    #+RESULTS:
-
 ** ac mode
    #+BEGIN_SRC emacs-lisp
-     (use-package auto-complete
-       :ensure
-       :config
-       (progn
-         (require 'auto-complete-config)
-         (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
-
-         (ac-config-default)))
+          (use-package auto-complete
+            :ensure
+            :config
+            (progn
+              (require 'auto-complete-config)
+              (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
+              (ac-config-default)
+              (ac-set-trigger-key "TAB")
+              (ac-set-trigger-key "<tab>")
+     ))
    #+END_SRC
 
    #+RESULTS:
@@ -452,6 +471,25 @@
 
    
    
+** javascript
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.json" . js-mode))
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  (use-package js2-mode :ensure :config (my-js-mode-stuff))
+  (use-package ac-js2 :ensure)
+
+  (defun my-js-mode-stuff ()
+    (setq js2-highlight-level 3)
+    (define-key js-mode-map "{" 'paredit-open-curly)
+    (define-key js-mode-map "}" 'paredit-close-curly-and-newline)
+    )
+
+#+END_SRC
+
+#+RESULTS:
+: my-js-mode-stuff
+
 ** org-mode
    #+BEGIN_SRC emacs-lisp
      (use-package org 
@@ -622,10 +660,10 @@
 ** inital buffer
 #+BEGIN_SRC emacs-lisp
   ;(setq initial-buffer-choice "~/org")
-  ;(setq initial-buffer-choice "~/org/notes.org")
-  (org-agenda-list)
-  (delete-other-windows)
-  (org-agenda-day-view)
+  (setq initial-buffer-choice "~/org/organizer.org")
+;  (org-agenda-list)
+;  (delete-other-windows)
+;  (org-agenda-day-view)
 #+END_SRC
 
 #+RESULTS:
@@ -720,6 +758,7 @@
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
 (set-register ?o (cons 'file "~/org/organizer.org"))
+(set-register ?w (cons 'file "~/org/work.org"))
 (set-register ?z (cons 'file "~/.zshrc"))
 (set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
    #+END_SRC
@@ -734,6 +773,18 @@
   configuration
   #+BEGIN_SRC emacs-lisp
     (require 'cl)
+
+(defun my-put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
 
     (defun load-init-file ()
       (interactive)
