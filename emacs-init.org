@@ -32,456 +32,15 @@
 ** Misc packages
    #+BEGIN_SRC emacs-lisp
           (use-package ag :ensure)
+          ;;(use-package ggtags :ensure)
           (use-package better-defaults :ensure)
           (use-package markdown-mode :ensure)
-          ;;(use-package auctex :ensure  )
-     (require 'tex)
+;;;          (use-package auctex :ensure :config (require 'tex) )
+
    #+END_SRC
 
    #+RESULTS:
    : tex
-
-   
-*** yasnippet
-    #+BEGIN_SRC emacs-lisp
-      (use-package yasnippet
-        :ensure
-        :config
-        (progn
-          (require 'yasnippet)
-          (yas-global-mode 1)))
-
-
-      (use-package common-lisp-snippets
-        :ensure
-        :config (require 'common-lisp-snippets))
-#+END_SRC
-
-    #+RESULTS:
-    : t
-
-*** elfeed
-#+BEGIN_SRC emacs-lisp
-  (use-package
-    elfeed :ensure
-    :config (evil-set-initial-state 'elfeed-show 'emacs)
-    :bind ("C-x w" . elfeed)
-    )
-#+END_SRC
-*** powerline
-#+BEGIN_SRC emacs-lisp
-  (use-package powerline 
-    :ensure
-    :config (progn
-              (require 'powerline)
-              (powerline-default-theme)))
-#+END_SRC
-
-#+RESULTS:
-: t
-
-*** flycheck
-#+begin_src emacs-lisp
-  (use-package
-    flycheck
-    :ensure
-    :config
-    (progn
-      (add-hook 'after-init-hook #'global-flycheck-mode)))
-#+end_src
-
-#+RESULTS:
-: t
-
-*** better-defaults
-#+BEGIN_SRC emacs-lisp
-  (use-package better-defaults :ensure )
-#+END_SRC
-
-#+RESULTS:
-
-*** git-gutter-fringe
-#+BEGIN_SRC emacs-lisp
-  (use-package git-gutter-fringe
-    :ensure
-    :config
-    (progn
-      (require 'git-gutter-fringe)
-      (global-git-gutter-mode t)))
-
-#+END_SRC
-
-#+RESULTS:
-: t
-
-*** magit
-    #+BEGIN_SRC emacs-lisp
-(use-package magit :ensure
-:bind ("C-x g" . magit-status))
-    #+END_SRC
-    
-*** persistent scratch
-    #+BEGIN_SRC emacs-lisp
-(use-package persistent-scratch :ensure
-:config (persistent-scratch-setup-default))
-    #+END_SRC
-    
-*** recursive narrow
-    #+BEGIN_SRC emacs-lisp
-      (use-package recursive-narrow :ensure
-        :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
-               ("C-x n w" . recursive-widen-dwim)))
-    #+END_SRC
-*** deft org
-#+BEGIN_SRC emacs-lisp
-  (use-package deft 
-    :ensure
-    :config (progn
-              (setq
-               deft-extension "org"
-               deft-directory "~/org/"
-               deft-text-mode 'org-mode)
-              (global-set-key (kbd "H-d") 'deft)))
-#+END_SRC
-*** org-ac
-    #+BEGIN_SRC emacs-lisp
-;;      (use-package org-ac
-;;        :ensure
-;;        :init
-;;        (progn
-;;          (require 'org-ac)
-;;          ;; Make config suit for you. About the config item, eval the following sexp.
-;;          ;; (customize-group "org-ac")
-;;          (org-ac/config-default)
-;;          ) )  
-    #+END_SRC
-    
-*** page-break-lines
-#+begin_src emacs-lisp
-  (use-package page-break-lines :ensure :config (global-page-break-lines-mode 1))
-
-#+end_src
-
-#+RESULTS:
-: t
-
-* emacs
-** name
-*** 
-  #+BEGIN_SRC emacs-lisp
-    (setq user-full-name "Logan Mohseni")
-    (setq user-mail-address "mohsenil85@gmail.com")
-  #+END_SRC
-  
-** inital buffer
-#+BEGIN_SRC emacs-lisp
-  ;(setq initial-buffer-choice "~/org")
-  (setq initial-buffer-choice "~/org/organizer.org")
-;  (org-agenda-list)
-;  (delete-other-windows)
-;  (org-agenda-day-view)
-#+END_SRC
-
-#+RESULTS:
-
-** inital frame size
-   #+BEGIN_SRC emacs-lisp
-     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
-     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
-     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
-     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
-   #+END_SRC
-
-   #+RESULTS:
-
-** tool bars, menu bars, and pop ups
-   #+BEGIN_SRC emacs-lisp
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-   #+END_SRC
-** cursor and startup screen
-   #+BEGIN_SRC emacs-lisp
-     (blink-cursor-mode -1)
-     (setq inhibit-startup-screen t)
-     (setq inhibit-startup-echo-area-message "USERNAME")
-     (setq inhibit-startup-message t)
-   #+END_SRC
-
-   
-** mark mode
-   #+BEGIN_SRC emacs-lisp
-     ;;;(transient-mark-mode t)
-   #+END_SRC
-** Asking questions
-   #+BEGIN_SRC emacs-lisp
-(defalias 'yes-or-no-p 'y-or-n-p)
-(setq use-dialog-box nil)
-   #+END_SRC
-
-   #+RESULTS:
-
-** silence bell
-   #+BEGIN_SRC  emacs-lisp
-(setq ring-bell-function nil)
-   #+END_SRC
-** narrow-to-region
-   this is what i'm trying to learn.  
-   C-x n p to narrow and
-   C-x n w to widen to a page (delineated by ^L chars)
-   #+BEGIN_SRC emacs-lisp
-;(put 'narrow-to-page 'disabled nil)
-   #+END_SRC 
-** Mode line defaults
-   #+BEGIN_SRC emacs-lisp
-(line-number-mode t)
-(column-number-mode t)
-(size-indication-mode t)
-   #+END_SRC
-** line-wraping
-#+BEGIN_SRC emacs-lisp
-(global-visual-line-mode t)
-
-#+END_SRC
-
-#+RESULTS:
-: t
-
-** line and paren highlighting
-   #+BEGIN_SRC emacs-lisp
-  (show-paren-mode t)
-  (setq show-paren-style 'parenthesis)
-   #+END_SRC
-** color theme
-   #+BEGIN_SRC emacs-lisp
-(use-package gandalf-theme :ensure)
-;(use-package warm-night-theme :ensure)
-;(use-package slime-theme :ensure)
-;(use-package basic-theme :ensure)
-;(use-package minimal-theme :ensure)
-(load-theme 'gandalf)
-   #+END_SRC
-
-   #+RESULTS:
-   : t
-
-** bindings
-   #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "M-o") 'other-window)
-   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
-   #+END_SRC
-** registers
-   #+BEGIN_SRC emacs-lisp
-(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-(set-register ?o (cons 'file "~/org/organizer.org"))
-(set-register ?w (cons 'file "~/org/work.org"))
-(set-register ?z (cons 'file "~/.zshrc"))
-(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
-   #+END_SRC
-
-   #+RESULTS:
-   : (file . ~/Projects/lisp/drogue/drogue.lisp)
-
-   
-
-* functionaria 
-  Helper functions to use either in an editing session or to help with
-  configuration
-  #+BEGIN_SRC emacs-lisp
-    (require 'cl)
-
-(defun my-put-file-name-on-clipboard ()
-  "Put the current file name on the clipboard"
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (with-temp-buffer
-        (insert filename)
-        (clipboard-kill-region (point-min) (point-max)))
-      (message filename))))
-
-    (defun load-init-file ()
-      (interactive)
-      (load-file "/Users/lmohseni/.emacs.d/init.el"))
-
-    (defun add-hook-to-modes (modes hook)
-      (dolist (mode modes)
-        (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-                  hook)))
-
-    (defun halt ()
-      (interactive)
-      (save-some-buffers)
-      (kill-emacs))
-
-    (defun my-whitespace-mode-hook ()
-      (setq whitespace-action '(auto-cleanup)
-            whitespace-style  '(face tabs trailing lines-tail empty)
-            ;; use fill-column value instead
-            whitespace-line-column nil)
-      (whitespace-mode))
-
-    (defun my-makefile-mode-hook ()
-      (setq indent-tabs-mode t
-            tab-width 4))
-
-    (defun make-region-read-only (start end)
-      (interactive "*r")
-      (let ((inhibit-read-only t))
-        (put-text-property start end 'read-only t)))
-
-    (defun make-region-read-write (start end)
-      (interactive "*r")
-      (let ((inhibit-read-only t))
-        (put-text-property start end 'read-only nil)))
-
-  #+END_SRC
-
-  #+RESULTS:
-  : make-region-read-write
-
-  
-* osx specific 
-  handle meta as command
-  toggle fullscreen
-  #+BEGIN_SRC emacs-lisp
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
-    (setq mac-control-modifier 'control)
-    (setq mac-function-modifier 'hyper)
-    (use-package helm-itunes :ensure)
-    (defun toggle-fullscreen ()
-      "Toggle full screen"
-      (interactive)
-      (set-frame-parameter
-       nil 'fullscreen
-       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-    (defun pbcopy ()
-      (interactive)
-      (call-process-region (point) (mark) "pbcopy")
-      (setq deactivate-mark t))
-
-    (defun pbpaste ()
-      (interactive)
-      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
-
-    (defun pbcut ()
-      (interactive)
-      (pbcopy)
-      (delete-region (region-beginning) (region-end)))
-
-    (global-set-key (kbd "H-c") 'pbcopy)
-    (global-set-key (kbd "H-v") 'pbpaste)
-    (global-set-key (kbd "H-x") 'pbcut)
-    (global-set-key (kbd "H-i") 'load-init-file)
-
-    ;;recomended by brew
-    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-      (normal-top-level-add-subdirs-to-load-path))
-
-  #+END_SRC
-  
-* mu4e stuff
-#+BEGIN_SRC emacs-lisp
-    (add-to-list 'load-path "~/builds/mu/mu4e")
-    (require 'smtpmail)
-
-    (setq mu4e-mu-binary "/usr/local/bin/mu")
-  (setq mail-user-agent 'mu4e-user-agent)
-
-
-  (require 'org-mu4e)
-
-    ; smtp
-    (setq message-send-mail-function 'smtpmail-send-it
-          smtpmail-starttls-credentials
-          '(("imap.gmail.com" 587 nil nil))
-          smtpmail-default-smtp-server "imap.gmail.com"
-          smtpmail-smtp-server "imap.gmail.com"
-          smtpmail-smtp-service 587
-          smtpmail-debug-info t)
-
-    (require 'mu4e)
-
-    (setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
-
-    (setq mu4e-drafts-folder "/Drafts")
-    (setq mu4e-sent-folder   "/Sent Items")
-    (setq mu4e-trash-folder  "/Trash")
-    (setq message-signature-file "~/.emacs.d/.signature") ; put your signature in this file
-
-    ; get mail
-    (setq mu4e-get-mail-command "mbsync -a "
-          mu4e-html2text-command "w3m -T text/html"
-          mu4e-update-interval 120
-          mu4e-headers-auto-update t
-          mu4e-compose-signature-auto-include nil)
-
-    (setq mu4e-maildir-shortcuts
-          '( ("Inbox"        . ?i)
-             ("Sent Items"   . ?s)
-             ("Trash"        . ?t)
-             ("Drafts"       . ?d)))
-
-    ;; show images
-    (setq mu4e-show-images t)
-
-    ;; use imagemagick, if available
-    (when (fboundp 'imagemagick-register-types)
-      (imagemagick-register-types))
-
-    ;; general emacs mail settings; used when composing e-mail
-    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
-    (setq mu4e-reply-to-address "mohsenil85@gmail.com"
-        user-mail-address "mohsenil85@gmail.com"
-        user-full-name  "Logan Mohseni")
-
-    ;; don't save message to Sent Messages, IMAP takes care of this
-    ; (setq mu4e-sent-messages-behavior 'delete)
-
-    ;; spell check
-    (add-hook 'mu4e-compose-mode-hook
-            (defun my-do-compose-stuff ()
-               "My settings for message composition."
-               (set-fill-column 80)
-               (flyspell-mode)))
-
-    (global-set-key (kbd "H-m") 'mu4e)
-#+END_SRC
-
-#+RESULTS:
-: mu4e
-    
-* diminish
-must be at very end?
-#+begin_src emacs-lisp
-  (use-package
-    diminish
-    :ensure
-    :config
-    (progn
-      (diminish 'helm-mode)
-      (diminish 'evil-smartparens-mode)
-      (diminish 'evil-rsi-mode)
-      (diminish 'smartparens-mode)
-      (diminish 'page-break-lines-mode)
-      (diminish 'org-indent-mode)
-      (diminish 'git-gutter-mode)
-      (diminish 'evil-org-mode)
-      (diminish 'flycheck-mode)
-      (diminish 'yas-minor-mode)
-      (diminish 'smartparens-mode)
-      (diminish 'undo-tree-mode)
-      (diminish 'paredit-mode)
-      (diminish 'visual-line-mode)
-      
-      ))
-#+end_src
-
-#+RESULTS:
-: t
 
 ** evil
 *** evil-leader
@@ -513,11 +72,13 @@ must be at very end?
         :config
         (progn
           (setq evil-default-state 'emacs)
-          (evil-mode 1)))
+          (evil-mode 1))
+        :bind
+        ("S-SPC" . evil-exit-emacs-state)
+        )
     #+END_SRC
 
     #+RESULTS:
-    : t
 
     
 *** evil-rsi
@@ -548,65 +109,60 @@ must be at very end?
 - C-h w, which runs where-is
 *** helm proper
     #+BEGIN_SRC emacs-lisp
-            (use-package helm
-              :ensure
-              :demand
-              :config
-              (progn
-                (require 'helm)
-                (require 'helm-config)
-                (setq helm-ff-transformer-show-only-basename nil)
-                (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+      (use-package helm
+        :ensure
+        :demand
+        :config
+        (progn
+          (require 'helm)
+          (require 'helm-config)
+          (setq helm-ff-transformer-show-only-basename nil)
+          (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
 
-                (setq helm-M-x-fuzzy-match t)
-                (setq helm-recentf-fuzzy-match t)
-                (setq helm-mode-fuzzy-match t)
-                (setq helm-buffers-fuzzy-matching t)
-                (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
-                (setq helm-move-to-line-cycle-in-source t)
+          (setq helm-M-x-fuzzy-match t)
+          (setq helm-recentf-fuzzy-match t)
+          (setq helm-mode-fuzzy-match t)
+          (setq helm-buffers-fuzzy-matching t)
+          (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
+          (setq helm-move-to-line-cycle-in-source t)
 
-                
-                (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-                (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-                (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-                (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-               (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
+          
+          (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+          (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+          (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+          (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+          (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
 
-                (autoload 'helm-descbinds      "helm-descbinds" t)
-                (autoload 'helm-eshell-history "helm-eshell"    t)
-                (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
+          (autoload 'helm-descbinds      "helm-descbinds" t)
+          (autoload 'helm-eshell-history "helm-eshell"    t)
+          (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
 
-                
+          (setq helm-autoresize-mode t)
+          (setq helm-split-window-in-side-p t)
+          (setq helm-ff-file-name-history-use-recentf t)
+          (setq helm-autoresize-mode t)
 
-                
+          (helm-mode 1))
+        :bind
+        (("M-x" . helm-M-x)
+         ("C-c h" . helm-command-prefix)
+         ("C-x b" . helm-mini)
+         ("C-h SPC" . helm-all-mark-rings)
+         ("C-c h x" . helm-register)
+         ("C-c h g" . helm-google-suggest)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x C-r" . helm-recentf)
+         ("M-y" . helm-show-kill-ring)
+         ("C-x C-f" . helm-find-files)
+         ("C-c h o" . helm-occur)))
 
+      (use-package helm-descbinds :ensure :config
+        (progn
+          (require 'helm-descbinds)
+          (helm-descbinds-mode)
+          )
+        )
 
-                (setq helm-autoresize-mode t)
-                (setq helm-split-window-in-side-p t)
-                (setq helm-ff-file-name-history-use-recentf t)
-                (setq helm-autoresize-mode t)
-
-                (helm-mode 1))
-              :bind
-              (("M-x" . helm-M-x)
-               ("C-c h" . helm-command-prefix)
-               ("C-x b" . helm-mini)
-               ("C-h SPC" . helm-all-mark-rings)
-               ("C-c h x" . helm-register)
-               ("C-c h g" . helm-google-suggest)
-
-               ("C-x C-b" . helm-buffers-list)
-               ("C-x C-r" . helm-recentf)
-               ("M-y" . helm-show-kill-ring)
-               ("C-x C-f" . helm-find-files)
-               ("C-c h o" . helm-occur)))
-
-            (use-package helm-descbinds :ensure :config
-              (progn
-                (require 'helm-descbinds)
-                (helm-descbinds-mode)
-                )
-              )
     #+END_SRC
 
 *** helm-projectile
@@ -681,7 +237,46 @@ must be at very end?
         :ensure)
           
     #+END_SRC
+*** helm-gtags 
+#+BEGIN_SRC emacs-lisp
+    (use-package helm-gtags
+      :ensure
+      :config
+      (progn
+        ;;; Enable helm-gtags-mode
+        (add-hook 'c-mode-hook 'helm-gtags-mode)
+        (add-hook 'c++-mode-hook 'helm-gtags-mode)
+        (add-hook 'asm-mode-hook 'helm-gtags-mode)
+        (add-hook 'java-mode-hook 'helm-gtags-mode)
 
+        ;; customize
+        (setq
+         (helm-gtags-path-style 'relative)
+         (helm-gtags-ignore-case t)
+         (helm-gtags-auto-update t))
+
+        ;; key bindings
+        (eval-after-load "helm-gtags"
+          '(progn
+             (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+             (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+             (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+             (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+             (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+             (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+             (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+
+      (setq helm-gtags-prefix-key "C-t")
+      (helm-gtags-suggested-key-mapping t)
+      
+      )
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+    
 ** ac mode
    #+BEGIN_SRC emacs-lisp
           (use-package auto-complete
@@ -941,4 +536,447 @@ must be at very end?
    #+END_SRC
 
    #+RESULTS:
+
+   
+** yasnippet
+    #+BEGIN_SRC emacs-lisp
+      (use-package yasnippet
+        :ensure
+        :config
+        (progn
+          (require 'yasnippet)
+          (yas-global-mode 1)))
+
+
+      (use-package common-lisp-snippets
+        :ensure
+        :config (require 'common-lisp-snippets))
+#+END_SRC
+
+    #+RESULTS:
+    : t
+
+** elfeed
+#+BEGIN_SRC emacs-lisp
+  (use-package
+    elfeed :ensure
+    :config (evil-set-initial-state 'elfeed-show 'emacs)
+    :bind ("C-x w" . elfeed)
+    )
+#+END_SRC
+** powerline
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline 
+    :ensure
+    :config (progn
+              (require 'powerline)
+              (powerline-center-evil-theme)))
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** flycheck
+#+begin_src emacs-lisp
+  (use-package
+    flycheck
+    :ensure
+    :config
+    (progn
+      (add-hook 'after-init-hook #'global-flycheck-mode)))
+#+end_src
+
+#+RESULTS:
+: t
+
+** better-defaults
+#+BEGIN_SRC emacs-lisp
+  (use-package better-defaults :ensure )
+#+END_SRC
+
+#+RESULTS:
+
+** git-gutter-fringe
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure
+    :config
+    (progn
+      (require 'git-gutter-fringe)
+      (global-git-gutter-mode t)))
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** magit
+    #+BEGIN_SRC emacs-lisp
+(use-package magit :ensure
+:bind ("C-x g" . magit-status))
+    #+END_SRC
+    
+** persistent scratch
+    #+BEGIN_SRC emacs-lisp
+(use-package persistent-scratch :ensure
+:config (persistent-scratch-setup-default))
+    #+END_SRC
+    
+** recursive narrow
+   #+BEGIN_SRC emacs-lisp
+     (use-package recursive-narrow :ensure
+       :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
+              ("C-x n w" . recursive-widen-dwim)))
+   #+END_SRC
+** deft org
+#+BEGIN_SRC emacs-lisp
+  (use-package deft 
+    :ensure
+    :config (progn
+              (setq
+               deft-extension "org"
+               deft-directory "~/org/"
+               deft-text-mode 'org-mode)
+              (global-set-key (kbd "H-d") 'deft)))
+#+END_SRC
+** org-ac
+    #+BEGIN_SRC emacs-lisp
+;;      (use-package org-ac
+;;        :ensure
+;;        :init
+;;        (progn
+;;          (require 'org-ac)
+;;          ;; Make config suit for you. About the config item, eval the following sexp.
+;;          ;; (customize-group "org-ac")
+;;          (org-ac/config-default)
+;;          ) )  
+    #+END_SRC
+    
+** page-break-lines
+#+begin_src emacs-lisp
+  (use-package page-break-lines :ensure :config (global-page-break-lines-mode 1))
+
+#+end_src
+
+#+RESULTS:
+: t
+   
+* emacs
+** name
+*** 
+  #+BEGIN_SRC emacs-lisp
+    (setq user-full-name "Logan Mohseni")
+    (setq user-mail-address "mohsenil85@gmail.com")
+  #+END_SRC
+  
+** inital buffer
+#+BEGIN_SRC emacs-lisp
+  ;(setq initial-buffer-choice "~/org")
+  (setq initial-buffer-choice "~/org/organizer.org")
+;  (org-agenda-list)
+;  (delete-other-windows)
+;  (org-agenda-day-view)
+#+END_SRC
+
+#+RESULTS:
+
+** inital frame size
+   #+BEGIN_SRC emacs-lisp
+     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
+     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
+     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
+     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
+   #+END_SRC
+
+   #+RESULTS:
+
+** tool bars, menu bars, and pop ups
+   #+BEGIN_SRC emacs-lisp
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+   #+END_SRC
+** cursor and startup screen
+   #+BEGIN_SRC emacs-lisp
+     (blink-cursor-mode -1)
+     (setq inhibit-startup-screen t)
+     (setq inhibit-startup-echo-area-message "USERNAME")
+     (setq inhibit-startup-message t)
+   #+END_SRC
+
+   
+** mark mode
+   #+BEGIN_SRC emacs-lisp
+     ;;;(transient-mark-mode t)
+   #+END_SRC
+** Asking questions
+   #+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-dialog-box nil)
+   #+END_SRC
+
+   #+RESULTS:
+
+** silence bell
+   #+BEGIN_SRC  emacs-lisp
+(setq ring-bell-function nil)
+   #+END_SRC
+** narrow-to-region
+   this is what i'm trying to learn.  
+   C-x n p to narrow and
+   C-x n w to widen to a page (delineated by ^L chars)
+   #+BEGIN_SRC emacs-lisp
+;(put 'narrow-to-page 'disabled nil)
+   #+END_SRC 
+** Mode line defaults
+   #+BEGIN_SRC emacs-lisp
+(line-number-mode t)
+(column-number-mode t)
+(size-indication-mode t)
+   #+END_SRC
+** line-wraping
+#+BEGIN_SRC emacs-lisp
+(global-visual-line-mode t)
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** line and paren highlighting
+   #+BEGIN_SRC emacs-lisp
+  (show-paren-mode t)
+  (setq show-paren-style 'parenthesis)
+   #+END_SRC
+** color theme
+   #+BEGIN_SRC emacs-lisp
+(use-package gandalf-theme :ensure)
+;(use-package warm-night-theme :ensure)
+;(use-package slime-theme :ensure)
+;(use-package basic-theme :ensure)
+;(use-package minimal-theme :ensure)
+(load-theme 'gandalf)
+   #+END_SRC
+
+   #+RESULTS:
+   : t
+
+** bindings
+   #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "M-o") 'other-window)
+   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+   #+END_SRC
+** registers
+   #+BEGIN_SRC emacs-lisp
+(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
+(set-register ?o (cons 'file "~/org/organizer.org"))
+(set-register ?w (cons 'file "~/org/work.org"))
+(set-register ?z (cons 'file "~/.zshrc"))
+(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
+   #+END_SRC
+
+   #+RESULTS:
+   : (file . ~/Projects/lisp/drogue/drogue.lisp)
+
+   
+
+* functionaria 
+  Helper functions to use either in an editing session or to help with
+  configuration
+  #+BEGIN_SRC emacs-lisp
+    (require 'cl)
+
+(defun my-put-file-name-on-clipboard ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (with-temp-buffer
+        (insert filename)
+        (clipboard-kill-region (point-min) (point-max)))
+      (message filename))))
+
+    (defun load-init-file ()
+      (interactive)
+      (load-file "/Users/lmohseni/.emacs.d/init.el"))
+
+    (defun add-hook-to-modes (modes hook)
+      (dolist (mode modes)
+        (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+                  hook)))
+
+    (defun halt ()
+      (interactive)
+      (save-some-buffers)
+      (kill-emacs))
+
+    (defun my-whitespace-mode-hook ()
+      (setq whitespace-action '(auto-cleanup)
+            whitespace-style  '(face tabs trailing lines-tail empty)
+            ;; use fill-column value instead
+            whitespace-line-column nil)
+      (whitespace-mode))
+
+    (defun my-makefile-mode-hook ()
+      (setq indent-tabs-mode t
+            tab-width 4))
+
+    (defun make-region-read-only (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only t)))
+
+    (defun make-region-read-write (start end)
+      (interactive "*r")
+      (let ((inhibit-read-only t))
+        (put-text-property start end 'read-only nil)))
+
+  #+END_SRC
+
+  #+RESULTS:
+  : make-region-read-write
+
+  
+* osx specific 
+  handle meta as command
+  toggle fullscreen
+  #+BEGIN_SRC emacs-lisp
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super)
+    (setq mac-control-modifier 'control)
+    (setq mac-function-modifier 'hyper)
+    (use-package helm-itunes :ensure)
+    (defun toggle-fullscreen ()
+      "Toggle full screen"
+      (interactive)
+      (set-frame-parameter
+       nil 'fullscreen
+       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+    (defun pbcopy ()
+      (interactive)
+      (call-process-region (point) (mark) "pbcopy")
+      (setq deactivate-mark t))
+
+    (defun pbpaste ()
+      (interactive)
+      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+
+    (defun pbcut ()
+      (interactive)
+      (pbcopy)
+      (delete-region (region-beginning) (region-end)))
+
+    (global-set-key (kbd "H-c") 'pbcopy)
+    (global-set-key (kbd "H-v") 'pbpaste)
+    (global-set-key (kbd "H-x") 'pbcut)
+    (global-set-key (kbd "H-i") 'load-init-file)
+
+    ;;recomended by brew
+    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+      (normal-top-level-add-subdirs-to-load-path))
+
+  #+END_SRC
+  
+* mu4e stuff
+#+BEGIN_SRC emacs-lisp
+    (add-to-list 'load-path "~/builds/mu/mu4e")
+    (require 'smtpmail)
+
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+  (setq mail-user-agent 'mu4e-user-agent)
+
+
+  (require 'org-mu4e)
+
+    ; smtp
+    (setq message-send-mail-function 'smtpmail-send-it
+          smtpmail-starttls-credentials
+          '(("imap.gmail.com" 587 nil nil))
+          smtpmail-default-smtp-server "imap.gmail.com"
+          smtpmail-smtp-server "imap.gmail.com"
+          smtpmail-smtp-service 587
+          smtpmail-debug-info t)
+
+    (require 'mu4e)
+
+    (setq mu4e-maildir (expand-file-name "~/.mail/gmail"))
+
+    (setq mu4e-drafts-folder "/[GMail]/.Drafts")
+    (setq mu4e-sent-folder   "/[GMail]/.Sent Items")
+    (setq mu4e-trash-folder  "/[GMail]/.Trash")
+    (setq message-signature-file "~/.emacs.d/.signature") ; put your signature in this file
+
+    ; get mail
+    (setq mu4e-get-mail-command "mbsync -a "
+          mu4e-html2text-command "w3m -T text/html"
+          mu4e-update-interval 120
+          mu4e-headers-auto-update t
+          mu4e-compose-signature-auto-include nil)
+
+    (setq mu4e-maildir-shortcuts
+          '( ("Inbox"        . ?i)
+             ("Sent Items"   . ?s)
+             ("Trash"        . ?t)
+             ("Drafts"       . ?d)))
+
+    ;; show images
+    ;;;(setq mu4e-show-images t)
+
+    ;; use imagemagick, if available
+    (when (fboundp 'imagemagick-register-types)
+      (imagemagick-register-types))
+
+    ;; general emacs mail settings; used when composing e-mail
+    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
+    (setq mu4e-reply-to-address "mohsenil85@gmail.com"
+        user-mail-address "mohsenil85@gmail.com"
+        user-full-name  "Logan Mohseni")
+
+    ;; don't save message to Sent Messages, IMAP takes care of this
+    ; (setq mu4e-sent-messages-behavior 'delete)
+
+    ;; spell check
+    (add-hook 'mu4e-compose-mode-hook
+            (defun my-do-compose-stuff ()
+               "My settings for message composition."
+               (set-fill-column 80)
+               (flyspell-mode)))
+   
+  (global-set-key (kbd "C-c m") 'mu4e)
+  (global-set-key (kbd "C-c e") 'elfeed)
+#+END_SRC
+
+#+RESULTS:
+: mu4e
+    
+* diminish
+must be at very end?
+#+begin_src emacs-lisp
+  (use-package
+    diminish
+    :ensure
+    :config
+    (progn
+      (diminish 'helm-mode)
+      (diminish 'evil-smartparens-mode)
+      (diminish 'evil-rsi-mode)
+      (diminish 'smartparens-mode)
+      (diminish 'page-break-lines-mode)
+      (diminish 'org-indent-mode)
+      (diminish 'git-gutter-mode)
+      (diminish 'evil-org-mode)
+      (diminish 'flycheck-mode)
+      (diminish 'yas-minor-mode)
+      (diminish 'smartparens-mode)
+      (diminish 'undo-tree-mode)
+      (diminish 'paredit-mode)
+      (diminish 'visual-line-mode)
+      
+      ))
+#+end_src
+
+#+RESULTS:
+: t
 
