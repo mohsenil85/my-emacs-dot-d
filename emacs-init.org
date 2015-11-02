@@ -239,44 +239,43 @@
     #+END_SRC
 *** helm-gtags 
 #+BEGIN_SRC emacs-lisp
-    (use-package helm-gtags
-      :ensure
-      :config
-      (progn
-        ;;; Enable helm-gtags-mode
-        (add-hook 'c-mode-hook 'helm-gtags-mode)
-        (add-hook 'c++-mode-hook 'helm-gtags-mode)
-        (add-hook 'asm-mode-hook 'helm-gtags-mode)
-        (add-hook 'java-mode-hook 'helm-gtags-mode)
+  (use-package helm-gtags
+    :ensure
+    :config
+    (progn
+      ;;; Enable helm-gtags-mode
+      (add-hook 'c-mode-hook 'helm-gtags-mode)
+      (add-hook 'c++-mode-hook 'helm-gtags-mode)
+      (add-hook 'asm-mode-hook 'helm-gtags-mode)
+      (add-hook 'java-mode-hook 'helm-gtags-mode)
 
-        ;; customize
-        (setq
-         (helm-gtags-path-style 'relative)
-         (helm-gtags-ignore-case t)
-         (helm-gtags-auto-update t))
+      ;; customize
+      (setq
+       (helm-gtags-path-style 'relative)
+       (helm-gtags-ignore-case t)
+       (helm-gtags-auto-update t))
 
-        ;; key bindings
-        (eval-after-load "helm-gtags"
-          '(progn
-             (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-             (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-             (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-             (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-             (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-             (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-             (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+    (setq helm-gtags-prefix-key "C-t")
+    (helm-gtags-suggested-key-mapping t)
+      ;; key bindings
+      (eval-after-load "helm-gtags"
+        '(progn
+           (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+           (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+           (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+           (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+           (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+           (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+           (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
 
-      (setq helm-gtags-prefix-key "C-t")
-      (helm-gtags-suggested-key-mapping t)
-      
-      )
+    
+    )
 
 #+END_SRC
 
 #+RESULTS:
 : t
 
-    
 ** ac mode
    #+BEGIN_SRC emacs-lisp
           (use-package auto-complete
@@ -531,7 +530,10 @@
    #+BEGIN_SRC emacs-lisp
      (org-babel-do-load-languages
       'org-babel-load-languages
-      '((lisp . t)))
+      '(
+        (lisp . t)
+        (sh . t)
+        ))
 
    #+END_SRC
 
@@ -760,6 +762,20 @@
 
    #+RESULTS:
    : t
+
+** utf-8 stuff
+#+BEGIN_SRC emacs-lisp
+
+
+ (setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+#+END_SRC
+
+#+RESULTS:
 
 ** bindings
    #+BEGIN_SRC emacs-lisp

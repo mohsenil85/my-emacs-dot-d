@@ -15,7 +15,7 @@
     ("/opt/homebrew-cask/Caskroom/eclipse-jee/4.5/Eclipse.app/Contents/Eclipse/eclim")))
  '(elfeed-feeds
    (quote
-    ("http://www.newyorker.com/feed/humor" "http://www.newyorker.com/feed/articles" "http://feeds.feedburner.com/TheAtlantic?format=xml" "http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=2" "http://www.npr.org/rss/rss.php?id=1004")))
+    ("http://nullprogram.com/feed/" "http://blog.funcall.org/feed.xml" "http://owlturd.com/rss" "http://planet.lisp.org/rss20.xml" "http://planet.clojure.in/atom.xml" "http://cartographerswithoutborders.org/rss" "http://irreal.org/blog/?feed=rss2" "http://endlessparentheses.com/atom.xml" "http://www.newyorker.com/feed/humor" "http://www.newyorker.com/feed/articles" "http://feeds.feedburner.com/TheAtlantic?format=xml" "http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=1004" "http://english.bouletcorp.com/feed/" "http://pbfcomics.com/feed/feed.xml" "http://www.jspowerhour.com/comics.rss" "http://thecodelesscode.com/rss" "http://bldgblog.blogspot.com/atom.xml" "http://divisbyzero.com/feed/" "http://blog.tanyakhovanova.com/?feed=rss" "https://terrytao.wordpress.com/feed/" "http://feeds.feedburner.com/codinghorror")))
  '(erc-modules
    (quote
     (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
@@ -28,6 +28,7 @@
  '(global-highlight-changes-mode nil)
  '(global-hl-line-mode t)
  '(global-page-break-lines-mode t)
+ '(helm-gtags-prefix-key "")
  '(helm-locate-command "mdfind %s %s")
  '(org-agenda-custom-commands
    (quote
