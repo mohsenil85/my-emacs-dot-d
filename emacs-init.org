@@ -230,7 +230,11 @@
       ;; Face name is `helm-swoop-line-number-face`
       (setq helm-swoop-use-line-number-face t)))
 #+END_SRC
-*** helm-ac
+*** helm-ag
+#+BEGIN_SRC emacs-lisp
+(use-package :helm-ag :ensure)
+
+#+END_SRC
 *** helm-ack
     #+BEGIN_SRC emacs-lisp
       (use-package helm-ack
@@ -782,6 +786,24 @@
    (global-set-key (kbd "M-o") 'other-window)
    (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
    #+END_SRC
+
+** prompts
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (setq confirm-nonexistent-file-or-buffer nil)
+
+  (setq kill-buffer-query-functions
+    (remq 'process-kill-buffer-query-function
+           kill-buffer-query-functions))
+
+
+#+END_SRC
+** tool tips
+#+BEGIN_SRC emacs-lisp
+(tooltip-mode -1)
+(setq tooltip-use-echo-area t)
+
+#+END_SRC
 ** registers
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
