@@ -71,7 +71,7 @@
         :ensure
         :config
         (progn
-          (setq evil-default-state 'emacs)
+          ;;(setq evil-default-state 'emacs)
           (evil-mode 1))
         :bind
         ("S-SPC" . evil-exit-emacs-state)
@@ -232,7 +232,7 @@
 #+END_SRC
 *** helm-ag
 #+BEGIN_SRC emacs-lisp
-(use-package :helm-ag :ensure)
+(use-package helm-ag :ensure)
 
 #+END_SRC
 *** helm-ack
@@ -702,6 +702,13 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
    #+END_SRC
+**  backups to tmp
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+#+END_SRC
 ** cursor and startup screen
    #+BEGIN_SRC emacs-lisp
      (blink-cursor-mode -1)
@@ -710,7 +717,6 @@
      (setq inhibit-startup-message t)
    #+END_SRC
 
-   
 ** mark mode
    #+BEGIN_SRC emacs-lisp
      ;;;(transient-mark-mode t)
@@ -748,6 +754,16 @@
 
 #+RESULTS:
 : t
+
+** global linum mode
+   #+BEGIN_SRC emacs-lisp
+(global-linum-mode)
+
+
+#+END_SRC
+
+   #+RESULTS:
+   : t
 
 ** line and paren highlighting
    #+BEGIN_SRC emacs-lisp
@@ -973,7 +989,7 @@
         user-full-name  "Logan Mohseni")
 
     ;; don't save message to Sent Messages, IMAP takes care of this
-    ; (setq mu4e-sent-messages-behavior 'delete)
+     (setq mu4e-sent-messages-behavior 'delete)
 
     ;; spell check
     (add-hook 'mu4e-compose-mode-hook
@@ -997,7 +1013,6 @@ must be at very end?
     :ensure
     :config
     (progn
-      (diminish 'helm-mode)
       (diminish 'evil-smartparens-mode)
       (diminish 'evil-rsi-mode)
       (diminish 'smartparens-mode)

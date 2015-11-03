@@ -15,7 +15,7 @@
     ("/opt/homebrew-cask/Caskroom/eclipse-jee/4.5/Eclipse.app/Contents/Eclipse/eclim")))
  '(elfeed-feeds
    (quote
-    ("http://nullprogram.com/feed/" "http://blog.funcall.org/feed.xml" "http://owlturd.com/rss" "http://planet.lisp.org/rss20.xml" "http://planet.clojure.in/atom.xml" "http://cartographerswithoutborders.org/rss" "http://irreal.org/blog/?feed=rss2" "http://endlessparentheses.com/atom.xml" "http://www.newyorker.com/feed/humor" "http://www.newyorker.com/feed/articles" "http://feeds.feedburner.com/TheAtlantic?format=xml" "http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=1004" "http://english.bouletcorp.com/feed/" "http://pbfcomics.com/feed/feed.xml" "http://www.jspowerhour.com/comics.rss" "http://thecodelesscode.com/rss" "http://bldgblog.blogspot.com/atom.xml" "http://divisbyzero.com/feed/" "http://blog.tanyakhovanova.com/?feed=rss")))
+    ("http://nedroid.com/feed/" "http://crawdadswelcome.tumblr.com/rss" "http://moonbeard.com/feed/atom/" "http://gunshowcomic.com/rss.xml" "http://www.goyedogs.com/rss" "http://sticksangelica.tumblr.com/rss" "http://feeds.feedburner.com/thunderpaw?format=xml" "http://studygroupcomics.com/main/feed/rss/" "http://www.destructorcomics.com/?feed=rss" "http://garfieldminusgarfield.net/rss" "http://www.tor.com/category/all-fiction/feed" "http://nullprogram.com/feed/" "http://blog.funcall.org/feed.xml" "http://owlturd.com/rss" "http://planet.lisp.org/rss20.xml" "http://planet.clojure.in/atom.xml" "http://cartographerswithoutborders.org/rss" "http://irreal.org/blog/?feed=rss2" "http://endlessparentheses.com/atom.xml" "http://www.newyorker.com/feed/humor" "http://www.newyorker.com/feed/articles" "http://feeds.feedburner.com/TheAtlantic?format=xml" "http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=1004" "http://english.bouletcorp.com/feed/" "http://pbfcomics.com/feed/feed.xml" "http://www.jspowerhour.com/comics.rss" "http://thecodelesscode.com/rss" "http://bldgblog.blogspot.com/atom.xml" "http://divisbyzero.com/feed/" "http://blog.tanyakhovanova.com/?feed=rss")))
  '(erc-modules
    (quote
     (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
@@ -39,7 +39,7 @@
      ("n" "Agenda and all TODO's"
       ((agenda "" nil)
        (alltodo "" nil))
-      nil))) t)
+      nil))))
  '(org-agenda-files (quote ("~/org/work.org" "~/org/organizer.org")))
  '(projectile-global-mode t)
  '(projectile-mode-line (quote (:eval (format " %s" (projectile-project-name)))))
@@ -61,3 +61,4 @@
  (expand-file-name "emacs-init.org"
                    user-emacs-directory))
 (put 'narrow-to-page 'disabled nil)
+(put 'downcase-region 'disabled nil)
