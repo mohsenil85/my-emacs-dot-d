@@ -72,6 +72,8 @@
         :config
         (progn
           ;;(setq evil-default-state 'emacs)
+          (evil-set-initial-state 'elfeed-show-mode 'emacs) 
+          (evil-set-initial-state 'elfeed-search-mode 'emacs) 
           (evil-mode 1))
         :bind
         ("S-SPC" . evil-exit-emacs-state)
@@ -564,11 +566,56 @@
 
 ** elfeed
 #+BEGIN_SRC emacs-lisp
-  (use-package
-    elfeed :ensure
-    :config (evil-set-initial-state 'elfeed-show 'emacs)
-    :bind ("C-x w" . elfeed)
-    )
+      (use-package
+        elfeed :ensure
+        :config (progn
+                  (evil-set-initial-state 'elfeed-show 'emacs)
+                  (setq elfeed-feeds
+                        '("http://feeds.igvita.com/igvita"
+                           "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
+                          ("http://nedroid.com/feed/" comic)
+                          ("http://crawdadswelcome.tumblr.com/rss" comic)
+                          ("http://moonbeard.com/feed/atom/" comic)
+                          ("http://gunshowcomic.com/rss.xml" comic)
+                          ("http://www.goyedogs.com/rss" comic)
+                          ("http://sticksangelica.tumblr.com/rss" comic)
+                          ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
+                          ("http://studygroupcomics.com/main/feed/rss/" comic)
+                          ("http://www.destructorcomics.com/?feed=rss" comic)
+                          ("http://garfieldminusgarfield.net/rss" comic)
+                          "http://www.tor.com/category/all-fiction/feed"
+                          "http://nullprogram.com/feed/"
+"http://apod.nasa.gov/apod.rss"
+                          "http://blog.funcall.org/feed.xml"
+                          ("http://owlturd.com/rss" comic)
+                          "http://planet.lisp.org/rss20.xml"
+                          "http://planet.clojure.in/atom.xml"
+                          "http://cartographerswithoutborders.org/rss"
+                          "http://irreal.org/blog/?feed=rss2"
+                          "http://endlessparentheses.com/atom.xml"
+                          "http://www.newyorker.com/feed/articles"
+                          ("http://www.lunarbaboon.com/comics/rss.xml" comic)
+                          "http://www.atlasobscura.com/feeds/places"
+                          "http://pragmaticemacs.com/feed/"
+                          "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
+                          "http://planet.lisp.org/rss20.xml"
+                          "http://lisptips.com/rss"
+                          "http://what-if.xkcd.com/feed.atom"
+                          ("http://xkcd.com/rss.xml" comic)
+                          ("http://www.smbc-comics.com/rss.php" comic)
+                          ("http://www.qwantz.com/rssfeed.php" comic)
+                          "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
+                          "http://english.bouletcorp.com/feed/"
+                          ("http://pbfcomics.com/feed/feed.xml" comic)
+                          "http://thecodelesscode.com/rss"
+                          "http://bldgblog.blogspot.com/atom.xml"
+                          "http://divisbyzero.com/feed/"
+                          "http://blog.fogus.me/feed/"
+                          "http://blog.tanyakhovanova.com/?feed=rss"))
+      ) :bind ("C-c e" . elfeed)
+        
+        )
+
 #+END_SRC
 ** powerline
 #+BEGIN_SRC emacs-lisp
@@ -772,12 +819,13 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-(use-package gandalf-theme :ensure)
+;(use-package gandalf-theme :ensure)
+(use-package mbo70s-theme :ensure)
 ;(use-package warm-night-theme :ensure)
 ;(use-package slime-theme :ensure)
 ;(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'gandalf)
+(load-theme 'mbo70s)
    #+END_SRC
 
    #+RESULTS:
@@ -893,6 +941,17 @@
   : make-region-read-write
 
   
+** clipboard-to-elfeed
+#+BEGIN_SRC emacs-lisp
+  (defun my-clipboard-to-elfeed ()
+    (interactive)
+    (let ((link (pbpaste)))
+      (elfeed-add-feed link)))
+#+END_SRC
+
+#+RESULTS:
+: my-clipboard-to-elfeed
+
 * osx specific 
   handle meta as command
   toggle fullscreen

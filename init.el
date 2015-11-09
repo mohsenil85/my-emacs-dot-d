@@ -9,13 +9,11 @@
 ")))
  '(custom-safe-themes
    (quote
-    ("4af6fad34321a1ce23d8ab3486c662de122e8c6c1de97baed3aa4c10fe55e060" "ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" "a33ccce31f398f812561d4b0a9f7a2b7038197b722abc278f50d80f3566a0fdf" default)))
+    ("9d7e517b49068e9fef941fe4083ad3d2a4b040895dca5175b84be48739689707" "4af6fad34321a1ce23d8ab3486c662de122e8c6c1de97baed3aa4c10fe55e060" "ac2b1fed9c0f0190045359327e963ddad250e131fbf332e80d371b2e1dbc1dc4" "a33ccce31f398f812561d4b0a9f7a2b7038197b722abc278f50d80f3566a0fdf" default)))
  '(eclim-executable
    (quote
     ("/opt/homebrew-cask/Caskroom/eclipse-jee/4.5/Eclipse.app/Contents/Eclipse/eclim")))
- '(elfeed-feeds
-   (quote
-    ("http://nedroid.com/feed/" "http://crawdadswelcome.tumblr.com/rss" "http://moonbeard.com/feed/atom/" "http://gunshowcomic.com/rss.xml" "http://www.goyedogs.com/rss" "http://sticksangelica.tumblr.com/rss" "http://feeds.feedburner.com/thunderpaw?format=xml" "http://studygroupcomics.com/main/feed/rss/" "http://www.destructorcomics.com/?feed=rss" "http://garfieldminusgarfield.net/rss" "http://www.tor.com/category/all-fiction/feed" "http://nullprogram.com/feed/" "http://blog.funcall.org/feed.xml" "http://owlturd.com/rss" "http://planet.lisp.org/rss20.xml" "http://planet.clojure.in/atom.xml" "http://cartographerswithoutborders.org/rss" "http://irreal.org/blog/?feed=rss2" "http://endlessparentheses.com/atom.xml" "http://www.newyorker.com/feed/humor" "http://www.newyorker.com/feed/articles" "http://feeds.feedburner.com/TheAtlantic?format=xml" "http://www.lunarbaboon.com/comics/rss.xml" "http://www.atlasobscura.com/feeds/places" "http://pragmaticemacs.com/feed/" "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/" "http://planet.lisp.org/rss20.xml" "http://lisptips.com/rss" "http://what-if.xkcd.com/feed.atom" "http://xkcd.com/rss.xml" "http://www.smbc-comics.com/rss.php" "http://www.qwantz.com/rssfeed.php" "http://languagelog.ldc.upenn.edu/nll/?feed=rss2" "http://www.npr.org/rss/rss.php?id=1004" "http://english.bouletcorp.com/feed/" "http://pbfcomics.com/feed/feed.xml" "http://www.jspowerhour.com/comics.rss" "http://thecodelesscode.com/rss" "http://bldgblog.blogspot.com/atom.xml" "http://divisbyzero.com/feed/" "http://blog.tanyakhovanova.com/?feed=rss")))
+ '(elfeed-feeds nil)
  '(erc-modules
    (quote
     (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
@@ -30,6 +28,7 @@
  '(global-page-break-lines-mode t)
  '(helm-gtags-prefix-key "")
  '(helm-locate-command "mdfind %s %s")
+ '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))
  '(org-agenda-custom-commands
    (quote
     (("x" "daily " tags "inbox"
@@ -39,7 +38,7 @@
      ("n" "Agenda and all TODO's"
       ((agenda "" nil)
        (alltodo "" nil))
-      nil))))
+      nil))) t)
  '(org-agenda-files (quote ("~/org/work.org" "~/org/organizer.org")))
  '(projectile-global-mode t)
  '(projectile-mode-line (quote (:eval (format " %s" (projectile-project-name)))))
@@ -49,11 +48,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(git-gutter:added ((t (:foreground "medium sea green" :weight bold))))
- '(git-gutter:deleted ((t (:foreground "tomato" :weight bold))))
- '(git-gutter:modified ((t (:foreground "violet red" :weight bold))))
  '(git-gutter:separator ((t (:foreground "deep sky blue" :weight bold))))
- '(mode-line-inactive ((t (:background "gray50" :foreground "gray83"))))
+ '(helm-selection ((t (:background "NavajoWhite4" :distant-foreground "black"))))
+ '(helm-source-header ((t (:foreground "white" :weight bold :height 1.1))))
  '(powerline-active2 ((t (:background "grey40" :foreground "PaleGreen1")))))
 (require 'ob-tangle)
 ;;(setq debug-on-error t)
