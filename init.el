@@ -24,7 +24,6 @@
  '(git-gutter:window-width -1)
  '(global-git-gutter-mode t)
  '(global-highlight-changes-mode nil)
- '(global-hl-line-mode t)
  '(global-page-break-lines-mode t)
  '(helm-gtags-prefix-key "")
  '(helm-locate-command "mdfind %s %s")
@@ -49,8 +48,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(git-gutter:separator ((t (:foreground "deep sky blue" :weight bold))))
- '(helm-selection ((t (:background "NavajoWhite4" :distant-foreground "black"))))
- '(helm-source-header ((t (:foreground "white" :weight bold :height 1.1))))
+ '(helm-source-header ((t (:weight bold :height 1.1))))
  '(powerline-active2 ((t (:background "grey40" :foreground "PaleGreen1")))))
 (require 'ob-tangle)
 ;;(setq debug-on-error t)

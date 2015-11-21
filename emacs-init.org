@@ -85,7 +85,7 @@
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp
-      (use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
+      ;;(use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
     #+END_SRC
 *** evil-org
     #+BEGIN_SRC emacs-lisp
@@ -363,6 +363,15 @@
 
    
    
+** python
+#+BEGIN_SRC emacs-lisp
+  (use-package jedi :ensure
+    :config
+    (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)     
+      ))
+#+END_SRC
 ** javascript
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.json" . js-mode))
@@ -539,6 +548,7 @@
       '(
         (lisp . t)
         (sh . t)
+        (python . t)
         ))
 
    #+END_SRC
@@ -611,6 +621,7 @@
                           "http://bldgblog.blogspot.com/atom.xml"
                           "http://divisbyzero.com/feed/"
                           "http://blog.fogus.me/feed/"
+"http://feeds.feedburner.com/zerohedge/feed"
                           "http://blog.tanyakhovanova.com/?feed=rss"))
       ) :bind ("C-c e" . elfeed)
         
@@ -820,12 +831,13 @@
 ** color theme
    #+BEGIN_SRC emacs-lisp
 ;(use-package gandalf-theme :ensure)
-(use-package mbo70s-theme :ensure)
+;(use-package mbo70s-theme :ensure)
 ;(use-package warm-night-theme :ensure)
 ;(use-package slime-theme :ensure)
 ;(use-package basic-theme :ensure)
 ;(use-package minimal-theme :ensure)
-(load-theme 'mbo70s)
+;(load-theme 'mbo70s)
+(load-theme 'adwaita)
    #+END_SRC
 
    #+RESULTS:
