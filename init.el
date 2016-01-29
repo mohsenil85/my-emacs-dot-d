@@ -13,6 +13,7 @@
  '(eclim-executable
    (quote
     ("/opt/homebrew-cask/Caskroom/eclipse-jee/4.5/Eclipse.app/Contents/Eclipse/eclim")))
+ '(electric-indent-mode nil)
  '(elfeed-feeds nil)
  '(erc-modules
    (quote
@@ -25,6 +26,7 @@
  '(global-git-gutter-mode t)
  '(global-highlight-changes-mode nil)
  '(global-page-break-lines-mode t)
+ '(helm-gtags-ignore-case t)
  '(helm-gtags-prefix-key "")
  '(helm-locate-command "mdfind %s %s")
  '(magit-log-arguments (quote ("--graph" "--color" "--decorate" "-n256")))

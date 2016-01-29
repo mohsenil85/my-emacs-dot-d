@@ -40,3 +40,13 @@ semanticdb/
 /url/cookies
 /dict/go-mode
 /dict/js-mode
+/%backup%~
+/.cache/ido.last
+/.python-environments/default/.Python
+/.python-environments/default/bin/activate
+/.python-environments/default/bin/pip
+/.python-environments/default/bin/activate.csh
+/.python-environments/default/bin/pip2
+/.python-environments/default/bin/activate_this.py
+/.python-environments/default/lib/python2.7/site-packages/epc/tests/test_dispatcher.pyc
+/dict/sh-mode

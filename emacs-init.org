@@ -35,7 +35,13 @@
           ;;(use-package ggtags :ensure)
           (use-package better-defaults :ensure)
           (use-package markdown-mode :ensure)
-;;;          (use-package auctex :ensure :config (require 'tex) )
+;;          (use-package auctex :ensure :config (require 'tex) )
+
+(add-hook 'LaTeX-mode-hook (lambda ()
+  (push 
+    '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+      :help "Run Latexmk on file")
+    TeX-command-list)))
 
    #+END_SRC
 
@@ -73,6 +79,7 @@
         (progn
           ;;(setq evil-default-state 'emacs)
           (evil-set-initial-state 'elfeed-show-mode 'emacs) 
+          (evil-set-initial-state 'snake-mode 'emacs) 
           (evil-set-initial-state 'elfeed-search-mode 'emacs) 
           (evil-mode 1))
         :bind
@@ -113,13 +120,13 @@
     #+BEGIN_SRC emacs-lisp
       (use-package helm
         :ensure
-        :demand
         :config
         (progn
           (require 'helm)
           (require 'helm-config)
           (setq helm-ff-transformer-show-only-basename nil)
           (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+
 
           (setq helm-M-x-fuzzy-match t)
           (setq helm-recentf-fuzzy-match t)
@@ -132,7 +139,7 @@
           (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
           (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
           (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-          (define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+          ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
           (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
 
           (autoload 'helm-descbinds      "helm-descbinds" t)
@@ -144,14 +151,13 @@
           (setq helm-ff-file-name-history-use-recentf t)
           (setq helm-autoresize-mode t)
 
+  (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+  (global-set-key (kbd "C-c h r") 'helm-register)
           (helm-mode 1))
         :bind
         (("M-x" . helm-M-x)
-         ("C-c h" . helm-command-prefix)
          ("C-x b" . helm-mini)
          ("C-h SPC" . helm-all-mark-rings)
-         ("C-c h x" . helm-register)
-         ("C-c h g" . helm-google-suggest)
          ("C-x C-b" . helm-buffers-list)
          ("C-x C-r" . helm-recentf)
          ("M-y" . helm-show-kill-ring)
@@ -245,38 +251,38 @@
     #+END_SRC
 *** helm-gtags 
 #+BEGIN_SRC emacs-lisp
-  (use-package helm-gtags
-    :ensure
-    :config
-    (progn
-      ;;; Enable helm-gtags-mode
-      (add-hook 'c-mode-hook 'helm-gtags-mode)
-      (add-hook 'c++-mode-hook 'helm-gtags-mode)
-      (add-hook 'asm-mode-hook 'helm-gtags-mode)
-      (add-hook 'java-mode-hook 'helm-gtags-mode)
-
-      ;; customize
-      (setq
-       (helm-gtags-path-style 'relative)
-       (helm-gtags-ignore-case t)
-       (helm-gtags-auto-update t))
-
-    (setq helm-gtags-prefix-key "C-t")
-    (helm-gtags-suggested-key-mapping t)
-      ;; key bindings
-      (eval-after-load "helm-gtags"
-        '(progn
-           (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-           (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-           (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-           (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-           (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-           (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-           (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
-
-    
-    )
-
+;;  (use-package helm-gtags
+;;    :ensure
+;;    :config
+;;    (progn
+;;      ;;; Enable helm-gtags-mode
+;;      (add-hook 'c-mode-hook 'helm-gtags-mode)
+;;      (add-hook 'c++-mode-hook 'helm-gtags-mode)
+;;      (add-hook 'asm-mode-hook 'helm-gtags-mode)
+;;      (add-hook 'java-mode-hook 'helm-gtags-mode)
+;;
+;;      ;; customize
+;;;;      (setq
+;;;;       (helm-gtags-path-style 'relative))
+;;;;(setq  
+;;;;       (helm-gtags-auto-update t)) 
+;;
+;;    (setq helm-gtags-prefix-key "C-t")
+;;    (helm-gtags-suggested-key-mapping t)
+;;      ;; key bindings
+;;      (eval-after-load "helm-gtags"
+;;        '(progn
+;;           (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+;;           (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+;;           (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+;;           (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+;;           (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+;;           (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+;;           (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+;;
+;;    
+;;    )
+;;
 #+END_SRC
 
 #+RESULTS:
@@ -340,7 +346,7 @@
                  (setq inferior-lisp-program "/usr/local/bin/sbcl")
                  (require 'slime-autoloads)
                  (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                 (setq slime-contribs '(slime-fancy slime-fuzzy))
+                 (setq slime-contribs '(slime-fancy slime-fuzzy slime-asdf))
                  (slime-setup)
                  )
        )
@@ -363,21 +369,34 @@
 
    
    
+** clojure
+#+BEGIN_SRC emacs-lisp
+  (use-package clojure-mode :ensure)
+  (use-package cider :ensure)
+
+
+#+END_SRC
+
+#+RESULTS:
+
 ** python
 #+BEGIN_SRC emacs-lisp
   (use-package jedi :ensure
     :config
     (progn
       (add-hook 'python-mode-hook 'jedi:setup)
-      (setq jedi:complete-on-dot t)     
-      ))
+      (setq jedi:complete-on-dot t)))
+  (use-package ob-ipython :ensure)
+  (use-package ein :ensure)
 #+END_SRC
+
+#+RESULTS:
+
 ** javascript
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.json" . js-mode))
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  (use-package js2-mode :ensure :config (my-js-mode-stuff))
   (use-package ac-js2 :ensure)
 
   (defun my-js-mode-stuff ()
@@ -385,12 +404,13 @@
     (define-key js-mode-map "{" 'paredit-open-curly)
     (define-key js-mode-map "}" 'paredit-close-curly-and-newline)
     )
+  (use-package js2-mode :ensure :config (my-js-mode-stuff))
 
 #+END_SRC
 
 #+RESULTS:
 : my-js-mode-stuff
-
+   
 ** org-mode
    #+BEGIN_SRC emacs-lisp
      (use-package org 
@@ -549,6 +569,7 @@
         (lisp . t)
         (sh . t)
         (python . t)
+        (ipython . t)
         ))
 
    #+END_SRC
@@ -575,7 +596,7 @@
     : t
 
 ** elfeed
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
       (use-package
         elfeed :ensure
         :config (progn
@@ -589,13 +610,15 @@
                           ("http://gunshowcomic.com/rss.xml" comic)
                           ("http://www.goyedogs.com/rss" comic)
                           ("http://sticksangelica.tumblr.com/rss" comic)
+"http://feeds2.feedburner.com/MachineLearningtheory"
+"http://infostructuralist.wordpress.com/"
+"http://nlpers.blogspot.com/feeds/posts/default"
                           ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
                           ("http://studygroupcomics.com/main/feed/rss/" comic)
                           ("http://www.destructorcomics.com/?feed=rss" comic)
                           ("http://garfieldminusgarfield.net/rss" comic)
                           "http://www.tor.com/category/all-fiction/feed"
                           "http://nullprogram.com/feed/"
-"http://apod.nasa.gov/apod.rss"
                           "http://blog.funcall.org/feed.xml"
                           ("http://owlturd.com/rss" comic)
                           "http://planet.lisp.org/rss20.xml"
@@ -605,7 +628,6 @@
                           "http://endlessparentheses.com/atom.xml"
                           "http://www.newyorker.com/feed/articles"
                           ("http://www.lunarbaboon.com/comics/rss.xml" comic)
-                          "http://www.atlasobscura.com/feeds/places"
                           "http://pragmaticemacs.com/feed/"
                           "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
                           "http://planet.lisp.org/rss20.xml"
@@ -621,13 +643,12 @@
                           "http://bldgblog.blogspot.com/atom.xml"
                           "http://divisbyzero.com/feed/"
                           "http://blog.fogus.me/feed/"
-"http://feeds.feedburner.com/zerohedge/feed"
                           "http://blog.tanyakhovanova.com/?feed=rss"))
       ) :bind ("C-c e" . elfeed)
         
         )
 
-#+END_SRC
+   #+END_SRC
 ** powerline
 #+BEGIN_SRC emacs-lisp
   (use-package powerline 
@@ -1077,30 +1098,32 @@
 : mu4e
     
 * diminish
-must be at very end?
+  must be at very end?
 #+begin_src emacs-lisp
-  (use-package
-    diminish
-    :ensure
-    :config
-    (progn
-      (diminish 'evil-smartparens-mode)
-      (diminish 'evil-rsi-mode)
-      (diminish 'smartparens-mode)
-      (diminish 'page-break-lines-mode)
-      (diminish 'org-indent-mode)
-      (diminish 'git-gutter-mode)
-      (diminish 'evil-org-mode)
-      (diminish 'flycheck-mode)
-      (diminish 'yas-minor-mode)
-      (diminish 'smartparens-mode)
-      (diminish 'undo-tree-mode)
-      (diminish 'paredit-mode)
-      (diminish 'visual-line-mode)
+  ;; (use-package
+  ;;   diminish
+  ;;   :ensure
+  ;;   :config
+  ;;   (progn
+  ;;     (diminish 'evil-smartparens-mode)
+  ;;     (diminish 'evil-rsi-mode)
+  ;;     (diminish 'smartparens-mode)
+  ;;     (diminish 'page-break-lines-mode)
+  ;;     (diminish 'org-indent-mode)
+  ;;     (diminish 'git-gutter-mode)
+  ;;     (diminish 'evil-org-mode)
+  ;;     (diminish 'flycheck-mode)
+  ;;     (diminish 'yas-minor-mode)
+  ;;     (diminish 'smartparens-mode)
+  ;;     (diminish 'undo-tree-mode)
+  ;;     (diminish 'paredit-mode)
+  ;;     (diminish 'visual-line-mode)
       
-      ))
+  ;;     ))
 #+end_src
 
 #+RESULTS:
 : t
 
+* nasm
+  
