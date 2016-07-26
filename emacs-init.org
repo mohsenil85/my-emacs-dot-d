@@ -993,7 +993,6 @@
     (setq mac-option-modifier 'super)
     (setq mac-control-modifier 'control)
     (setq mac-function-modifier 'hyper)
-    (use-package helm-itunes :ensure)
     (defun toggle-fullscreen ()
       "Toggle full screen"
       (interactive)
