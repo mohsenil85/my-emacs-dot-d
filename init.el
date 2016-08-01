@@ -59,3 +59,4 @@
                    user-emacs-directory))
 (put 'narrow-to-page 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)

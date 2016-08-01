@@ -700,7 +700,12 @@
 (use-package magit :ensure
 :bind ("C-x g" . magit-status))
     #+END_SRC
-    
+** evil-magit
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-magit :ensure)
+
+    #+END_SRC
+
 ** persistent scratch
     #+BEGIN_SRC emacs-lisp
 (use-package persistent-scratch :ensure
