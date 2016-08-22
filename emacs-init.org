@@ -7,27 +7,57 @@
 
 * packages
 ** package config 
-*** Configure package archives
+*** make a new keymap
 
     #+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/"))
+      (defvar evil-package-menu-mode-map
+        (let ((map (make-sparse-keymap)))
+          (set-keymap-parent map tabulated-list-mode-map)
+          (define-key map "\C-m" 'package-menu-describe-package)
+          (define-key map "u" 'package-menu-mark-unmark)
+          (define-key map "\177" 'package-menu-backup-unmark)
+          (define-key map "d" 'package-menu-mark-delete)
+          (define-key map "i" 'package-menu-mark-install)
+          (define-key map "U" 'package-menu-mark-upgrades)
+          (define-key map "r" 'package-menu-refresh)
+          (define-key map "f" 'package-menu-filter)
+          (define-key map "~" 'package-menu-mark-obsolete-for-deletion)
+          (define-key map "x" 'package-menu-execute)
+          (define-key map "h" 'package-menu-quick-help)
+          (define-key map "H" #'package-menu-hide-package)
+          (define-key map "?" 'package-menu-describe-package)
+          (define-key map "(" #'package-menu-toggle-hiding)
+          (define-key map "/" #'isearch-forward-regexp)
+          map)
+        "Local keymap for `package-menu-mode' buffers.")
+    #+END_SRC
 
-(add-to-list 'package-archives
-             '("org" . "http://orgmode.org/elpa/"))
+    #+RESULTS:
+    : evil-package-menu-mode-map
 
-(package-initialize)
+*** Configure package archives
+
+
+    #+BEGIN_SRC emacs-lisp
+           (require 'package)
+
+      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+
+             ;(add-to-list 'package-archives
+             ;             '("org" . "http://orgmode.org/elpa/"))
+
+           (package-initialize)
     #+END_SRC
     
     #+RESULTS:
-    : t
-
 *** Setup use-package
     #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/vendor/use-package")
 (require 'use-package)
     #+END_SRC
+
+*** github key
+    ~/.github-paradox-key
     
 ** Misc packages
    #+BEGIN_SRC emacs-lisp
@@ -290,16 +320,16 @@
 
 ** ac mode
    #+BEGIN_SRC emacs-lisp
-          (use-package auto-complete
-            :ensure
-            :config
-            (progn
-              (require 'auto-complete-config)
-              (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
-              (ac-config-default)
-              (ac-set-trigger-key "TAB")
-              (ac-set-trigger-key "<tab>")
-     ))
+           (use-package auto-complete
+             :ensure
+             :config
+             (progn
+               (require 'auto-complete-config)
+               (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
+               (ac-config-default)
+               (ac-set-trigger-key "TAB")
+               (ac-set-trigger-key "<tab>")
+      ))
    #+END_SRC
 
    #+RESULTS:
@@ -308,72 +338,129 @@
 
 ** lisp
    #+BEGIN_SRC emacs-lisp
-     (use-package paredit
-       :ensure
-       :config 
-       (progn
-         (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
-         (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-         (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-         (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-         (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-         (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-         ))
+          (use-package paredit
+            :ensure
+            :config 
+            (progn
+              (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+              (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+              (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+              (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+              (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+              (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+              ))
 
-     (use-package smartparens
-       :ensure
-       :init (require 'smartparens-config)
-       :config (smartparens-global-strict-mode 1))
+          (use-package smartparens
+            :ensure
+            :init (require 'smartparens-config)
+            :config (smartparens-global-strict-mode 1))
 
-     (use-package evil-smartparens
-       :ensure
-       :config (progn
-                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+          (use-package evil-smartparens
+            :ensure
+            :config (progn
+                      (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
-     (use-package rainbow-delimiters
-       :ensure
-       :config
-       (progn
-         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-         (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+          (use-package rainbow-delimiters
+            :ensure
+            :config
+            (progn
+              (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+              (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
+          (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+          (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+          (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+          (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
-     (use-package slime
-       :ensure
-       :load-path  "~/.emacs.d/vendor/slime"
-       :config (progn
-                 (setq inferior-lisp-program "/usr/local/bin/sbcl")
-                 (require 'slime-autoloads)
-                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                 (setq slime-contribs '(slime-fancy slime-fuzzy slime-asdf))
-                 (slime-setup)
-                 )
-       )
+          (eval-after-load "slime"
+            '(progn
+               (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+               (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
 
-     ;;     (use-package log4slime
-     ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
-     (use-package fuzzy :ensure )
-          (use-package ac-slime
-       :ensure
-       :config (progn
-                 (add-hook 'slime-mode-hook 'set-up-slime-ac)
-                 (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-                 (eval-after-load "auto-complete"
-                   '(add-to-list 'ac-modes 'slime-repl-mode))))
+          (use-package slime
+            :ensure
+            :load-path  "~/.emacs.d/vendor/slime"
+            :config (progn
+                      (setq inferior-lisp-program 
+                            "/usr/local/bin/sbcl --noinform --no-linedit")
+                      (require 'slime-autoloads)
+                      (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+                      (setq slime-contribs 
+     '(slime-fancy 
+     slime-asdf 
+     ;slime-banner
+     slime-indentation
+     slime-quicklisp 
+     slime-xref-browser))
+                      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+
+                      (slime-setup)
+                      )
+            
+            :bind (
+                   ("C-c s" . slime-selector)
+                   ("M-." . slime-edit-definition)
+                   ("M-," . slime-pop-definition-stack)
+     )
+          )
+
+          (require 'info-look)
+          (info-lookup-add-help
+           :mode 'lisp-mode
+           :regexp "[^][()'\" \t\n]+"
+           :ignore-case t
+           :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))
+
+          ;;     (use-package log4slime
+          ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
+          ;; (use-package fuzzy :ensure )
+          ;; (use-package ac-slime
+          ;;   :ensure
+          ;;   :config (progn
+          ;;             (add-hook 'slime-mode-hook 'set-up-slime-ac)
+          ;;             (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+          ;;             (eval-after-load "auto-complete"
+          ;;               '(add-to-list 'ac-modes 'slime-repl-mode))))
 
    #+END_SRC
 
    #+RESULTS:
-   : t
 
    
    
 ** clojure
+
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode :ensure)
   (use-package cider :ensure)
 
+
+#+END_SRC
+
+#+RESULTS:
+** java
+#+BEGIN_SRC emacs-lisp
+  (use-package emacs-eclim :ensure
+    :config
+    (progn
+      (require 'eclim)
+      (global-eclim-mode)
+      (setf eclim-eclipse-dirs
+            '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse"))
+      (setf eclim-executable 
+            '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse/eclim"))
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  ;; regular auto-complete initialization
+  (require 'auto-complete-config)
+  (ac-config-default)
+
+  ;; add the emacs-eclim source
+  (require 'ac-emacs-eclim-source)
+  (ac-emacs-eclim-config)
+      ))
 
 #+END_SRC
 
@@ -538,8 +625,9 @@
          (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
          
+         (setq org-mobile-inbox-for-pull "~/org/flagged.org")
 
-         (setq org-mobile-directory "~/Dropbox/org/"))
+         (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/"))
        :bind (
               ("C-c l" . org-store-link)
               ("C-c a" . org-agenda)
@@ -856,14 +944,15 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-;(use-package gandalf-theme :ensure)
-;(use-package mbo70s-theme :ensure)
-;(use-package warm-night-theme :ensure)
-;(use-package slime-theme :ensure)
-;(use-package basic-theme :ensure)
-;(use-package minimal-theme :ensure)
-;(load-theme 'mbo70s)
-(load-theme 'adwaita)
+     ;(use-package gandalf-theme :ensure)
+     ;(use-package mbo70s-theme :ensure)
+     ;(use-package warm-night-theme :ensure)
+     (use-package slime-theme :ensure)
+     ;(use-package basic-theme :ensure)
+     ;(use-package minimal-theme :ensure)
+     ;(load-theme 'mbo70s)
+     (load-theme 'slime)
+     ;;; (load-theme 'adwaita)
    #+END_SRC
 
    #+RESULTS:
@@ -998,6 +1087,7 @@
     (setq mac-option-modifier 'super)
     (setq mac-control-modifier 'control)
     (setq mac-function-modifier 'hyper)
+(setq mac-pass-command-to-system nil) 
     (defun toggle-fullscreen ()
       "Toggle full screen"
       (interactive)
@@ -1028,6 +1118,9 @@
       (normal-top-level-add-subdirs-to-load-path))
 
   #+END_SRC
+
+  #+RESULTS:
+
   
 * mu4e stuff
 #+BEGIN_SRC emacs-lisp
@@ -1104,26 +1197,28 @@
 * diminish
   must be at very end?
 #+begin_src emacs-lisp
-  ;; (use-package
-  ;;   diminish
-  ;;   :ensure
-  ;;   :config
-  ;;   (progn
-  ;;     (diminish 'evil-smartparens-mode)
-  ;;     (diminish 'evil-rsi-mode)
-  ;;     (diminish 'smartparens-mode)
-  ;;     (diminish 'page-break-lines-mode)
-  ;;     (diminish 'org-indent-mode)
-  ;;     (diminish 'git-gutter-mode)
-  ;;     (diminish 'evil-org-mode)
-  ;;     (diminish 'flycheck-mode)
-  ;;     (diminish 'yas-minor-mode)
-  ;;     (diminish 'smartparens-mode)
-  ;;     (diminish 'undo-tree-mode)
-  ;;     (diminish 'paredit-mode)
-  ;;     (diminish 'visual-line-mode)
-      
-  ;;     ))
+   (use-package
+     diminish
+     :ensure
+     :config
+     (progn
+       (diminish 'evil-smartparens-mode)
+       (diminish 'evil-rsi-mode)
+       (diminish 'smartparens-mode)
+       (diminish 'page-break-lines-mode)
+       (diminish 'org-indent-mode)
+       (diminish 'git-gutter-mode)
+       (diminish 'evil-org-mode)
+       (diminish 'flycheck-mode)
+       (diminish 'yas-minor-mode)
+       (diminish 'smartparens-mode)
+       (diminish 'helm-mode)
+       (diminish 'undo-tree-mode)
+       (diminish 'paredit-mode)
+       (diminish 'auto-revert-mode)
+       (diminish 'visual-line-mode)
+    
+       ))
 #+end_src
 
 #+RESULTS:
