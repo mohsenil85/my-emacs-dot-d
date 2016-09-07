@@ -10,26 +10,28 @@
 *** make a new keymap
 
     #+BEGIN_SRC emacs-lisp
-      (defvar evil-package-menu-mode-map
-        (let ((map (make-sparse-keymap)))
-          (set-keymap-parent map tabulated-list-mode-map)
-          (define-key map "\C-m" 'package-menu-describe-package)
-          (define-key map "u" 'package-menu-mark-unmark)
-          (define-key map "\177" 'package-menu-backup-unmark)
-          (define-key map "d" 'package-menu-mark-delete)
-          (define-key map "i" 'package-menu-mark-install)
-          (define-key map "U" 'package-menu-mark-upgrades)
-          (define-key map "r" 'package-menu-refresh)
-          (define-key map "f" 'package-menu-filter)
-          (define-key map "~" 'package-menu-mark-obsolete-for-deletion)
-          (define-key map "x" 'package-menu-execute)
-          (define-key map "h" 'package-menu-quick-help)
-          (define-key map "H" #'package-menu-hide-package)
-          (define-key map "?" 'package-menu-describe-package)
-          (define-key map "(" #'package-menu-toggle-hiding)
-          (define-key map "/" #'isearch-forward-regexp)
-          map)
-        "Local keymap for `package-menu-mode' buffers.")
+            (defvar evil-package-menu-mode-map
+              (let ((map (make-sparse-keymap)))
+                (set-keymap-parent map tabulated-list-mode-map)
+                (define-key map "\C-m" 'package-menu-describe-package)
+                (define-key map "u" 'package-menu-mark-unmark)
+                (define-key map "\177" 'package-menu-backup-unmark)
+                (define-key map "d" 'package-menu-mark-delete)
+                (define-key map "i" 'package-menu-mark-install)
+                (define-key map "U" 'package-menu-mark-upgrades)
+                (define-key map "r" 'package-menu-refresh)
+                (define-key map "f" 'package-menu-filter)
+                (define-key map "~" 'package-menu-mark-obsolete-for-deletion)
+                (define-key map "x" 'package-menu-execute)
+                (define-key map "h" 'package-menu-quick-help)
+                (define-key map "H" 'package-menu-hide-package)
+                (define-key map "?" 'package-menu-describe-package)
+                (define-key map "(" 'package-menu-toggle-hiding)
+                (define-key map "/" 'isearch-forward-regexp)
+                map)
+              "Local keymap for `package-menu-mode' buffers.")
+
+      (add-hook 'package-menu-mode-hook (lambda () ()))
     #+END_SRC
 
     #+RESULTS:
@@ -39,26 +41,92 @@
 
 
     #+BEGIN_SRC emacs-lisp
-           (require 'package)
+(setq package-enable-at-startup nil) ; tells emacs not to load any packages before starting up
+;; the following lines tell emacs where on the internet to look up
+;; for new packages.
+(setq package-archives '(("org"       . "http://orgmode.org/elpa/")
+                         ("gnu"       . "http://elpa.gnu.org/packages/")
+                         ("melpa"     . "https://melpa.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+(package-initialize)
 
-      (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package) ; unless it is already installed
+  (package-refresh-contents) ; updage packages archive
+  (package-install 'use-package)) ; and install the most recent version of use-package
 
-             ;(add-to-list 'package-archives
-             ;             '("org" . "http://orgmode.org/elpa/"))
-
-           (package-initialize)
-    #+END_SRC
-    
-    #+RESULTS:
-*** Setup use-package
-    #+BEGIN_SRC emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/vendor/use-package")
 (require 'use-package)
     #+END_SRC
 
-*** github key
-    ~/.github-paradox-key
-    
+** avy
+
+    #+BEGIN_SRC emacs-lisp
+
+(use-package avy :ensure t
+  :commands (avy-goto-word-1))
+    #+END_SRC
+
+    #+RESULTS:
+
+** general
+    #+BEGIN_SRC emacs-lisp
+(use-package general :ensure t
+  :config
+  (general-define-key "C-'" 'avy-goto-word-1)
+  )
+    #+END_SRC
+
+** which key
+    #+BEGIN_SRC emacs-lisp
+      (use-package which-key :ensure
+        :config
+        (which-key-setup-side-window-right-bottom)
+        (setq which-key-sort-order 'which-key-key-order-alpha
+              which-key-side-window-max-width 0.33
+              which-key-idle-delay 0.05)
+
+        :diminish which-key-mode)
+
+
+
+    #+END_SRC
+
+    #+RESULTS:
+    : t
+
+** swiper et al
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy :ensure t
+       :diminish (ivy-mode . "") ; does not display ivy in the modeline
+       :init (ivy-mode 1)        ; enable ivy globally at startup
+       :bind (:map ivy-mode-map  ; bind in the ivy buffer
+              ("C-'" . ivy-avy)) ; C-' to ivy-avy
+       :config
+       (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
+       (setq ivy-height 20)               ; set height of the ivy window
+       (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
+       )
+
+     (use-package counsel :ensure t
+       :bind*                           ; load counsel when pressed
+       (("M-x"     . counsel-M-x)       ; M-x use counsel
+        ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+        ("C-x C-r" . counsel-recentf)   ; search recently edited files
+        ("C-c f"   . counsel-git)       ; search for files in git repo
+        ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+        ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+        ("C-c l"   . counsel-locate)   ; search for files or else using locate
+        ("C-h b"   . counsel-descbinds)   ; search for files or else using locate
+        ("C-h v"   . counsel-describe-variable)   ; search for files or else using locate
+        ("C-h f"   . counsel-describe-function)   ; search for files or else using locate
+        ("C-s"   . swiper))        ; find 
+       )
+
+   #+END_SRC
+
+   #+RESULTS:
+
 ** Misc packages
    #+BEGIN_SRC emacs-lisp
           (use-package ag :ensure)
@@ -151,73 +219,69 @@
 - C-h w, which runs where-is
 *** helm proper
     #+BEGIN_SRC emacs-lisp
-      (use-package helm
-        :ensure
-        :config
-        (progn
-          (require 'helm)
-          (require 'helm-config)
-          (setq helm-ff-transformer-show-only-basename nil)
-          (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
-
-
-          (setq helm-M-x-fuzzy-match t)
-          (setq helm-recentf-fuzzy-match t)
-          (setq helm-mode-fuzzy-match t)
-          (setq helm-buffers-fuzzy-matching t)
-          (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
-          (setq helm-move-to-line-cycle-in-source t)
-
-          
-          (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-          (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-          (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-          ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-          (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
-
-          (autoload 'helm-descbinds      "helm-descbinds" t)
-          (autoload 'helm-eshell-history "helm-eshell"    t)
-          (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
-
-          (setq helm-autoresize-mode t)
-          (setq helm-split-window-in-side-p t)
-          (setq helm-ff-file-name-history-use-recentf t)
-          (setq helm-autoresize-mode t)
-
-  (global-set-key (kbd "C-c h g") 'helm-google-suggest)
-  (global-set-key (kbd "C-c h r") 'helm-register)
-          (helm-mode 1))
-        :bind
-        (("M-x" . helm-M-x)
-         ("C-x b" . helm-mini)
-         ("C-h SPC" . helm-all-mark-rings)
-         ("C-x C-b" . helm-buffers-list)
-         ("C-x C-r" . helm-recentf)
-         ("M-y" . helm-show-kill-ring)
-         ("C-x C-f" . helm-find-files)
-         ("C-c h o" . helm-occur)))
-
-      (use-package helm-descbinds :ensure :config
-        (progn
-          (require 'helm-descbinds)
-          (helm-descbinds-mode)
-          )
-        )
+;;      (use-package helm
+;;        :ensure
+;;        :config
+;;        (progn
+;;          (require 'helm)
+;;          (require 'helm-config)
+;;          (setq helm-ff-transformer-show-only-basename nil)
+;;          (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+;;
+;;
+;;          (setq helm-M-x-fuzzy-match t)
+;;          (setq helm-recentf-fuzzy-match t)
+;;          (setq helm-mode-fuzzy-match t)
+;;          (setq helm-buffers-fuzzy-matching t)
+;;          (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
+;;          (setq helm-move-to-line-cycle-in-source t)
+;;
+;;          
+;;          (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+;;          (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+;;          (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+;;          ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+;;          (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
+;;
+;;          (autoload 'helm-descbinds      "helm-descbinds" t)
+;;          (autoload 'helm-eshell-history "helm-eshell"    t)
+;;          (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
+;;
+;;          (setq helm-autoresize-mode t)
+;;          (setq helm-split-window-in-side-p t)
+;;          (setq helm-ff-file-name-history-use-recentf t)
+;;          (setq helm-autoresize-mode t)
+;;
+;;  (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+;;  (global-set-key (kbd "C-c h r") 'helm-register)
+;;          (helm-mode 1))
+;;        :bind
+;;        (("M-x" . helm-M-x)
+;;         ("C-x b" . helm-mini)
+;;         ("C-h SPC" . helm-all-mark-rings)
+;;         ("C-x C-b" . helm-buffers-list)
+;;         ("C-x C-r" . helm-recentf)
+;;         ("M-y" . helm-show-kill-ring)
+;;         ("C-x C-f" . helm-find-files)
+;;         ("C-c h o" . helm-occur)))
+;;
+;;      (use-package helm-descbinds :ensure :config
+;;        (progn
+;;          (require 'helm-descbinds)
+;;          (helm-descbinds-mode)
+;;          )
+;;        )
 
     #+END_SRC
 
 *** helm-projectile
     #+BEGIN_SRC emacs-lisp
-            (use-package projectile :ensure
-              :config
-              (progn
-               (setq projectile-switch-project-action 'helm-projectile)))
-            (use-package helm-projectile
-              :ensure
-              :config (progn
-                        (projectile-global-mode)
-                        (setq projectile-completion-system 'helm)
-                        (helm-projectile-on)))
+      (use-package projectile :ensure
+        :config
+        (progn
+         (projectile-global-mode)
+         (setq projectile-completion-system 'ivy)
+      (setq projectile-switch-project-action 'helm-projectile)))
     #+END_SRC
 
     #+RESULTS:
@@ -227,59 +291,59 @@
 
 *** helm-swoop
 #+BEGIN_SRC emacs-lisp
-  (use-package helm-swoop 
-    :ensure
-    :config
-    (progn
-      (global-set-key (kbd "M-i") 'helm-swoop)
-      (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-      (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-      (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+  ;; (use-package helm-swoop 
+  ;;   :ensure
+  ;;   :config
+  ;;   (progn
+  ;;     (global-set-key (kbd "M-i") 'helm-swoop)
+  ;;     (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+  ;;     (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+  ;;     (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
 
-      ;; When doing isearch, hand the word over to helm-swoop
-      (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-      ;; From helm-swoop to helm-multi-swoop-all
-      (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-      ;; When doing evil-search, hand the word over to helm-swoop
-      ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
+  ;;     ;; When doing isearch, hand the word over to helm-swoop
+  ;;     (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+  ;;     ;; From helm-swoop to helm-multi-swoop-all
+  ;;     (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+  ;;     ;; When doing evil-search, hand the word over to helm-swoop
+  ;;     ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
 
-      ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-      (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+  ;;     ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+  ;;     (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
 
-      ;; Move up and down like isearch
-      (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-      (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-      (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-      (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+  ;;     ;; Move up and down like isearch
+  ;;     (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  ;;     (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+  ;;     (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+  ;;     (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
 
-      ;; Save buffer when helm-multi-swoop-edit complete
-      (setq helm-multi-swoop-edit-save t)
+  ;;     ;; Save buffer when helm-multi-swoop-edit complete
+  ;;     (setq helm-multi-swoop-edit-save t)
 
-      ;; If this value is t, split window inside the current window
-      (setq helm-swoop-split-with-multiple-windows nil)
+  ;;     ;; If this value is t, split window inside the current window
+  ;;     (setq helm-swoop-split-with-multiple-windows nil)
 
-      ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-      (setq helm-swoop-split-direction 'split-window-vertically)
+  ;;     ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+  ;;     (setq helm-swoop-split-direction 'split-window-vertically)
 
-      ;; If nil, you can slightly boost invoke speed in exchange for text color
-      (setq helm-swoop-speed-or-color nil)
+  ;;     ;; If nil, you can slightly boost invoke speed in exchange for text color
+  ;;     (setq helm-swoop-speed-or-color nil)
 
-      ;; ;; Go to the opposite side of line from the end or beginning of line
-      (setq helm-swoop-move-to-line-cycle t)
+  ;;     ;; ;; Go to the opposite side of line from the end or beginning of line
+  ;;     (setq helm-swoop-move-to-line-cycle t)
 
-      ;; Optional face for line numbers
-      ;; Face name is `helm-swoop-line-number-face`
-      (setq helm-swoop-use-line-number-face t)))
+  ;;     ;; Optional face for line numbers
+  ;;     ;; Face name is `helm-swoop-line-number-face`
+  ;;     (setq helm-swoop-use-line-number-face t)))
 #+END_SRC
 *** helm-ag
 #+BEGIN_SRC emacs-lisp
-(use-package helm-ag :ensure)
+;(use-package helm-ag :ensure)
 
 #+END_SRC
 *** helm-ack
     #+BEGIN_SRC emacs-lisp
-      (use-package helm-ack
-        :ensure)
+;      (use-package helm-ack
+;        :ensure)
           
     #+END_SRC
 *** helm-gtags 
@@ -320,19 +384,19 @@
 
 #+RESULTS:
 : t
-
+    
 ** ac mode
    #+BEGIN_SRC emacs-lisp
-           (use-package auto-complete
-             :ensure
-             :config
-             (progn
-               (require 'auto-complete-config)
-               (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
-               (ac-config-default)
-               (ac-set-trigger-key "TAB")
-               (ac-set-trigger-key "<tab>")
-      ))
+      ;      (use-package auto-complete
+      ;        :ensure
+      ;        :config
+      ;        (progn
+      ;          (require 'auto-complete-config)
+      ;          (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
+      ;          (ac-config-default)
+      ;          (ac-set-trigger-key "TAB")
+      ;          (ac-set-trigger-key "<tab>")
+      ; ))
    #+END_SRC
 
    #+RESULTS:
@@ -386,7 +450,7 @@
             :load-path  "~/.emacs.d/vendor/slime"
             :config (progn
                       (setq inferior-lisp-program 
-                            "/usr/local/bin/sbcl --noinform --no-linedit")
+                            "sbcl --noinform --no-linedit")
                       (require 'slime-autoloads)
                       (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
                       (setq slime-contribs 
@@ -707,11 +771,11 @@
    #+END_SRC
 ** powerline
 #+BEGIN_SRC emacs-lisp
-  (use-package powerline 
-    :ensure
-    :config (progn
-              (require 'powerline)
-              (powerline-center-evil-theme)))
+  ;; (use-package powerline 
+  ;;   :ensure
+  ;;   :config (progn
+  ;;             (require 'powerline)
+  ;;             (powerline-center-evil-theme)))
 #+END_SRC
 
 #+RESULTS:
@@ -782,16 +846,16 @@
    #+RESULTS:
 
 ** deft org
-##+BEGIN_SRC emacs-lisp
-#  (use-package deft 
-#    :ensure
-#    :config (progn
-#              (setq
-#               deft-extension "org"
-#               deft-directory "~/org/"
-#               deft-text-mode 'org-mode)
-#              (global-set-key (kbd "H-d") 'deft)))
-##+END_SRC
+#+BEGIN_SRC emacs-lisp
+;  (use-package deft 
+;    :ensure
+;    :config (progn
+;              (setq
+;               deft-extension "org"
+;               deft-directory "~/org/"
+;               deft-text-mode 'org-mode)
+;              (global-set-key (kbd "H-d") 'deft)))
+#+END_SRC
 ** org-ac
     #+BEGIN_SRC emacs-lisp
 ;;      (use-package org-ac
@@ -975,6 +1039,16 @@
   (setq default-directory (getenv "HOME"))
 
 #+END_SRC
+** jump to dired
+   #+BEGIN_SRC emacs-lisp
+
+(require 'dired-x)
+
+   #+END_SRC
+
+   #+RESULTS:
+   : dired-x
+
 ** registers
    #+BEGIN_SRC emacs-lisp
 (set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
@@ -989,14 +1063,35 @@
 
    
 
+** more sanity
+   #+BEGIN_SRC emacs-lisp
+(setq delete-old-versions -1 )		; delete excess backup versions silently
+(setq version-control t )		; use version control
+(setq vc-make-backup-files t )		; make backups file even when in version controlled dir
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
+(setq vc-follow-symlinks t )				       ; don't ask for confirmation when opening symlinked file
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ) ;transform backups file name
+(setq inhibit-startup-screen t )	; inhibit useless and old-school startup screen
+(setq ring-bell-function 'ignore )	; silent bell when you make a mistake
+(setq coding-system-for-read 'utf-8 )	; use utf-8 by default
+(setq coding-system-for-write 'utf-8 )
+(setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
+(setq default-fill-column 80)		; toggle wrapping text at the 80th character
+(setq initial-scratch-message ";;;;happy hacking") ; print a default message in the empty scratch buffer opened at startup
+
+   #+END_SRC
+
+   #+RESULTS:
+   : ;;;;happy hacking
+*** taken from http://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
 * functionaria 
   Helper functions to use either in an editing session or to help with
   configuration
   #+BEGIN_SRC emacs-lisp
         (require 'cl)
 
-    (defun my-put-file-name-on-clipboard ()
-      "Put the current file name on the clipboard"
+    (defun copy-filename-to-clip ()
+  "Put the current file name on the clipboard"
       (interactive)
       (let ((filename (if (equal major-mode 'dired-mode)
                           default-directory
@@ -1174,32 +1269,6 @@
 #+RESULTS:
 : mu4e
     
-* diminish
-  must be at very end?
-#+begin_src emacs-lisp
-   (use-package
-     diminish
-     :ensure
-     :config
-     (progn
-       (diminish 'evil-smartparens-mode)
-       (diminish 'evil-rsi-mode)
-       (diminish 'smartparens-mode)
-       (diminish 'page-break-lines-mode)
-       (diminish 'org-indent-mode)
-       (diminish 'git-gutter-mode)
-       (diminish 'evil-org-mode)
-       (diminish 'flycheck-mode)
-       (diminish 'yas-minor-mode)
-       (diminish 'smartparens-mode)
-       (diminish 'helm-mode)
-       (diminish 'undo-tree-mode)
-       (diminish 'paredit-mode)
-       (diminish 'auto-revert-mode)
-       (diminish 'visual-line-mode)
-    
-       ))
-#+end_src
 
 #+RESULTS:
 : t
