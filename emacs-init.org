@@ -650,8 +650,8 @@
                        ("s" "shopping" checkitem
                         (file+headline "~/org/organizer.org" "shopping")
                         "- [ ] %?\n")
-                       ("j" "journal" entry (file+datetree "~/org/journal.org")
-                        "* %?\nEntered on %U\n  %i\n  %a")
+                       ("j" "journal" entry (file+datetree "~/org/organizer.org")
+                        "* %?\n %U\n  %i\n  %a")
                        )))  
 
 
@@ -913,6 +913,28 @@
 ;;          ) )  
     #+END_SRC
     
+** sentence navigation
+    #+BEGIN_SRC emacs-lisp
+(use-package sentence-navigation
+  :ensure t
+  ;; autoloads will be created for all commands and text objects
+  ;; when installed with package.el
+  :defer t
+  :config (
+s.
+
+(define-key evil-motion-state-map ")" 'sentence-nav-evil-forward)
+(define-key evil-motion-state-map "(" 'sentence-nav-evil-backward)
+(define-key evil-motion-state-map "g)" 'sentence-nav-evil-forward-end)
+(define-key evil-motion-state-map "g(" 'sentence-nav-evil-backward-end)
+(define-key evil-outer-text-objects-map "s" 'sentence-nav-evil-a-sentence)
+(define-key evil-inner-text-objects-map "s" 'sentence-nav-evil-inner-sentence)
+)
+)
+    #+END_SRC
+
+    #+RESULTS:
+
 ** page-break-lines
 #+begin_src emacs-lisp
   (use-package page-break-lines
@@ -1036,18 +1058,19 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-     ;; (use-package gandalf-theme :ensure)
-     ;; (use-package mbo70s-theme :ensure)
-     ;; (use-package warm-night-theme :ensure)
-     ;; (use-package slime-theme :ensure)
-     ;; (use-package basic-theme :ensure)
-     ;; (use-package minimal-theme :ensure)
+      (use-package gandalf-theme :ensure)
+      (use-package mbo70s-theme :ensure)
+     (use-package warm-night-theme :ensure)
+      (use-package slime-theme :ensure)
+      (use-package basic-theme :ensure)
+      (use-package minimal-theme :ensure)
      (use-package white-theme :ensure)
+     (use-package hydandata-light-theme :ensure)
 
      ; (load-theme 'adwaita)
      ; (load-theme 'mbo70s)
 
-     (load-theme 'white)
+     (load-theme 'hydandata-light)
    #+END_SRC
 
    #+RESULTS:
@@ -1122,13 +1145,55 @@
 
    
 
-** recentf
+** hippie-expand 
+   as per http://blog.binchen.org/posts/autocomplete-with-a-dictionary-with-hippie-expand.html
    #+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-/") 'hippie-expand)
+
+;; The actual expansion function
+(defun try-expand-by-dict (old)
+  ;; old is true if we have already attempted an expansion
+  (unless (bound-and-true-p ispell-minor-mode)
+    (ispell-minor-mode 1))
+
+  ;; english-words.txt is the fallback dicitonary
+  (if (not ispell-alternate-dictionary)
+      (setq ispell-alternate-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
+  (let ((lookup-func (if (fboundp 'ispell-lookup-words)
+                       'ispell-lookup-words
+                       'lookup-words)))
+    (unless old
+      (he-init-string (he-lisp-symbol-beg) (point))
+      (if (not (he-string-member he-search-string he-tried-table))
+        (setq he-tried-table (cons he-search-string he-tried-table)))
+      (setq he-expand-list
+            (and (not (equal he-search-string ""))
+                 (funcall lookup-func (concat (buffer-substring-no-properties (he-lisp-symbol-beg) (point)) "*")))))
+    (if (null he-expand-list)
+      (if old (he-reset-string))
+      (he-substitute-string (car he-expand-list))
+      (setq he-expand-list (cdr he-expand-list))
+      t)
+    ))
+
+(setq hippie-expand-try-functions-list
+      '(;; try-expand-dabbrev
+        ;; try-expand-dabbrev-all-buffers
+        try-expand-by-dict))
+
+   #+END_SRC
+
+   #+RESULTS:
+   | try-expand-by-dict |
+
+* recentf
+   #+BEGIN_SRC emacs-lisp
+(recentf-mode 1)
     (run-at-time nil (* 5 60) 'recentf-save-list)
    #+END_SRC
 
    #+RESULTS:
-   : [nil 22480 35755 47679 300 recentf-save-list nil nil 0]
+   : [nil 22483 8721 398038 300 recentf-save-list nil nil 0]
 
 ** more sanity
    #+BEGIN_SRC emacs-lisp
