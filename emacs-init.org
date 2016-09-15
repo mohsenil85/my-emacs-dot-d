@@ -734,12 +734,11 @@
     #+BEGIN_SRC emacs-lisp
       (use-package yasnippet
         :ensure
-        :ensure
+        :init (yas-global-mode 1)
         :config
         (progn
-          (require 'yasnippet)
-          (yas-global-mode 1)))
-
+          (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+          ))
 
       (use-package common-lisp-snippets
         :ensure
@@ -879,7 +878,6 @@
     #+RESULTS:
     : t
 
-    
 ** recursive narrow
    #+BEGIN_SRC emacs-lisp
      (use-package recursive-narrow :ensure
@@ -915,20 +913,18 @@
     
 ** sentence navigation
     #+BEGIN_SRC emacs-lisp
-(use-package sentence-navigation
-  :ensure t
-  ;; autoloads will be created for all commands and text objects
-  ;; when installed with package.el
-  :defer t
-  :config (
-(define-key evil-motion-state-map ")" 'sentence-nav-evil-forward)
-(define-key evil-motion-state-map "(" 'sentence-nav-evil-backward)
-(define-key evil-motion-state-map "g)" 'sentence-nav-evil-forward-end)
-(define-key evil-motion-state-map "g(" 'sentence-nav-evil-backward-end)
-(define-key evil-outer-text-objects-map "s" 'sentence-nav-evil-a-sentence)
-(define-key evil-inner-text-objects-map "s" 'sentence-nav-evil-inner-sentence)
-)
-)
+      (use-package sentence-navigation
+        :ensure t
+        :bind (:map evil-motion-state-map 
+                    ((")" . sentence-nav-evil-forward)
+                     ("(" . sentence-nav-evil-backward)
+                     ("g(" . sentence-nav-evil-backward-end)
+                     ("g)" . sentence-nav-evil-forward-end)))
+        :config
+        (progn
+          (define-key evil-outer-text-objects-map "s" 'sentence-nav-evil-a-sentence)
+          (define-key evil-inner-text-objects-map "s" 'sentence-nav-evil-inner-sentence))
+      )
     #+END_SRC
 
     #+RESULTS:
@@ -1145,6 +1141,7 @@
 
 ** hippie-expand 
    as per http://blog.binchen.org/posts/autocomplete-with-a-dictionary-with-hippie-expand.html
+   and 
    #+BEGIN_SRC emacs-lisp
      (global-set-key (kbd "M-/") 'hippie-expand)
 
@@ -1174,6 +1171,59 @@
            t)
          ))
 
+(defun try-expand-flexible-abbrev (old)
+  "Try to complete word using flexible matching.
+
+Flexible matching works by taking the search string and then
+interspersing it with a regexp for any character. So, if you try
+to do a flexible match for `foo' it will match the word
+`findOtherOtter' but also `fixTheBoringOrange' and
+`ifthisisboringstopreadingnow'.
+
+The argument OLD has to be nil the first call of this function, and t
+for subsequent calls (for further possible completions of the same
+string).  It returns t if a new completion is found, nil otherwise."
+  (if (not old)
+      (progn
+	(he-init-string (he-lisp-symbol-beg) (point))
+	(if (not (he-string-member he-search-string he-tried-table))
+	    (setq he-tried-table (cons he-search-string he-tried-table)))
+	(setq he-expand-list
+	      (and (not (equal he-search-string ""))
+		   (he-flexible-abbrev-collect he-search-string)))))
+  (while (and he-expand-list
+	      (he-string-member (car he-expand-list) he-tried-table))
+    (setq he-expand-list (cdr he-expand-list)))
+  (if (null he-expand-list)
+      (progn
+	(if old (he-reset-string))
+	())
+      (progn
+	(he-substitute-string (car he-expand-list))
+	(setq he-expand-list (cdr he-expand-list))
+	t)))
+
+(defun he-flexible-abbrev-collect (str)
+  "Find and collect all words that flex-matches STR.
+See docstring for `try-expand-flexible-abbrev' for information
+about what flexible matching means in this context."
+  (let ((collection nil)
+        (regexp (he-flexible-abbrev-create-regexp str)))
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward-regexp regexp nil t)
+        ;; Is there a better or quicker way than using
+        ;; `thing-at-point' here?
+        (setq collection (cons (thing-at-point 'word) collection))))
+    collection))
+
+(defun he-flexible-abbrev-create-regexp (str)
+  "Generate regexp for flexible matching of STR.
+See docstring for `try-expand-flexible-abbrev' for information
+about what flexible matching means in this context."
+  (concat "\\b" (mapconcat (lambda (x) (concat "\\w*" (list x))) str "")
+          "\\w*" "\\b"))
+
      (setq hippie-expand-try-functions-list
            '(try-complete-file-name-partially
              try-complete-file-name
@@ -1185,12 +1235,14 @@
              try-expand-dabbrev-from-kill
              try-complete-lisp-symbol-partially
              try-complete-lisp-symbol
-             try-expand-by-dict))
-
+             try-expand-by-dict
+             try-expand-flexible-abbrev
+             yas/hippie-try-expand
+))
    #+END_SRC
 
    #+RESULTS:
-   | try-complete-file-name-partially | try-complete-file-name | try-expand-all-abbrevs | try-expand-list | try-expand-line | try-expand-dabbrev | try-expand-dabbrev-all-buffers | try-expand-dabbrev-from-kill | try-complete-lisp-symbol-partially | try-complete-lisp-symbol | try-expand-by-dict |
+   | try-complete-file-name-partially | try-complete-file-name | try-expand-all-abbrevs | try-expand-list | try-expand-line | try-expand-dabbrev | try-expand-dabbrev-all-buffers | try-expand-dabbrev-from-kill | try-complete-lisp-symbol-partially | try-complete-lisp-symbol | try-expand-by-dict | try-expand-flexible-abbrev | yas/hippie-try-expand |
 
 * recentf
    #+BEGIN_SRC emacs-lisp
