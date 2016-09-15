@@ -921,8 +921,6 @@
   ;; when installed with package.el
   :defer t
   :config (
-s.
-
 (define-key evil-motion-state-map ")" 'sentence-nav-evil-forward)
 (define-key evil-motion-state-map "(" 'sentence-nav-evil-backward)
 (define-key evil-motion-state-map "g)" 'sentence-nav-evil-forward-end)
