@@ -1348,39 +1348,41 @@ about what flexible matching means in this context."
   handle meta as command
   toggle fullscreen
   #+BEGIN_SRC emacs-lisp
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
-    (setq mac-control-modifier 'control)
-    (setq mac-function-modifier 'hyper)
-(setq mac-pass-command-to-system nil) 
-    (defun toggle-fullscreen ()
-      "Toggle full screen"
-      (interactive)
-      (set-frame-parameter
-       nil 'fullscreen
-       (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-    (defun pbcopy ()
-      (interactive)
-      (call-process-region (point) (mark) "pbcopy")
-      (setq deactivate-mark t))
+    (when (eq system-type 'darwin)
+        (setq mac-command-modifier 'meta)
+        (setq mac-option-modifier 'super)
+        (setq mac-control-modifier 'control)
+        (setq mac-function-modifier 'hyper)
+    (setq mac-pass-command-to-system nil) 
+        (defun toggle-fullscreen ()
+          "Toggle full screen"
+          (interactive)
+          (set-frame-parameter
+           nil 'fullscreen
+           (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+        (defun pbcopy ()
+          (interactive)
+          (call-process-region (point) (mark) "pbcopy")
+          (setq deactivate-mark t))
 
-    (defun pbpaste ()
-      (interactive)
-      (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+        (defun pbpaste ()
+          (interactive)
+          (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
 
-    (defun pbcut ()
-      (interactive)
-      (pbcopy)
-      (delete-region (region-beginning) (region-end)))
+        (defun pbcut ()
+          (interactive)
+          (pbcopy)
+          (delete-region (region-beginning) (region-end)))
 
-    (global-set-key (kbd "H-c") 'pbcopy)
-    (global-set-key (kbd "H-v") 'pbpaste)
-    (global-set-key (kbd "H-x") 'pbcut)
-    (global-set-key (kbd "H-i") 'load-init-file)
+        (global-set-key (kbd "H-c") 'pbcopy)
+        (global-set-key (kbd "H-v") 'pbpaste)
+        (global-set-key (kbd "H-x") 'pbcut)
 
-    ;;recomended by brew
-    (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-      (normal-top-level-add-subdirs-to-load-path))
+        ;;recomended by brew
+        (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+          (normal-top-level-add-subdirs-to-load-path))
+
+      )
 
   #+END_SRC
 
