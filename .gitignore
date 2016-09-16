@@ -42,3 +42,5 @@ semanticdb/
 /.python-environments/*
 /dict/*
 /eshell/history
+/customizations.el
+/tramp
