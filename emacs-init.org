@@ -1052,16 +1052,17 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-      (use-package gandalf-theme :ensure)
-      (use-package mbo70s-theme :ensure)
-     (use-package warm-night-theme :ensure)
-      (use-package slime-theme :ensure)
-      (use-package basic-theme :ensure)
-      (use-package minimal-theme :ensure)
-     (use-package white-theme :ensure)
-     (use-package hydandata-light-theme :ensure)
+       (use-package gandalf-theme :ensure)
+     ;;  (use-package mbo70s-theme :ensure)
+     ;; (use-package warm-night-theme :ensure)
+     ;;  (use-package slime-theme :ensure)
+     ;;  (use-package basic-theme :ensure)
+     ;;  (use-package minimal-theme :ensure)
+     ;; (use-package white-theme :ensure)
+;;      (use-package hydandata-light-theme :ensure)
 
-     ; (load-theme 'adwaita)
+     ;(load-theme 'adwaita)
+     (load-theme 'gandalf)
      ; (load-theme 'mbo70s)
 
      (load-theme 'hydandata-light)
