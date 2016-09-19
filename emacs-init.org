@@ -218,8 +218,11 @@
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp
-      ;;(use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
+      (use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
     #+END_SRC
+
+    #+RESULTS:
+
 *** evil-org
     #+BEGIN_SRC emacs-lisp
     ;  (use-package evil-org :ensure :init (require 'evil-org))  
@@ -1052,7 +1055,7 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp
-       (use-package gandalf-theme :ensure)
+       ;;(use-package gandalf-theme :ensure)
      ;;  (use-package mbo70s-theme :ensure)
      ;; (use-package warm-night-theme :ensure)
      ;;  (use-package slime-theme :ensure)
