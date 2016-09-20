@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: jira
+# key: jira
+# --
+$1
+- [ ] link
+- [ ] desc
+- [ ] repro
+- [ ] files
+- [ ] fix
+- [ ] branch
