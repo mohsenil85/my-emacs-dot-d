@@ -2,10 +2,11 @@
 # name: jira
 # key: jira
 # --
-$1
+** $1 [/]
 - [ ] link
 - [ ] desc
 - [ ] repro
 - [ ] files
 - [ ] fix
 - [ ] branch
+

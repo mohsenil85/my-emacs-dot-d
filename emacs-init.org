@@ -218,7 +218,10 @@
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp
-      (use-package evil-rsi :ensure :init (setq evil-rsi-mode 1) )  
+      (use-package evil-rsi 
+                  :diminish ""
+:ensure 
+:init (setq evil-rsi-mode 1) )  
     #+END_SRC
 
     #+RESULTS:
@@ -232,13 +235,13 @@
 
 *** vimmish fold
     #+BEGIN_SRC emacs-lisp
-      (use-package vimish-fold
-        :ensure
-        :config
-        (progn
-          (evil-leader/set-key "ff" 'vimish-fold)
-          (evil-leader/set-key "fd" 'vimish-fold-delete)
-          ))
+      ;; (use-package vimish-fold
+      ;;   :ensure
+      ;;   :config
+      ;;   (progn
+      ;;     (evil-leader/set-key "ff" 'vimish-fold)
+      ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
+      ;;     ))
     #+END_SRC
     
     
@@ -449,17 +452,21 @@
               ))
 
           (use-package smartparens
-            :ensure
+            :ensure t
+            :diminish ""
+
             :init (require 'smartparens-config)
             :config (smartparens-global-strict-mode 1))
 
           (use-package evil-smartparens
             :ensure
+            :diminish ""
             :config (progn
                       (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
           (use-package rainbow-delimiters
             :ensure
+            :diminish ""
             :config
             (progn
               (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
@@ -736,7 +743,8 @@
 ** yasnippet
     #+BEGIN_SRC emacs-lisp
       (use-package yasnippet
-        :ensure
+        :ensure t
+        :diminish ""
         :init (yas-global-mode 1)
         :config
         (progn
@@ -818,9 +826,6 @@
   ;;             (powerline-center-evil-theme)))
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -858,6 +863,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
     :ensure
+    :diminish ""
     :config
     (progn
       (require 'git-gutter-fringe)
@@ -870,11 +876,11 @@
 
 ** magit
     #+BEGIN_SRC emacs-lisp
-(use-package magit :ensure
-:config (progn 
-(setq magit-completing-read-function 'ivy-completing-read)
-)
-:bind ("C-x g" . magit-status))
+      (use-package magit 
+        :ensure t
+        :config (progn 
+                  (setq magit-completing-read-function 'ivy-completing-read))
+        :bind ("C-x g" . magit-status))
     #+END_SRC
 
     #+RESULTS:
