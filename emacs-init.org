@@ -243,8 +243,6 @@
       ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
       ;;     ))
     #+END_SRC
-    
-    
 ** helm
    taken from http://tuhdo.github.io/helm-intro.html
    things i need to remember
@@ -308,21 +306,6 @@
 
     #+END_SRC
 
-*** helm-projectile
-    #+BEGIN_SRC emacs-lisp
-      (use-package projectile :ensure
-        :config
-        (progn
-         (projectile-global-mode)
-         (setq projectile-completion-system 'ivy)
-      (setq projectile-switch-project-action 'helm-projectile)))
-    #+END_SRC
-
-    #+RESULTS:
-    : t
-
-
-
 *** helm-swoop
 #+BEGIN_SRC emacs-lisp
   ;; (use-package helm-swoop 
@@ -381,44 +364,62 @@
           
     #+END_SRC
 *** helm-gtags 
-#+BEGIN_SRC emacs-lisp
-;;  (use-package helm-gtags
-;;    :ensure
-;;    :config
-;;    (progn
-;;      ;;; Enable helm-gtags-mode
-;;      (add-hook 'c-mode-hook 'helm-gtags-mode)
-;;      (add-hook 'c++-mode-hook 'helm-gtags-mode)
-;;      (add-hook 'asm-mode-hook 'helm-gtags-mode)
-;;      (add-hook 'java-mode-hook 'helm-gtags-mode)
-;;
-;;      ;; customize
-;;;;      (setq
-;;;;       (helm-gtags-path-style 'relative))
-;;;;(setq  
-;;;;       (helm-gtags-auto-update t)) 
-;;
-;;    (setq helm-gtags-prefix-key "C-t")
-;;    (helm-gtags-suggested-key-mapping t)
-;;      ;; key bindings
-;;      (eval-after-load "helm-gtags"
-;;        '(progn
-;;           (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-;;           (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-;;           (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-;;           (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-;;           (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-;;           (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-;;           (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
-;;
-;;    
-;;    )
-;;
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp
+ ;;  (use-package helm-gtags
+ ;;    :ensure
+ ;;    :config
+ ;;    (progn
+ ;;      ;;; Enable helm-gtags-mode
+ ;;      (add-hook 'c-mode-hook 'helm-gtags-mode)
+ ;;      (add-hook 'c++-mode-hook 'helm-gtags-mode)
+ ;;      (add-hook 'asm-mode-hook 'helm-gtags-mode)
+ ;;      (add-hook 'java-mode-hook 'helm-gtags-mode)
+ ;;
+ ;;      ;; customize
+ ;;;;      (setq
+ ;;;;       (helm-gtags-path-style 'relative))
+ ;;;;(setq  
+ ;;;;       (helm-gtags-auto-update t)) 
+ ;;
+ ;;    (setq helm-gtags-prefix-key "C-t")
+ ;;    (helm-gtags-suggested-key-mapping t)
+ ;;      ;; key bindings
+ ;;      (eval-after-load "helm-gtags"
+ ;;        '(progn
+ ;;           (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+ ;;           (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+ ;;           (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+ ;;           (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+ ;;           (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+ ;;           (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+ ;;           (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+ ;;
+ ;;    
+ ;;    )
+ ;;
+ #+END_SRC
 
-#+RESULTS:
-: t
+ #+RESULTS:
+ : t
     
+** projectile
+   :PROPERTIES:
+   :ORDERED:  t
+   :END:
+    #+BEGIN_SRC emacs-lisp
+      (use-package projectile :ensure
+        :config
+        (progn
+          (projectile-global-mode)
+          (setq projectile-completion-system 'ivy)
+          (setq projectile-switch-project-action 'projectile-find-file)
+          (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+          ))
+    #+END_SRC
+
+    #+RESULTS:
+    : t
+
 ** ac mode
    #+BEGIN_SRC emacs-lisp
       ;      (use-package auto-complete
@@ -752,7 +753,7 @@
           ))
 
       (use-package common-lisp-snippets
-        :ensure
+        :ensure t
         :config (require 'common-lisp-snippets))
 #+END_SRC
 
@@ -1486,6 +1487,19 @@ about what flexible matching means in this context."
 
 #+RESULTS:
 : t
+* diminish
+#+BEGIN_SRC emacs-lisp
+(diminish 'wrap-region-mode)
+(diminish 'yas-minor-mode)
+(diminish 'auto-revert-mode )
+(diminish 'undo-tree-mode )
+(diminish 'git-gutter-mode )
+(diminish 'visual-line-mode )
 
-* nasm
+
+#+END_SRC
+
+#+RESULTS:
+|   |
+
   
