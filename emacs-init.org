@@ -527,7 +527,6 @@
 
    #+RESULTS:
 
-   
 ** clojure
 
 #+BEGIN_SRC emacs-lisp
@@ -946,8 +945,9 @@
 ** page-break-lines
 #+begin_src emacs-lisp
   (use-package page-break-lines
-:diminish ""
- :ensure :config (global-page-break-lines-mode 1))
+    :diminish ""
+    :ensure t 
+    :config (global-page-break-lines-mode 1))
 
 #+end_src
 

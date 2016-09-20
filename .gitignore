@@ -44,3 +44,5 @@ semanticdb/
 /eshell/history
 /customizations.el
 /tramp
+url*
+*.el~~
