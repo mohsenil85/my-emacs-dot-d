@@ -9,7 +9,7 @@
 (load-file custom-file )
 (load-file "~/.emacs.d/recentf" )
 (require 'ob-tangle)
-(setq debug-on-error t)
+;;(setq debug-on-error t)
 (org-babel-load-file
  (expand-file-name "emacs-init.org"
                    user-emacs-directory))
