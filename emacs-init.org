@@ -43,7 +43,7 @@
                                ("gnu"       . "http://elpa.gnu.org/packages/")
                                ("melpa"     . "http://melpa.org/packages/")
                                ("marmalade" . "http://marmalade-repo.org/packages/")))
-      ;(package-initialize)
+      (package-initialize)
 
       ;; Bootstrap `use-package'
       (unless (package-installed-p 'use-package) ; unless it is already installed
@@ -787,18 +787,18 @@
    : t
 ** yasnippet
    #+BEGIN_SRC emacs-lisp
-      (use-package yasnippet
-        :ensure t
-        :diminish ""
-        :init (yas-global-mode 1)
-        :config
-        (progn
-          (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
-          ))
+     ;; (use-package yasnippet
+     ;;   :ensure t
+     ;;   :diminish ""
+     ;;   :config
+     ;;   (progn
+     ;;   (yas-global-mode 1)
+     ;;     (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+     ;;     ))
 
-      (use-package common-lisp-snippets
-        :ensure t
-        :config (require 'common-lisp-snippets))
+     ;; (use-package common-lisp-snippets
+     ;;   :ensure t
+     ;;   :config (require 'common-lisp-snippets))
    #+END_SRC
 
    #+RESULTS:
@@ -916,7 +916,10 @@
           )
 
           (require 'info-look)
+   #+END_SRC
+
 ** javascript
+
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.json" . js-mode))
 (autoload 'js2-mode "js2" nil t)
@@ -1069,15 +1072,15 @@
      ;; (use-package white-theme :ensure t)
       ;;(use-package paper-theme :ensure t )
       ;(use-package soft-charcoal-theme :ensure t )
-      ;(use-package soft-morning-theme :ensure t )
-      (use-package django-theme :ensure t )
+      (use-package soft-morning-theme :ensure t )
+      ;(use-package django-theme :ensure t )
       ;;(use-package hydandata-light-theme :ensure t)
 
      ;(load-theme 'adwaita)
   ;   (load-theme 'gandalf)
      ; (load-theme 'mbo70s)
      
-     (setq my-theme 'django)
+     (setq my-theme 'soft-morning)
 
      (enable-theme my-theme)
      (load-theme my-theme t t)
@@ -1250,20 +1253,20 @@ about what flexible matching means in this context."
              try-complete-lisp-symbol-partially
              try-complete-lisp-symbol
              try-expand-by-dict
-             try-expand-flexible-abbrev
-             yas/hippie-try-expand
+             ;;try-expand-flexible-abbrev
+             yas-hippie-try-expand
 ))
    #+END_SRC
 
    #+RESULTS:
-   | try-complete-file-name-partially | try-complete-file-name | try-expand-all-abbrevs | try-expand-list | try-expand-line | try-expand-dabbrev | try-expand-dabbrev-all-buffers | try-expand-dabbrev-from-kill | try-complete-lisp-symbol-partially | try-complete-lisp-symbol | try-expand-by-dict | try-expand-flexible-abbrev | yas/hippie-try-expand |
+   | try-complete-file-name-partially | try-complete-file-name | try-expand-all-abbrevs | try-expand-list | try-expand-line | try-expand-dabbrev | try-expand-dabbrev-all-buffers | try-expand-dabbrev-from-kill | try-complete-lisp-symbol-partially | try-complete-lisp-symbol | try-expand-by-dict | try-expand-flexible-abbrev | yas-hippie-try-expand |
 
 ** text-mode stuff
    #+BEGIN_SRC emacs-lisp
 
-     (add-hook 'text-mode-hook 'flyspell-mode)
-     (add-hook 'text-mode-hook 'writeroom-mode)
-     (add-hook 'text-mode-hook #'(lambda()(linum-mode 0)))
+     ;(add-hook 'text-mode-hook 'flyspell-mode)
+;    ;(add-hook 'text-mode-hook 'writeroom-mode)
+     ;(add-hook 'text-mode-hook #'(lambda()(linum-mode 0)))
    #+END_SRC
 
    #+RESULTS:
@@ -1332,7 +1335,7 @@ about what flexible matching means in this context."
 
           (defun load-init-file ()
             (interactive)
-            (load-file (concat (getenv "HOME") "/.emacs.d/init.el")))
+            (load-file (concat "~/.emacs.d/init.el")))
 
           (defun add-hook-to-modes (modes hook)
             (dolist (mode modes)
@@ -1507,6 +1510,7 @@ about what flexible matching means in this context."
 (diminish 'undo-tree-mode )
 (diminish 'git-gutter-mode )
 (diminish 'visual-line-mode )
+(diminish 'flyspell-mode )
 
 
   #+END_SRC

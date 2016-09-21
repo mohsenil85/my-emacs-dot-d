@@ -46,3 +46,7 @@ semanticdb/
 /tramp
 url*
 *.el~~
+/network-security.data
+/init.el~
+/init.el~~~
+/eshell/*
