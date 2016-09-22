@@ -55,6 +55,73 @@
       (require 'use-package)
    #+END_SRC
 * packages
+
+** general
+   evil leader is required before evil
+   #+BEGIN_SRC emacs-lisp
+     (use-package general
+       :ensure t   
+       :config   (setq leader "SPC"))
+     ;;       (use-package evil-leader
+     ;;       :ensure
+     ;;       :config
+     ;;       (progn
+     ;;       (global-evil-leader-mode 1)
+     ;;       (evil-leader/set-leader "<SPC>")
+     ;;       (evil-leader/set-key "c" 'org-capture)
+     ;;       (evil-leader/set-key "<SPC>" 'org-agenda-list)
+     ;;       (evil-leader/set-key "o" (lambda ()
+     ;;                                  ((interactive)
+     ;;                                   (find-file "~/org/organizer.org")
+     ;;                                   )))
+     ;; ))
+   #+END_SRC
+
+   #+RESULTS:
+   : t
+
+** evil
+*** main evil
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil
+        :ensure
+        :config
+        (progn
+          (evil-set-initial-state 'snake-mode 'emacs) 
+          (evil-mode 1))
+        :bind
+        ("S-SPC" . evil-exit-emacs-state))
+    #+END_SRC
+
+    #+RESULTS:
+
+*** evil-rsi
+    #+BEGIN_SRC emacs-lisp
+      (use-package evil-rsi 
+        :diminish ""
+        :ensure t 
+        :init (setq evil-rsi-mode 1) )  
+    #+END_SRC
+
+    #+RESULTS:
+
+*** evil-org
+    #+BEGIN_SRC emacs-lisp
+    ;  (use-package evil-org :ensure :init (require 'evil-org))  
+    #+END_SRC
+
+    #+RESULTS:
+
+*** vimmish fold
+    #+BEGIN_SRC emacs-lisp
+      ;; (use-package vimish-fold
+      ;;   :ensure
+      ;;   :config
+      ;;   (progn
+      ;;     (evil-leader/set-key "ff" 'vimish-fold)
+      ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
+      ;;     ))
+    #+END_SRC
 ** ac mode
    #+BEGIN_SRC emacs-lisp
       ;      (use-package auto-complete
@@ -100,129 +167,92 @@
    #+END_SRC
 ** elfeed
    #+BEGIN_SRC emacs-lisp
-      (use-package
-        elfeed :ensure
-        :config (progn
-                  (evil-set-initial-state 'elfeed-show 'emacs)
-                  (setq elfeed-feeds
-                        '("http://feeds.igvita.com/igvita"
-                           "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
-                          ("http://nedroid.com/feed/" comic)
-                          ("http://crawdadswelcome.tumblr.com/rss" comic)
-                          ("http://moonbeard.com/feed/atom/" comic)
-                          ("http://gunshowcomic.com/rss.xml" comic)
-                          ("http://www.goyedogs.com/rss" comic)
-                          ("http://sticksangelica.tumblr.com/rss" comic)
-"http://feeds2.feedburner.com/MachineLearningtheory"
-"http://infostructuralist.wordpress.com/"
-"http://nlpers.blogspot.com/feeds/posts/default"
-"http://emacshorrors.com/feed.atom"
-                          ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
-                          ("http://studygroupcomics.com/main/feed/rss/" comic)
-                          ("http://www.destructorcomics.com/?feed=rss" comic)
-                          ("http://garfieldminusgarfield.net/rss" comic)
-                          "http://www.tor.com/category/all-fiction/feed"
-                          "http://nullprogram.com/feed/"
-                          "http://blog.funcall.org/feed.xml"
-                          ("http://owlturd.com/rss" comic)
-                          "http://planet.lisp.org/rss20.xml"
-                          "http://planet.clojure.in/atom.xml"
-                          "http://cartographerswithoutborders.org/rss"
-                          "http://irreal.org/blog/?feed=rss2"
-                          "http://endlessparentheses.com/atom.xml"
-                          "http://www.newyorker.com/feed/articles"
-                          ("http://www.lunarbaboon.com/comics/rss.xml" comic)
-                          "http://pragmaticemacs.com/feed/"
-                          "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
-                          "http://planet.lisp.org/rss20.xml"
-                          "http://lisptips.com/rss"
-                          "http://what-if.xkcd.com/feed.atom"
-                          ("http://xkcd.com/rss.xml" comic)
-                          ("http://www.smbc-comics.com/rss.php" comic)
-                          ("http://www.qwantz.com/rssfeed.php" comic)
-                          "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
-                          "http://english.bouletcorp.com/feed/"
-                          ("http://pbfcomics.com/feed/feed.xml" comic)
-                          "http://thecodelesscode.com/rss"
-                          "http://bldgblog.blogspot.com/atom.xml"
-                          "http://divisbyzero.com/feed/"
-                          "http://blog.fogus.me/feed/"
-                          "http://blog.tanyakhovanova.com/?feed=rss"))
-      ) :bind ("C-c e" . elfeed)
-        
-        )
+     (use-package elfeed
+       :ensure evil
+       :config
+       (progn
+         (evil-set-initial-state 'elfeed-show 'emacs)
+         (setq elfeed-feeds
+               '("http://feeds.igvita.com/igvita"
+                 "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
+                 ("http://nedroid.com/feed/" comic)
+                 ("http://crawdadswelcome.tumblr.com/rss" comic)
+                 ("http://moonbeard.com/feed/atom/" comic)
+                 ("http://gunshowcomic.com/rss.xml" comic)
+                 ("http://www.goyedogs.com/rss" comic)
+                 ("http://sticksangelica.tumblr.com/rss" comic)
+                 "http://feeds2.feedburner.com/MachineLearningtheory"
+                 "http://infostructuralist.wordpress.com/"
+                 "http://nlpers.blogspot.com/feeds/posts/default"
+                 "http://emacshorrors.com/feed.atom"
+                 ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
+                 ("http://studygroupcomics.com/main/feed/rss/" comic)
+                 ("http://www.destructorcomics.com/?feed=rss" comic)
+                 ("http://garfieldminusgarfield.net/rss" comic)
+                 "http://www.tor.com/category/all-fiction/feed"
+                 "http://nullprogram.com/feed/"
+                 "http://blog.funcall.org/feed.xml"
+                 ("http://owlturd.com/rss" comic)
+                 "http://planet.lisp.org/rss20.xml"
+                 "http://planet.clojure.in/atom.xml"
+                 "http://cartographerswithoutborders.org/rss"
+                 "http://irreal.org/blog/?feed=rss2"
+                 "http://endlessparentheses.com/atom.xml"
+                 "http://www.newyorker.com/feed/articles"
+                 ("http://www.lunarbaboon.com/comics/rss.xml" comic)
+                 "http://pragmaticemacs.com/feed/"
+                 "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
+                 "http://planet.lisp.org/rss20.xml"
+                 "http://lisptips.com/rss"
+                 "http://what-if.xkcd.com/feed.atom"
+                 ("http://xkcd.com/rss.xml" comic)
+                 ("http://www.smbc-comics.com/rss.php" comic)
+                 ("http://www.qwantz.com/rssfeed.php" comic)
+                 "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
+                 "http://english.bouletcorp.com/feed/"
+                 ("http://pbfcomics.com/feed/feed.xml" comic)
+                 "http://thecodelesscode.com/rss"
+                 "http://bldgblog.blogspot.com/atom.xml"
+                 "http://divisbyzero.com/feed/"
+                 "http://blog.fogus.me/feed/"
+                 "http://blog.tanyakhovanova.com/?feed=rss"))
+         (setq elfeed-db-directory "~/.emacs.d/elfeed")
+         (setq evil-motion-state-modes 
+               (append evil-motion-state-modes
+                       '(elfeed-search-mode elfeed-show-mode)))
+         (general-define-key
+          :keymaps 'elfeed-search-mode-map
+          :states 'motion
+          "RET" 'elfeed-search-show-entry    
+          "r" 'elfeed-update))
+       :bind
+       ("C-c e" . elfeed))
+
+     (use-package elfeed-goodies
+       :ensure t   
+       :after elfeed   
+       :config   
+       (setq 
+        elfeed-goodies/powerline-default-separator nil
+        elfeed-goodies/entry-pane-position 'bottom) 
+       (elfeed-goodies/setup)
+
+       (general-define-key :keymaps 'elfeed-show-mode-map   
+                           :states 'motion 
+                           "+" 'elfeed-show-tag
+                           "-" 'elfeed-show-untag
+                           "C-n" 'elfeed-goodies/split-show-next 
+                           "C-p" 'elfeed-goodies/split-show-prev)   
+       (general-define-key :keymaps
+                           'elfeed-search-mode-map
+                           :states 'motion
+                           "+" 'elfeed-search-tag-all
+                           "-" 'elfeed-search-untag-all))
 
    #+END_SRC
 
    #+RESULTS:
-
-** evil
-*** evil-leader
-    evil leader is required before evil
-    #+BEGIN_SRC emacs-lisp
-            (use-package evil-leader
-            :ensure
-            :config
-            (progn
-            (global-evil-leader-mode 1)
-            (evil-leader/set-leader "<SPC>")
-            (evil-leader/set-key "c" 'org-capture)
-            (evil-leader/set-key "<SPC>" 'org-agenda-list)
-            (evil-leader/set-key "o" (lambda ()
-                                       ((interactive)
-                                        (find-file "~/org/organizer.org")
-                                        )))
-      ))
-    #+END_SRC
-
-    #+RESULTS:
-    : t
-
-*** main evil
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil
-        :ensure
-        :config
-        (progn
-          ;;(setq evil-default-state 'emacs)
-          ;;(evil-set-initial-state 'elfeed-show-mode 'emacs) 
-          (evil-set-initial-state 'snake-mode 'emacs) 
-          ;;(evil-set-initial-state 'elfeed-search-mode 'emacs) 
-          (evil-mode 1))
-        :bind
-        ("S-SPC" . evil-exit-emacs-state)
-        )
-    #+END_SRC
-
-    #+RESULTS:
-
-*** evil-rsi
-    #+BEGIN_SRC emacs-lisp
-      (use-package evil-rsi 
-                  :diminish ""
-:ensure 
-:init (setq evil-rsi-mode 1) )  
-    #+END_SRC
-
-    #+RESULTS:
-
-*** evil-org
-    #+BEGIN_SRC emacs-lisp
-    ;  (use-package evil-org :ensure :init (require 'evil-org))  
-    #+END_SRC
-
-    #+RESULTS:
-
-*** vimmish fold
-    #+BEGIN_SRC emacs-lisp
-      ;; (use-package vimish-fold
-      ;;   :ensure
-      ;;   :config
-      ;;   (progn
-      ;;     (evil-leader/set-key "ff" 'vimish-fold)
-      ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
-      ;;     ))
-    #+END_SRC
+   : t
 ** evil-magit
    #+BEGIN_SRC emacs-lisp
       (use-package evil-magit :ensure)
@@ -241,7 +271,7 @@
     :diminish ""
     :config
     (progn
-      (add-hook 'after-init-hook #'global-flycheck-mode)))
+      (add-hook 'after-init-hook 'global-flycheck-mode)))
       
 
 (flycheck-define-checker proselint
@@ -634,7 +664,6 @@
         (lisp . t)
         (sh . t)
         (python . t)
-        ;(ipython . t)
         ))
 
    #+END_SRC
@@ -779,7 +808,7 @@
       (use-package which-key 
         :ensure t
         :init
-        (setq which-key-idle-delay 3)
+        (setq which-key-idle-delay 4)
         :diminish ""
         :config (progn (which-key-mode 1) ))
 
