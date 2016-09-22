@@ -682,6 +682,20 @@
    #+RESULTS:
    : t
    
+** keyfreq
+   #+BEGIN_SRC emacs-lisp
+(use-package keyfreq
+ :ensure t
+:init
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
+
+ )
+   #+END_SRC
+
+   #+RESULTS:
+
 ** paradox --better package search
    #+BEGIN_SRC emacs-lisp
 (use-package paradox :ensure t)
