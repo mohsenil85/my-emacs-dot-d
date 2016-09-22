@@ -1506,14 +1506,14 @@ about what flexible matching means in this context."
   : t
 * exwm
   #+BEGIN_SRC emacs-lisp
-    (use-package exwm
-      :ensure t
-      :config 
-    (require 'exwm)
-    (require 'exwm-config)
-    (exwm-config-default)
-
-      )
+    (when (eq system-name "treebeard")
+     (use-package exwm
+               :ensure t
+               :config 
+               (require 'exwm)
+               (require 'exwm-config)
+               (exwm-config-default)
+               ))
   #+END_SRC
 * diminish
   #+BEGIN_SRC emacs-lisp
