@@ -856,116 +856,143 @@
 ** clojure
 
    #+BEGIN_SRC emacs-lisp
-  (use-package clojure-mode :ensure)
-  (use-package cider :ensure)
+          (use-package clojure-mode :ensure)
+          (use-package cider :ensure t
+            )
+   ;  (use-package inf-clojure :ensure t)
+     (add-hook 'clojure-mode-hook #'eldoc-mode)
+
+     (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
 
 
    #+END_SRC
 
    #+RESULTS:
-
+=t
+=   
 ** java
    #+BEGIN_SRC emacs-lisp
-  ;; (use-package emacs-eclim :ensure
-  ;;   :config
-  ;;   (progn
-  ;;     (require 'eclim)
-  ;;     (global-eclim-mode)
-  ;;     (setf eclim-eclipse-dirs
-  ;;           '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse"))
-  ;;     (setf eclim-executable 
-  ;;           '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse/eclim"))
-  ;; (setq help-at-pt-display-when-idle t)
-  ;; (setq help-at-pt-timer-delay 0.1)
-  ;; (help-at-pt-set-timer)
-  ;; ;; regular auto-complete initialization
-  ;; (require 'auto-complete-config)
-  ;; (ac-config-default)
+     (use-package meghanada 
+       :ensure t
+       :config 
+     (progn
+     (add-hook 'java-mode-hook
+               (lambda ()
+                 ;; meghanada-mode on
+                 (meghanada-mode t)
+                 (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+     )
+     )
+       ;; (use-package emacs-eclim :ensure
+       ;;   :config
+       ;;   (progn
+       ;;     (require 'eclim)
+       ;;     (global-eclim-mode)
+       ;;     (setf eclim-eclipse-dirs
+       ;;           '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse"))
+       ;;     (setf eclim-executable 
+       ;;           '("/Users/lmohseni/java-neon/Eclipse.app/Contents/Eclipse/eclim"))
+       ;; (setq help-at-pt-display-when-idle t)
+       ;; (setq help-at-pt-timer-delay 0.1)
+       ;; (help-at-pt-set-timer)
+       ;; ;; regular auto-complete initialization
+       ;; (require 'auto-complete-config)
+       ;; (ac-config-default)
 
-  ;; ;; add the emacs-eclim source
-  ;; (require 'ac-emacs-eclim-source)
-  ;; (ac-emacs-eclim-config)
-  ;;     ))
+       ;; ;; add the emacs-eclim source
+       ;; (require 'ac-emacs-eclim-source)
+       ;; (ac-emacs-eclim-config)
+       ;;     ))
 
    #+END_SRC
 
    #+RESULTS:
-
+=t
+=   
 ** lisp
    #+BEGIN_SRC emacs-lisp
-          (use-package paredit
-            :ensure
-            :config 
-            (progn
-              (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
-              (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-              (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-              (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-              (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-              (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-              ))
+     (use-package paredit
+       :ensure t
+       :config 
+       (progn
+         (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+         (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+         (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+         (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+         (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+         (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+         (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+         (add-hook 'clojure-mode-hook 'paredit-mode)
+         (add-hook 'clojurescript-mode-hook 'paredit-mode)
+         (add-hook 'clojurec-mode-hook 'paredit-mode)
 
-          (use-package smartparens
-            :ensure t
-            :diminish ""
+         (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+         (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+         (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+         (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
-            :init (require 'smartparens-config)
-            :config (smartparens-global-strict-mode 1))
 
-          (use-package evil-smartparens
-            :ensure
-            :diminish ""
-            :config (progn
-                      (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+         ))
 
-          (use-package rainbow-delimiters
-            :ensure
-            :diminish ""
-            :config
-            (progn
-              (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-              (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-              (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+     ;;;     (use-package smartparens
+     ;;;       :ensure t
+     ;;;       :diminish ""
+     ;;;
+     ;;;       :init (require 'smartparens-config)
+     ;;;       :config (smartparens-global-strict-mode 1))
+     ;;;
+     ;;;     (use-package evil-smartparens
+     ;;;       :ensure
+     ;;;       :diminish ""
+     ;;;       :config (progn
+     ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
-          (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
-          (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
-          (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
-          (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
+     (use-package rainbow-delimiters
+       :ensure
+       :diminish ""
+       :config
+       (progn
+         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+         (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
-          (eval-after-load "slime"
-            '(progn
-               (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
-               (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
+     (eval-after-load "slime"
+       '(progn
+          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
 
-          (use-package slime
-            :ensure
-            :load-path  "~/.emacs.d/vendor/slime"
-            :config (progn
-                      (setq inferior-lisp-program 
-                            "sbcl --noinform --no-linedit")
-                      (require 'slime-autoloads)
-                      (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                      (setq slime-contribs 
-     '(slime-fancy 
-     slime-asdf 
-     ;slime-banner
-     slime-indentation
-     slime-quicklisp 
-     slime-xref-browser))
-                      (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+     (use-package slime
+       :ensure
+       :load-path  "~/.emacs.d/vendor/slime"
+       :config (progn
+                 (setq inferior-lisp-program 
+                       "sbcl --noinform --no-linedit")
+                 (require 'slime-autoloads)
+                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+                 (setq slime-contribs 
+                       '(slime-fancy 
+                         slime-asdf 
+                                             ;slime-banner
+                         slime-indentation
+                         slime-quicklisp 
+                         slime-xref-browser))
+                 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 
-                      (slime-setup)
-                      )
-            
-            :bind (
-                   ("C-c s" . slime-selector)
-                   ("M-." . slime-edit-definition)
-                   ("M-," . slime-pop-definition-stack)
-     )
-          )
+                 (slime-setup)
+                 )
+       
+       :bind (
+              ("C-c s" . slime-selector)
+              ("M-." . slime-edit-definition)
+              ("M-," . slime-pop-definition-stack)
+              )
+       )
 
-          (require 'info-look)
+     (require 'info-look)
    #+END_SRC
+
+   #+RESULTS:
+   : info-look
 
 ** javascript
 
