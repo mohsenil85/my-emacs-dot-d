@@ -1002,7 +1002,6 @@
    
 * emacs
 ** name
-*** 
     #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
     (setq user-mail-address "mohsenil85@gmail.com")
@@ -1085,10 +1084,7 @@
 ** global linum mode
    #+BEGIN_SRC emacs-lisp :results output silent
 (global-linum-mode)
-
-
    #+END_SRC
-   
 ** line and paren highlighting
    #+BEGIN_SRC emacs-lisp :results output silent
   (show-paren-mode t)
@@ -1114,15 +1110,12 @@
   ;   (load-theme 'gandalf)
      ; (load-theme 'mbo70s)
      
-     (setq my-theme 'gandalf)
+     (setq my-theme 'warm-night)
      (enable-theme my-theme)
      (load-theme my-theme t t)
    #+END_SRC
-   
 ** utf-8 stuff
    #+BEGIN_SRC emacs-lisp :results output silent
-
-
  (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8-unix)
 (set-keyboard-coding-system 'utf-8)
@@ -1289,12 +1282,12 @@ about what flexible matching means in this context."
 ** recentf
    #+BEGIN_SRC emacs-lisp :results output silent
  (recentf-mode 1)
-     (run-at-time nil (* 5 60) 'recentf-save-list)
+     ;(run-at-time nil (* 5 60) 'recentf-save-list)
    #+END_SRC
    
    
-*** more sanity
-    #+BEGIN_SRC emacs-lisp :results output silent
+** more sanity
+   #+BEGIN_SRC emacs-lisp :results output silent
  (setq delete-old-versions t )		; delete excess backup versions silently
  (setq version-control t )		; use version control
  (setq vc-make-backup-files t )		; make backups file even when in version controlled dir
@@ -1309,16 +1302,29 @@ about what flexible matching means in this context."
  (setq default-fill-column 80)		; toggle wrapping text at the 80th character
  (setq initial-scratch-message ";;;;happy hacking") ; print a default message in the empty scratch buffer opened at startup
 
-    #+END_SRC
-    
+   #+END_SRC
+   
 ** persist kill ring
+
    #+BEGIN_SRC emacs-lisp :results output silent
      (savehist-mode 1)
      (setq savehist-additional-variables 
      '(kill-ring search-ring regexp-search-ring))
      (setq savehist-file "~/.emacs.d/tmp/savehist")
    #+END_SRC
-   
+
+** disasbled functions
+   #+BEGIN_SRC emacs-lisp :results output silent
+(defun not-anymore ()
+"For overwriting wrong keybindings"
+  (interactive)
+  (message "not anymore")
+)
+
+
+(global-set-key (kbd "C-x C-c") 'not-anymore)
+(global-set-key (kbd "C-h h") 'not-anymore)
+   #+END_SRC
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
           (require 'cl)
