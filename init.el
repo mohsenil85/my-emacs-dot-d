@@ -5,7 +5,7 @@
 ;(package-initialize)
 
 (setq custom-file "~/.emacs.d/customizations.el")
-(load-file custom-file )
+(load-file custom-file)
 (load-file "~/.emacs.d/recentf" )
 (require 'ob-tangle)
 ;(setq debug-on-error t)
@@ -13,5 +13,3 @@
  (expand-file-name "emacs-init.org"
                    user-emacs-directory))
 (put 'narrow-to-page 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)
