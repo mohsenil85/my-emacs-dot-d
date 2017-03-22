@@ -877,6 +877,7 @@
        :ensure
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
+                 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
                  (setq inferior-lisp-program 
                        "sbcl --noinform --no-linedit")
                  (require 'slime-autoloads)
