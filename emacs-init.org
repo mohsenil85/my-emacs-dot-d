@@ -1122,8 +1122,8 @@
 
 ** inital frame size
    #+BEGIN_SRC emacs-lisp
-     ;; (add-to-list 'initial-frame-alist '(height . 51 )) 
-     ;; (add-to-list 'initial-frame-alist '(width . 177 )) 
+      (add-to-list 'initial-frame-alist '(height . 25 )) 
+      (add-to-list 'initial-frame-alist '(width . 80 )) 
      ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
      ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
    #+END_SRC
