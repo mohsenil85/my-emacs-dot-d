@@ -444,25 +444,6 @@
 
     #+END_SRC
     
-    #+BEGIN_SRC emacs-lisp :results output silent
-    (info-lookup-add-help
-    :mode 'lisp-mode
-    :regexp "[^][()'\" \t\n]+"
-    :ignore-case t
-    :doc-spec '(("(ansicl)Symbol Index" nil nil nil)))
-
-    ;;     (use-package log4slime
-    ;;       :load-path "~/.quicklisp/dists/quicklisp/software/log4cl-20141217-git/elisp/")
-    ;; (use-package fuzzy :ensure )
-    ;; (use-package ac-slime
-    ;;   :ensure
-    ;;   :config (progn
-    ;;             (add-hook 'slime-mode-hook 'set-up-slime-ac)
-    ;;             (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-    ;;             (eval-after-load "auto-complete"
-    ;;               '(add-to-list 'ac-modes 'slime-repl-mode))))
-
-    #+END_SRC
     
 ** magit
    #+BEGIN_SRC emacs-lisp :results output silent
