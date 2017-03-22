@@ -1092,9 +1092,9 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp :results output silent
-       (use-package gandalf-theme :ensure t)
+;;       (use-package gandalf-theme :ensure t)
      ;;  (use-package mbo70s-theme :ensure t)
-     ;; (use-package warm-night-theme :ensure t)
+      (use-package warm-night-theme :ensure t)
      ;;  (use-package slime-theme :ensure t)
      ;;  (use-package basic-theme :ensure t)
      ;;  (use-package minimal-theme :ensure t)
