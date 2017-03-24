@@ -766,7 +766,48 @@
   :ensure)
 
    #+END_SRC
+** dired
+   vinagresque
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package dired+
+       :defer t
+       :init
+       (progn
+         (setq diredp-hide-details-initially-flag t)
+         (setq diredp-hide-details-propagate-flag t)
+         ;; use single buffer for all dired navigation
+         ;; disable font themeing from dired+
+         (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
+         (toggle-diredp-find-file-reuse-dir 1)
+         ))
 
+
+     (use-package dired
+       :defer t
+       :config
+       (evilified-state-evilify dired-mode dired-mode-map
+                                "j"         'evil-move-down
+                                "k"         'evil-move-up
+                                "-"         'dired-up-directory
+                                "0"         'dired-back-to-start-of-files
+                                (kbd "C-j") 'dired-next-subdir
+                                (kbd "C-k") 'dired-prev-subdir
+                                "I"         'vinegar/dotfiles-toggle
+                                (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+                                (kbd "RET") 'dired-find-file-other-window
+                                "f"         'helm-find-files
+                                "J"         'dired-goto-file
+                                (kbd "C-f") 'find-name-dired
+                                "H"         'diredp-dired-recent-dirs
+                                "T"         'dired-tree-down
+                                "K"         'dired-do-kill-lines
+                                "r"         'revert-buffer
+                                (kbd "C-r") 'dired-do-redisplay
+                                "gg"        'evil-goto-first-line
+                                "G"         'evil-goto-line))
+
+     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+   #+END_SRC
 ** yasnippet
    #+BEGIN_SRC emacs-lisp :results output silent
      ;; (use-package yasnippet
@@ -890,9 +931,9 @@
        :ensure
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
-                 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+                 (load (expand-file-name "~/quicklisp/slime-helper.el"))
                  (setq inferior-lisp-program 
-                       "sbcl --noinform --no-linedit")
+                       "/usr/local/bin/sbcl --noinform --no-linedit")
                  (require 'slime-autoloads)
                  (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
                  (setq slime-contribs 
@@ -1105,25 +1146,27 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp :results output silent
-;;       (use-package gandalf-theme :ensure t)
+     ;;       (use-package gandalf-theme :ensure t)
      ;;  (use-package mbo70s-theme :ensure t)
-      (use-package warm-night-theme :ensure t)
+     ;;(use-package warm-night-theme :ensure t)
+     ;;(use-package alect-themes :ensure t)
+     (use-package yoshi-theme :ensure t)
      ;;  (use-package slime-theme :ensure t)
      ;;  (use-package basic-theme :ensure t)
      ;;  (use-package minimal-theme :ensure t)
      ;; (use-package white-theme :ensure t)
-      ;;(use-package paper-theme :ensure t )
-      ;(use-package soft-charcoal-theme :ensure t )
-      ;;(use-package soft-morning-theme :ensure t )
-      ;(use-package django-theme :ensure t )
-      ;;(use-package hydandata-light-theme :ensure t)
+     ;;(use-package paper-theme :ensure t )
+                                             ;(use-package soft-charcoal-theme :ensure t )
+     ;;(use-package soft-morning-theme :ensure t )
+                                             ;(use-package django-theme :ensure t )
+     ;;(use-package hydandata-light-theme :ensure t)
      ;;(use-package solarized-theme :ensure t)
 
-     ;(load-theme 'adwaita)
-  ;   (load-theme 'gandalf)
-     ; (load-theme 'mbo70s)
-     
-     (setq my-theme 'warm-night)
+                                             ;(load-theme 'adwaita)
+                                             ;   (load-theme 'gandalf)
+                                             ; (load-theme 'mbo70s)
+
+     (setq my-theme 'yoshi)
      (enable-theme my-theme)
      (load-theme my-theme t t)
    #+END_SRC
@@ -1335,8 +1378,9 @@ about what flexible matching means in this context."
 )
 
 
-(global-set-key (kbd "C-x C-c") 'not-anymore)
+;(global-set-key (kbd "C-x C-c") 'not-anymore)
 (global-set-key (kbd "C-h h") 'not-anymore)
+(global-set-key (kbd "C-h C-a") 'not-anymore)
    #+END_SRC
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
