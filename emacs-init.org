@@ -1149,8 +1149,9 @@
      ;;       (use-package gandalf-theme :ensure t)
      ;;  (use-package mbo70s-theme :ensure t)
      ;;(use-package warm-night-theme :ensure t)
+     (use-package soft-morning-theme :ensure t)
      ;;(use-package alect-themes :ensure t)
-     (use-package yoshi-theme :ensure t)
+     ;;(use-package yoshi-theme :ensure t)
      ;;  (use-package slime-theme :ensure t)
      ;;  (use-package basic-theme :ensure t)
      ;;  (use-package minimal-theme :ensure t)
@@ -1166,7 +1167,7 @@
                                              ;   (load-theme 'gandalf)
                                              ; (load-theme 'mbo70s)
 
-     (setq my-theme 'yoshi)
+     (setq my-theme 'soft-morning)
      (enable-theme my-theme)
      (load-theme my-theme t t)
    #+END_SRC
