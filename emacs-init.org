@@ -781,7 +781,6 @@
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package dired+
-       :defer t
        :init
        (progn
          (setq diredp-hide-details-initially-flag t)
@@ -797,8 +796,8 @@
        :defer t
        :config
        (evilified-state-evilify dired-mode dired-mode-map
-                                "j"         'evil-move-down
-                                "k"         'evil-move-up
+                                "j"         'evil-next-line
+                                "k"         'evil-previous-line
                                 "-"         'dired-up-directory
                                 "0"         'dired-back-to-start-of-files
                                 (kbd "C-j") 'dired-next-subdir
