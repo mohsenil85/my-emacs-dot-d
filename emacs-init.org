@@ -151,6 +151,13 @@
 ;               deft-text-mode 'org-mode)
 ;              (global-set-key (kbd "H-d") 'deft)))
    #+END_SRC
+
+** evil-evilified-state
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package evil-evilified-state
+       :load-path "~/Projects/elisp")
+
+   #+END_SRC
 ** elfeed
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package elfeed
