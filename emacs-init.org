@@ -155,7 +155,7 @@
 ** evil-evilified-state
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package evil-evilified-state
-       :load-path "~/Projects/elisp")
+       :load-path "~/Projects/elisp/evil-evilified-state/")
 
    #+END_SRC
 ** elfeed
