@@ -460,8 +460,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package magit 
         :ensure t
-        :config (progn 
-                  (setq magit-completing-read-function 'ivy-completing-read))
+        ;;:config (progn (setq magit-completing-read-function '-completing-read))
         :bind ("C-x g" . magit-status))
    #+END_SRC
    
