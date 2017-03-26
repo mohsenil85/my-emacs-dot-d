@@ -1511,13 +1511,16 @@ about what flexible matching means in this context."
   #+END_SRC
 
   #+BEGIN_SRC emacs-lisp :results output silent
-    (use-package evil-mu4e :ensure t  )
     (use-package mu4e  
-      :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e/"
+      :load-path (if (eq system-type 'darwin)
+                     "/usr/local/share/emacs/site-lisp/mu/mu4e/"
+                   "/usr/share/emacs/site-lisp/mu4e/")
       :commands (make-mu4e-context)
       :init (progn
               (setq
-               mu4e-mu-binary "/usr/local/bin/mu"
+               mu4e-mu-binary (if (eq system-type 'darwin)
+                                  "/usr/local/bin/mu"
+                                  "/usr/bin/mu")
                mu4e-maildir (expand-file-name "~/.mail/")
                mu4e-context-policy 'pick-first
                mu4e-reply-to-address  "mohsenil85@gmail.com"
@@ -1609,6 +1612,8 @@ about what flexible matching means in this context."
         )
       :bind ("C-c m" . mu4e)
       )
+
+    (use-package evil-mu4e :ensure t  )
 
   #+END_SRC
   
