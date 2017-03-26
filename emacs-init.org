@@ -655,7 +655,7 @@
    
 ** persistent scratch
    #+BEGIN_SRC emacs-lisp :results output silent
-(use-package persistent-scratch :ensure
+(use-package persistent-scratch :ensure t
 :config (persistent-scratch-setup-default))
    #+END_SRC
    
