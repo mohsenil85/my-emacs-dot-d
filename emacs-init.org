@@ -1383,6 +1383,10 @@ about what flexible matching means in this context."
      (setq savehist-file "~/.emacs.d/tmp/savehist")
    #+END_SRC
 
+** browse with eww
+   #+BEGIN_SRC emacs-lisp :results output silent
+   (setq browse-url-browser-function 'eww-browse-url)
+   #+END_SRC
 ** disasbled functions
    #+BEGIN_SRC emacs-lisp :results output silent
 (defun not-anymore ()
