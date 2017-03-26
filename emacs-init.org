@@ -1567,7 +1567,7 @@ about what flexible matching means in this context."
                           (mu4e-reply-to-address . "mohsenil85@gmail.com")
                           (user-mail-address . "mohsenil85@gmail.com"  )
                           (user-full-name   . "Logan Mohseni" )
-                          (mu4e-drafts-folder . "/gmail/[Gmail].Drafts")
+                          (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
                           (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail/")
                           (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")
                           (mu4e-compose-signature . nil)
