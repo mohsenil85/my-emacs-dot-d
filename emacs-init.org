@@ -53,7 +53,7 @@
 * packages
 ** emojify
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package emojify :ensure t)
+     (use-package emojify :ensure t )
    #+END_SRC
 ** bind-map
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -70,7 +70,8 @@
 *** main evil
     #+BEGIN_SRC emacs-lisp :results output silent
       (use-package evil
-        :ensure
+        :ensure t
+        :defer 1
         :config
         (progn
           (evil-set-initial-state 'snake-mode 'emacs) 
@@ -85,20 +86,21 @@
       (use-package evil-rsi 
         :diminish ""
         :ensure t 
+        :defer t 
         :init (setq evil-rsi-mode 1) )  
     #+END_SRC
     
     
 *** evil-org
     #+BEGIN_SRC emacs-lisp :results output silent
-    ;  (use-package evil-org :ensure :init (require 'evil-org))  
+    ;  (use-package evil-org :ensure t :defer t  :init (require 'evil-org))  
     #+END_SRC
     
     
 *** vimmish fold
     #+BEGIN_SRC emacs-lisp :results output silent
       ;; (use-package vimish-fold
-      ;;   :ensure
+      ;;   :ensure t
       ;;   :config
       ;;   (progn
       ;;     (evil-leader/set-key "ff" 'vimish-fold)
@@ -127,13 +129,13 @@
    
 ** better-defaults
    #+BEGIN_SRC emacs-lisp :results output silent
-  (use-package better-defaults :ensure )
+  (use-package better-defaults :ensure t :defer t )
    #+END_SRC
    
 ** deft org
    #+BEGIN_SRC emacs-lisp :results output silent
 ;  (use-package deft 
-;    :ensure
+;    :ensure t
 ;    :config (progn
 ;              (setq
 ;               deft-extension "org"
@@ -152,6 +154,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package elfeed
        :ensure evil
+       :defer t
        :config
        (progn
          (evil-set-initial-state 'elfeed-show 'emacs)
@@ -213,6 +216,7 @@
 
      (use-package elfeed-goodies
        :ensure t   
+       :defer t   
        :after elfeed   
        :config   
        (setq 
@@ -236,19 +240,18 @@
    
 ** evil-magit
    #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package evil-magit :ensure)
 
    #+END_SRC
    
 ** flx
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package flx :ensure t)
+     ;(use-package flx :ensure t)
 
    #+END_SRC
 ** flycheck
    #+begin_src emacs-lisp
   (use-package flycheck
-    :ensure
+    :ensure t
     :diminish ""
     :config
     (progn
@@ -267,11 +270,16 @@
 (add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
+
+   #+RESULTS:
+   | proselint | ada-gnat | asciidoctor | asciidoc | c/c++-clang | c/c++-gcc | c/c++-cppcheck | cfengine | chef-foodcritic | coffee | coffee-coffeelint | coq | css-csslint | css-stylelint | d-dmd | dockerfile-hadolint | elixir-dogma | emacs-lisp | emacs-lisp-checkdoc | erlang | eruby-erubis | fortran-gfortran | go-gofmt | go-golint | go-vet | go-build | go-test | go-errcheck | go-unconvert | groovy | haml | handlebars | haskell-stack-ghc | haskell-ghc | haskell-hlint | html-tidy | javascript-eslint | javascript-jshint | javascript-gjslint | javascript-jscs | javascript-standard | json-jsonlint | json-python-json | less | less-stylelint | lua-luacheck | lua | perl | perl-perlcritic | php | php-phpmd | php-phpcs | processing | protobuf-protoc | pug | puppet-parser | puppet-lint | python-flake8 | python-pylint | python-pycompile | r-lintr | racket | rpm-rpmlint | markdown-mdl | rst-sphinx | rst | ruby-rubocop | ruby-rubylint | ruby | ruby-jruby | rust-cargo | rust | scala | scala-scalastyle | scheme-chicken | scss-lint | scss-stylelint | sass/scss-sass-lint | sass | scss | sh-bash | sh-posix-dash | sh-posix-bash | sh-zsh | sh-shellcheck | slim | slim-lint | sql-sqlint | systemd-analyze | tex-chktex | tex-lacheck | texinfo | typescript-tslint | verilog-verilator | xml-xmlstarlet | xml-xmllint | yaml-jsyaml | yaml-ruby |
+
    
 ** git-gutter-fringe
    #+BEGIN_SRC emacs-lisp :results output silent
   (use-package git-gutter-fringe
-    :ensure
+    :ensure t
+    :defer t
     :diminish ""
     :config
     (progn
@@ -335,7 +343,7 @@
              ("C-x C-f" . helm-find-files)
              ("M-s o" . helm-occur)))
       
-          (use-package helm-descbinds :ensure :config
+          (use-package helm-descbinds :ensure t :defer t :config
             (progn
               (require 'helm-descbinds)
               (helm-descbinds-mode)
@@ -392,19 +400,20 @@
     #+END_SRC
 *** helm-ag
     #+BEGIN_SRC emacs-lisp :results output silent
-(use-package helm-ag :ensure)
+(use-package helm-ag :ensure t :defer t)
 
     #+END_SRC
 *** helm-ack
     #+BEGIN_SRC emacs-lisp :results output silent
       (use-package helm-ack
-        :ensure)
+        :ensure t :defer t)
           
     #+END_SRC
 *** helm-gtags 
     #+BEGIN_SRC emacs-lisp :results output silent
         (use-package helm-gtags
           :ensure t
+          :defer t
           :config
           (progn
             ;;; Enable helm-gtags-mode
@@ -440,19 +449,19 @@
     
 ** magit
    #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package magit 
-        :ensure t
-        ;;:config (progn (setq magit-completing-read-function '-completing-read))
-        :bind ("C-x g" . magit-status))
+           (use-package magit 
+             :ensure t
+             :defer t
+             :config       (use-package evil-magit :ensure t )
+             :bind ("C-x g" . magit-status))
    #+END_SRC
    
 ** Misc packages
    #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package ag :ensure)
+          (use-package ag :ensure t :defer t)
           ;;(use-package ggtags :ensure)
-          (use-package better-defaults :ensure)
-          (use-package markdown-mode :ensure)
-;;          (use-package auctex :ensure :config (require 'tex) )
+          (use-package markdown-mode :ensure t :defer t)
+;;          (use-package tex :ensure auctex :defer t  :config (require 'tex) )
 
 (add-hook 'LaTeX-mode-hook (lambda ()
   (push 
@@ -610,6 +619,7 @@
   (use-package page-break-lines
     :diminish ""
     :ensure t 
+    :defer t 
     :config (global-page-break-lines-mode 1))
 
    #+end_src
@@ -618,6 +628,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
 (use-package keyfreq
  :ensure t
+ :defer t
 :init
 (require 'keyfreq)
 (keyfreq-mode 1)
@@ -628,7 +639,7 @@
    
 ** paradox --better package search
    #+BEGIN_SRC emacs-lisp :results output silent
-(use-package paradox :ensure t)
+(use-package paradox :ensure t :defer t)
    #+END_SRC
    
 ** persistent scratch
@@ -651,7 +662,7 @@
    :ORDERED:  t
    :END:
    #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package projectile :ensure
+      (use-package projectile :ensure t :defer t
         :config
         (progn
           (projectile-global-mode)
@@ -664,7 +675,7 @@
    
 ** recursive narrow
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package recursive-narrow :ensure
+     (use-package recursive-narrow :ensure t :defer t
        :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
               ("C-x n w" . recursive-widen-dwim)))
    #+END_SRC
@@ -673,6 +684,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package sentence-navigation
         :ensure t
+        :defer t
         :bind (:map evil-motion-state-map 
                     ((")" . sentence-nav-evil-forward)
                      ("(" . sentence-nav-evil-backward)
@@ -739,6 +751,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package which-key 
         :ensure t
+        :defer t
         :init
         (setq which-key-idle-delay 4)
         :diminish ""
@@ -750,18 +763,22 @@
 ** dumb-jump
    #+BEGIN_SRC emacs-lisp :results output silent
 (use-package dumb-jump
+:ensure t 
+:defer t 
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'helm)
-  :ensure)
+  )
 
    #+END_SRC
 ** dired
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package dired+
+:ensure t
+:defer t
        :init
        (progn
          (setq diredp-hide-details-initially-flag t)
@@ -819,8 +836,8 @@
 ** clojure
    
    #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package clojure-mode :ensure)
-          (use-package cider :ensure t
+          (use-package clojure-mode :ensure t :defer t)
+          (use-package cider :ensure t :defer t
             )
    ;  (use-package inf-clojure :ensure t)
      (add-hook 'clojure-mode-hook #'eldoc-mode)
@@ -834,6 +851,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package meghanada 
        :ensure t
+       :defer t
        :config 
      (progn
      (add-hook 'java-mode-hook
@@ -870,6 +888,7 @@
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package paredit
        :ensure t
+       :defer t
        :config 
        (progn
          (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
@@ -905,7 +924,8 @@
      ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
      (use-package rainbow-delimiters
-       :ensure
+       :ensure t
+       :defer t
        :diminish ""
        :config
        (progn
@@ -919,7 +939,7 @@
           (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
 
      (use-package slime
-       :ensure
+        :defer 2
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
                  (load (expand-file-name "~/quicklisp/slime-helper.el"))
@@ -955,25 +975,25 @@
   (add-to-list 'auto-mode-alist '("\\.json" . js-mode))
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  (use-package ac-js2 :ensure)
+  ;(use-package ac-js2 :ensure)
 
   (defun my-js-mode-stuff ()
     (setq js2-highlight-level 3)
     (define-key js-mode-map "{" 'paredit-open-curly)
     (define-key js-mode-map "}" 'paredit-close-curly-and-newline)
     )
-  (use-package js2-mode :ensure :config (my-js-mode-stuff))
+  (use-package js2-mode :ensure t :defer t :config (my-js-mode-stuff))
 
    #+END_SRC
    
 ** python
    #+BEGIN_SRC emacs-lisp :results output silent
-  (use-package jedi :ensure
+  (use-package jedi :ensure t :defer t
     :config
     (progn
       (add-hook 'python-mode-hook 'jedi:setup)
       (setq jedi:complete-on-dot t)))
-  (use-package ob-ipython :ensure)
+  (use-package ob-ipython :ensure t :defer t)
   ;(use-package ein :ensure)
    #+END_SRC
    
@@ -1033,7 +1053,7 @@
     ;; `M-x package-install [ret] company`
     (company-mode +1))
 
-  (use-package tide :ensure t :config
+  (use-package tide :ensure t :defer t :config
     ;; aligns annotation to the right hand side
     (setq company-tooltip-align-annotations t)
 
@@ -1140,7 +1160,7 @@
      ;;       (use-package gandalf-theme :ensure t)
      ;;  (use-package mbo70s-theme :ensure t)
      ;;(use-package warm-night-theme :ensure t)
-     (use-package soft-morning-theme :ensure t)
+     (use-package soft-morning-theme :ensure t )
      ;;(use-package alect-themes :ensure t)
      ;;(use-package yoshi-theme :ensure t)
      ;;  (use-package slime-theme :ensure t)
@@ -1596,7 +1616,7 @@ about what flexible matching means in this context."
             :bind ("C-c m" . mu4e)
             ))
 
-        (use-package evil-mu4e :ensure t  )
+        (use-package evil-mu4e :ensure t :defer t  )
 
   #+END_SRC
   
