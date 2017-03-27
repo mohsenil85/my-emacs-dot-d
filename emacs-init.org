@@ -658,19 +658,17 @@
    #+END_SRC
    
 ** projectile
-   :PROPERTIES: 
-   :ORDERED:  t
-   :END:
    #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package projectile :ensure t :defer t
-        :config
-        (progn
-          (projectile-global-mode)
-          (setq projectile-completion-system 'helm)
-          (setq projectile-create-missing-test-files t)
-          (setq projectile-switch-project-action 'projectile-dired)
-          (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
-          ))
+     (use-package projectile
+       :ensure t
+       :config
+       (progn
+         (projectile-global-mode)
+         (setq projectile-completion-system 'helm)
+         (setq projectile-create-missing-test-files t)
+         (setq projectile-switch-project-action 'projectile-dired)
+         (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+         ))
    #+END_SRC
    
 ** recursive narrow
@@ -942,7 +940,7 @@
         :defer 2
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
-                 (load (expand-file-name "~/quicklisp/slime-helper.el"))
+                 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
                  (setq inferior-lisp-program 
                        "/usr/local/bin/sbcl --noinform --no-linedit")
                  (require 'slime-autoloads)
