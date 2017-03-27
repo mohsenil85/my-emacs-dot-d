@@ -4,6 +4,11 @@
 ;; You may delete these explanatory comments.
 ;(package-initialize)
 
+;(add-to-list 'load-path "~/.emacs.d/vendor/benchmark-init-el")
+;(require 'benchmark-init-loaddefs)
+;(benchmark-init/activate)
+
+
 (setq custom-file "~/.emacs.d/customizations.el")
 (load-file custom-file)
 (load-file "~/.emacs.d/recentf" )
