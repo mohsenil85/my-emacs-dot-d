@@ -54,14 +54,13 @@
 *** main evil
     #+BEGIN_SRC emacs-lisp :results output silent
       (use-package evil
-        :ensure t
-        :defer 1
-        :config
-        (progn
-          (evil-set-initial-state 'snake-mode 'emacs) 
-          (evil-mode 1))
-        :bind
-        ("S-SPC" . evil-exit-emacs-state))
+                   :ensure t
+                   :config
+                   (progn
+                     (evil-set-initial-state 'snake-mode 'emacs) 
+                     (evil-mode 1))
+                   :bind
+                   ("S-SPC" . evil-exit-emacs-state))
     #+END_SRC
     
     
@@ -71,7 +70,7 @@
         :diminish ""
         :ensure t 
         :defer t 
-        :init (setq evil-rsi-mode 1) )  
+        :config (setq evil-rsi-mode 1) )  
     #+END_SRC
     
     
@@ -137,88 +136,83 @@
 ** elfeed
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package elfeed
-       :ensure evil
-       :defer t
-       :config
-       (progn
-         (evil-set-initial-state 'elfeed-show 'emacs)
-         (setq elfeed-feeds
-               '("http://feeds.igvita.com/igvita"
-                 "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
-                 ("http://nedroid.com/feed/" comic)
-                 ("http://crawdadswelcome.tumblr.com/rss" comic)
-                 ("http://moonbeard.com/feed/atom/" comic)
-                 ("http://gunshowcomic.com/rss.xml" comic)
-                 ("http://www.goyedogs.com/rss" comic)
-                 ("http://sticksangelica.tumblr.com/rss" comic)
-                 "http://feeds2.feedburner.com/MachineLearningtheory"
-                 "http://infostructuralist.wordpress.com/"
-                 "http://nlpers.blogspot.com/feeds/posts/default"
-                 "http://emacshorrors.com/feed.atom"
-                 ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
-                 ("http://studygroupcomics.com/main/feed/rss/" comic)
-                 ("http://www.destructorcomics.com/?feed=rss" comic)
-                 ("http://garfieldminusgarfield.net/rss" comic)
-                 "http://www.tor.com/category/all-fiction/feed"
-                 "http://nullprogram.com/feed/"
-                 "http://blog.funcall.org/feed.xml"
-                 ("http://owlturd.com/rss" comic)
-                 "http://planet.lisp.org/rss20.xml"
-                 "http://planet.clojure.in/atom.xml"
-                 "http://cartographerswithoutborders.org/rss"
-                 "http://irreal.org/blog/?feed=rss2"
-                 "http://endlessparentheses.com/atom.xml"
-                 "http://www.newyorker.com/feed/articles"
-                 ("http://www.lunarbaboon.com/comics/rss.xml" comic)
-                 "http://pragmaticemacs.com/feed/"
-                 "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
-                 "http://planet.lisp.org/rss20.xml"
-                 "http://lisptips.com/rss"
-                 "http://what-if.xkcd.com/feed.atom"
-                 ("http://xkcd.com/rss.xml" comic)
-                 ("http://www.smbc-comics.com/rss.php" comic)
-                 ("http://www.qwantz.com/rssfeed.php" comic)
-                 "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
-                 "http://english.bouletcorp.com/feed/"
-                 ("http://pbfcomics.com/feed/feed.xml" comic)
-                 "http://thecodelesscode.com/rss"
-                 "http://bldgblog.blogspot.com/atom.xml"
-                 "http://divisbyzero.com/feed/"
-                 "http://blog.fogus.me/feed/"
-                 "http://blog.tanyakhovanova.com/?feed=rss"))
-         (setq elfeed-db-directory "~/.emacs.d/elfeed")
-         (setq evil-motion-state-modes 
-               (append evil-motion-state-modes
-                       '(elfeed-search-mode elfeed-show-mode)))
-         (general-define-key
-          :keymaps 'elfeed-search-mode-map
-          :states 'motion
-          "RET" 'elfeed-search-show-entry    
-          "r" 'elfeed-update))
-       :bind
-       ("C-c e" . elfeed))
+                  :ensure evil
+                  :defer t
+                  :init 
+                  (use-package elfeed-goodies
+                               :ensure t   
+                               :config   
+                               (setq 
+                                elfeed-goodies/powerline-default-separator nil
+                                elfeed-goodies/entry-pane-position 'bottom) 
+                               (elfeed-goodies/setup))
+                  :config
+                  (progn
+                    (evil-set-initial-state 'elfeed-show 'emacs)
+                    (setq elfeed-feeds
+                          '("http://feeds.igvita.com/igvita"
+                            "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
+                            ("http://nedroid.com/feed/" comic)
+                            ("http://crawdadswelcome.tumblr.com/rss" comic)
+                            ("http://moonbeard.com/feed/atom/" comic)
+                            ("http://gunshowcomic.com/rss.xml" comic)
+                            ("http://www.goyedogs.com/rss" comic)
+                            ("http://sticksangelica.tumblr.com/rss" comic)
+                            "http://feeds2.feedburner.com/MachineLearningtheory"
+                            "http://infostructuralist.wordpress.com/"
+                            "http://nlpers.blogspot.com/feeds/posts/default"
+                            "http://emacshorrors.com/feed.atom"
+                            ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
+                            ("http://studygroupcomics.com/main/feed/rss/" comic)
+                            ("http://www.destructorcomics.com/?feed=rss" comic)
+                            ("http://garfieldminusgarfield.net/rss" comic)
+                            "http://www.tor.com/category/all-fiction/feed"
+                            "http://nullprogram.com/feed/"
+                            "http://blog.funcall.org/feed.xml"
+                            ("http://owlturd.com/rss" comic)
+                            "http://planet.lisp.org/rss20.xml"
+                            "http://planet.clojure.in/atom.xml"
+                            "http://cartographerswithoutborders.org/rss"
+                            "http://irreal.org/blog/?feed=rss2"
+                            "http://endlessparentheses.com/atom.xml"
+                            "http://www.newyorker.com/feed/articles"
+                            ("http://www.lunarbaboon.com/comics/rss.xml" comic)
+                            "http://pragmaticemacs.com/feed/"
+                            "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
+                            "http://planet.lisp.org/rss20.xml"
+                            "http://lisptips.com/rss"
+                            "http://what-if.xkcd.com/feed.atom"
+                            ("http://xkcd.com/rss.xml" comic)
+                            ("http://www.smbc-comics.com/rss.php" comic)
+                            ("http://www.qwantz.com/rssfeed.php" comic)
+                            "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
+                            "http://english.bouletcorp.com/feed/"
+                            ("http://pbfcomics.com/feed/feed.xml" comic)
+                            "http://thecodelesscode.com/rss"
+                            "http://bldgblog.blogspot.com/atom.xml"
+                            "http://divisbyzero.com/feed/"
+                            "http://blog.fogus.me/feed/"
+                            "http://blog.tanyakhovanova.com/?feed=rss"))
+                    (setq elfeed-db-directory "~/.emacs.d/elfeed")
+                    (setq evil-motion-state-modes 
+                          (append evil-motion-state-modes
+                                  '(elfeed-search-mode elfeed-show-mode)))
+                    (general-define-key
+                     :keymaps '(elfeed-search-mode-map elfeed-show-mode-map)
+                     :states 'motion
+                     "r" 'elfeed-update
+                     "+" 'elfeed-show-tag
+                     "-" 'elfeed-show-untag
+                     "RET" 'elfeed-goodies/split-search-show-entry
+                     "SPC" 'evil-scroll-page-down
+                     "j" 'elfeed-goodies/split-show-next 
+                     "k" 'elfeed-goodies/split-show-prev) 
+                     
+                    )
 
-     (use-package elfeed-goodies
-       :ensure t   
-       :defer t   
-       :after elfeed   
-       :config   
-       (setq 
-        elfeed-goodies/powerline-default-separator nil
-        elfeed-goodies/entry-pane-position 'bottom) 
-       (elfeed-goodies/setup)
+     :bind
+     ("C-c e" . elfeed))
 
-       (general-define-key :keymaps 'elfeed-show-mode-map   
-                           :states 'motion 
-                           "+" 'elfeed-show-tag
-                           "-" 'elfeed-show-untag
-                           "C-n" 'elfeed-goodies/split-show-next 
-                           "C-p" 'elfeed-goodies/split-show-prev)   
-       (general-define-key :keymaps
-                           'elfeed-search-mode-map
-                           :states 'motion
-                           "+" 'elfeed-search-tag-all
-                           "-" 'elfeed-search-untag-all))
 
    #+END_SRC
    
@@ -868,21 +862,24 @@
    
 ** lisp
    #+BEGIN_SRC emacs-lisp :results output silent
+     (add-hook 'lisp-mode-hook
+               (lambda ()
+                 (set (make-local-variable 'lisp-indent-function)
+                      'common-lisp-indent-function)))
+
      (use-package paredit
        :ensure t
-       :defer t
        :config 
        (progn
-         (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
          (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
          (add-hook 'lisp-mode-hook             'enable-paredit-mode)
          (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
          (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
          (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-         (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-         (add-hook 'clojure-mode-hook 'paredit-mode)
-         (add-hook 'clojurescript-mode-hook 'paredit-mode)
-         (add-hook 'clojurec-mode-hook 'paredit-mode)
+         (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+         (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+         (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
+         (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
 
          (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
          (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
@@ -892,36 +889,36 @@
 
          ))
 
-     ;;;     (use-package smartparens
-     ;;;       :ensure t
-     ;;;       :diminish ""
-     ;;;
-     ;;;       :init (require 'smartparens-config)
-     ;;;       :config (smartparens-global-strict-mode 1))
-     ;;;
-     ;;;     (use-package evil-smartparens
-     ;;;       :ensure
-     ;;;       :diminish ""
-     ;;;       :config (progn
-     ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+          ;;;     (use-package smartparens
+          ;;;       :ensure t
+          ;;;       :diminish ""
+          ;;;
+          ;;;       :init (require 'smartparens-config)
+          ;;;       :config (smartparens-global-strict-mode 1))
+          ;;;
+          ;;;     (use-package evil-smartparens
+          ;;;       :ensure
+          ;;;       :diminish ""
+          ;;;       :config (progn
+          ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
      (use-package rainbow-delimiters
        :ensure t
-       :defer t
        :diminish ""
        :config
        (progn
          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
          (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+         (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
          (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
-     (eval-after-load "slime"
-       '(progn
-          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
-          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
-
+     ;;;     (eval-after-load "slime"
+     ;;;       '(progn
+     ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+     ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
+     ;;;
      (use-package slime
-        :defer 2
+       :defer 1
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
                  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
@@ -937,9 +934,7 @@
                          slime-quicklisp 
                          slime-xref-browser))
                  (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-
-                 (slime-setup)
-                 )
+                 (slime-setup))
        
        :bind (
               ("C-c s" . slime-selector)
@@ -1512,6 +1507,7 @@ about what flexible matching means in this context."
                  mu4e-sent-folder  "/gmail/[Gmail]/.Sent Mail"
                  mu4e-trash-folder  "/gmail/[Gmail]/.Trash"
                  mu4e-maildir-shortcuts '( ("/gmail/Inbox" . ?i)
+                                           ("/work/[Gmail]/Inbox" . ?w)
                                            ("/gmail/[Gmail]/.Sent Mail" . ?s)
                                            ("/gmail/[Gmail]/.Trash" . ?t)
                                            ("/gmail/[Gmail]/.All Mail" . ?a)
@@ -1530,10 +1526,14 @@ about what flexible matching means in this context."
                  message-kill-buffer-on-exit t
                  mu4e-sent-messages-behavior 'delete
                  mu4e-show-images t
-                 mu4e-confirm-quit t
+                 mu4e-confirm-quit nil
                  mu4e-headers-skip-duplicates t)
                 (when (fboundp 'imagemagick-register-types)
-                  (imagemagick-register-types)))
+                  (imagemagick-register-types))
+                (general-define-key
+                 :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
+                 :states 'motion
+                 "SPC" 'evil-scroll-page-down))
         :config
         (progn
           (require 'mu4e-contrib)
