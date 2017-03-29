@@ -3,66 +3,50 @@
 #+EMAIL: mohsenil85@gmail.com 
 
 
-* workinonit
-** make a new keymap
-   
-   #+BEGIN_SRC emacs-lisp :results output silent
-           (defvar evil-package-menu-mode-map
-             (let ((map (make-sparse-keymap)))
-               (set-keymap-parent map tabulated-list-mode-map)
-               (define-key map "\C-m" 'package-menu-describe-package)
-               (define-key map "u" 'package-menu-mark-unmark)
-               (define-key map "\177" 'package-menu-backup-unmark)
-               (define-key map "d" 'package-menu-mark-delete)
-               (define-key map "i" 'package-menu-mark-install)
-               (define-key map "U" 'package-menu-mark-upgrades)
-               (define-key map "r" 'package-menu-refresh)
-               (define-key map "f" 'package-menu-filter)
-               (define-key map "~" 'package-menu-mark-obsolete-for-deletion)
-               (define-key map "x" 'package-menu-execute)
-               (define-key map "h" 'package-menu-quick-help)
-               (define-key map "H" 'package-menu-hide-package)
-               (define-key map "?" 'package-menu-describe-package)
-               (define-key map "(" 'package-menu-toggle-hiding)
-               (define-key map "/" 'isearch-forward-regexp)
-               map)
-             "Local keymap for `package-menu-mode' buffers.")
-
-     (add-hook 'package-menu-mode-hook (lambda () ()))
-   #+END_SRC
 * package config 
   #+BEGIN_SRC emacs-lisp :results output silent
-      (setq package-enable-at-startup nil) ; tells emacs not to load any packages before starting up
-      ;; the following lines tell emacs where on the internet to look up
-      ;; for new packages.
-      (setq package-archives '(
-;("org"       . "http://orgmode.org/elpa/")
-                               ("gnu"       . "https://elpa.gnu.org/packages/")
-                               ("melpa"     . "https://melpa.org/packages/")
-                    ;("marmalade" . "http://marmalade-repo.org/packages/")
-))
+      (setq package-enable-at-startup nil)
+      (setq package-archives '(("gnu"       . "https://elpa.gnu.org/packages/")
+                               ("melpa"     . "https://melpa.org/packages/")))
       (package-initialize)
 
-      ;; Bootstrap `use-package'
-      (unless (package-installed-p 'use-package) ; unless it is already installed
-        (package-refresh-contents) ; updage packages archive
-        (package-install 'use-package)) ; and install the most recent version of use-package
+      (unless (package-installed-p 'use-package)
+        (package-refresh-contents)
+        (package-install 'use-package))
 
       (require 'use-package)
   #+END_SRC
+
 * packages
+** term
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package term
+                  :bind (("C-c t" . term)
+                         :map term-mode-map
+                         ("M-p" . term-send-up)
+                         ("M-n" . term-send-down)
+                         :map term-raw-map
+                         ("M-o" . other-window)
+                         ("M-p" . term-send-up)
+                         ("M-n" . term-send-down)))
+   #+END_SRC
+** no-littering
+   #+BEGIN_SRC emacs-lisp :results output silent
+   ;  (use-package no-littering :ensure t )
+   #+END_SRC
 ** emojify
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package emojify :ensure t )
+     (use-package emojify :ensure t :defer t )
    #+END_SRC
 ** bind-map
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package bind-map :ensure t)
+     (use-package bind-map :ensure t :defer t)
    #+END_SRC
 ** general
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package general
        :ensure t   
+       :defer t   
        :config   (setq leader "SPC"))
    #+END_SRC
    
