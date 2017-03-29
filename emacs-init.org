@@ -427,11 +427,15 @@
     
 ** magit
    #+BEGIN_SRC emacs-lisp :results output silent
-           (use-package magit 
-             :ensure t
-             :defer t
-             :config       (use-package evil-magit :ensure t )
-             :bind ("C-x g" . magit-status))
+     (use-package magit 
+       :ensure t
+       :defer t
+       :config       
+       (progn
+         (add-hook 'with-editor-mode-hook 'evil-insert-state)
+         (use-package evil-magit :ensure t ))
+
+       :bind ("C-x g" . magit-status))
    #+END_SRC
    
 ** Misc packages
