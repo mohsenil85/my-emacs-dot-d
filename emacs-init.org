@@ -443,7 +443,7 @@
           (use-package ag :ensure t :defer t)
           ;;(use-package ggtags :ensure)
           (use-package markdown-mode :ensure t :defer t)
-;;          (use-package tex :ensure auctex :defer t  :config (require 'tex) )
+          (use-package tex :ensure auctex :defer t  :config (require 'tex) )
 
 (add-hook 'LaTeX-mode-hook (lambda ()
   (push 
