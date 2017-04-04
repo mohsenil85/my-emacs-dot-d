@@ -1059,7 +1059,7 @@
 
    #+END_SRC
    
-* emacs
+* itself
 ** name
     #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
