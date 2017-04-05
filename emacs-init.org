@@ -135,7 +135,6 @@
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package elfeed
        :ensure t
-       :defer t
        :commands (elfeed-search-mode elfeed-show-mode)
        :init 
        (use-package elfeed-goodies
@@ -206,9 +205,9 @@
             "k"         'elfeed-goodies/split-show-prev
             (kbd "RET") 'elfeed-goodies/split-search-show-entry
             (kbd "SPC") 'evil-scroll-page-down
-            (kbd "TAB") 'evil-scroll-page-up
+            (kbd "DEL") 'evil-scroll-page-up
             )
-     (evilified-state-evilify elfeed-show-mode elfeed-show-mode-map 
+     (evilified-state-evilify elfeed-entry-mode elfeed-show-mode-map 
             "r"         'elfeed-update
             "+"         'elfeed-show-tag
             "-"         'elfeed-show-untag
@@ -216,7 +215,17 @@
             "k"         'elfeed-goodies/split-show-prev
             (kbd "RET") 'elfeed-goodies/split-search-show-entry
             (kbd "SPC") 'evil-scroll-page-down
-            (kbd "TAB") 'evil-scroll-page-up
+            (kbd "DEL") 'evil-scroll-page-up
+            )
+     (evilified-state-evilify elfeed-search-mode elfeed-show-mode-map 
+            "r"         'elfeed-update
+            "+"         'elfeed-show-tag
+            "-"         'elfeed-show-untag
+            "j"         'elfeed-goodies/split-show-next
+            "k"         'elfeed-goodies/split-show-prev
+            (kbd "RET") 'elfeed-goodies/split-search-show-entry
+            (kbd "SPC") 'evil-scroll-page-down
+            (kbd "DEL") 'evil-scroll-page-up
             )
      ))
        :bind
