@@ -1571,7 +1571,8 @@ about what flexible matching means in this context."
                 (general-define-key
                  :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
                  :states 'motion
-                 "SPC" 'evil-scroll-page-down))
+                 "SPC" 'evil-scroll-page-down
+                 "DEL" 'evil-scroll-page-up))
         :config
         (progn
           (require 'mu4e-contrib)
