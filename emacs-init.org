@@ -73,12 +73,10 @@
         :config (setq evil-rsi-mode 1) )  
     #+END_SRC
     
-    
 *** evil-org
     #+BEGIN_SRC emacs-lisp :results output silent
     ;  (use-package evil-org :ensure t :defer t  :init (require 'evil-org))  
     #+END_SRC
-    
     
 *** vimmish fold
     #+BEGIN_SRC emacs-lisp :results output silent
@@ -182,7 +180,6 @@
                   ("http://www.lunarbaboon.com/comics/rss.xml" comic)
                   "http://pragmaticemacs.com/feed/"
                   "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
-                  "http://planet.lisp.org/rss20.xml"
                   "http://lisptips.com/rss"
                   "http://what-if.xkcd.com/feed.atom"
                   ("http://xkcd.com/rss.xml" comic)
@@ -240,7 +237,7 @@
 
    #+END_SRC
 ** flycheck
-   #+begin_src emacs-lisp
+   #+BEGIN_SRC emacs-lisp  :results output silent
   (use-package flycheck
     :ensure t
     :diminish ""
@@ -261,11 +258,6 @@
 (add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
-
-   #+RESULTS:
-   | proselint | ada-gnat | asciidoctor | asciidoc | c/c++-clang | c/c++-gcc | c/c++-cppcheck | cfengine | chef-foodcritic | coffee | coffee-coffeelint | coq | css-csslint | css-stylelint | d-dmd | dockerfile-hadolint | elixir-dogma | emacs-lisp | emacs-lisp-checkdoc | erlang | eruby-erubis | fortran-gfortran | go-gofmt | go-golint | go-vet | go-build | go-test | go-errcheck | go-unconvert | groovy | haml | handlebars | haskell-stack-ghc | haskell-ghc | haskell-hlint | html-tidy | javascript-eslint | javascript-jshint | javascript-gjslint | javascript-jscs | javascript-standard | json-jsonlint | json-python-json | less | less-stylelint | lua-luacheck | lua | perl | perl-perlcritic | php | php-phpmd | php-phpcs | processing | protobuf-protoc | pug | puppet-parser | puppet-lint | python-flake8 | python-pylint | python-pycompile | r-lintr | racket | rpm-rpmlint | markdown-mdl | rst-sphinx | rst | ruby-rubocop | ruby-rubylint | ruby | ruby-jruby | rust-cargo | rust | scala | scala-scalastyle | scheme-chicken | scss-lint | scss-stylelint | sass/scss-sass-lint | sass | scss | sh-bash | sh-posix-dash | sh-posix-bash | sh-zsh | sh-shellcheck | slim | slim-lint | sql-sqlint | systemd-analyze | tex-chktex | tex-lacheck | texinfo | typescript-tslint | verilog-verilator | xml-xmlstarlet | xml-xmllint | yaml-jsyaml | yaml-ruby |
-
-   
 ** git-gutter-fringe
    #+BEGIN_SRC emacs-lisp :results output silent
   (use-package git-gutter-fringe
@@ -436,7 +428,6 @@
           )
 
     #+END_SRC
-    
     
 ** magit
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -793,7 +784,6 @@
                                 "0"         'dired-back-to-start-of-files
                                 (kbd "C-j") 'dired-next-subdir
                                 (kbd "C-k") 'dired-prev-subdir
-                                "I"         'vinegar/dotfiles-toggle
                                 (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
                                 (kbd "RET") 'dired-find-file-other-window
                                 "f"         'helm-find-files
@@ -809,21 +799,22 @@
 
      (define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
+*
 ** yasnippet
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;; (use-package yasnippet
-     ;;   :ensure t
-     ;;   :diminish ""
-     ;;   :config
-     ;;   (progn
-     ;;   (yas-global-mode 1)
-     ;;     (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
-     ;;     ))
+    #+BEGIN_SRC emacs-lisp :results output silent
+      ;; (use-package yasnippet
+      ;;   :ensure t
+      ;;   :diminish ""
+      ;;   :config
+      ;;   (progn
+      ;;   (yas-global-mode 1)
+      ;;     (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+      ;;     ))
 
-     ;; (use-package common-lisp-snippets
-     ;;   :ensure t
-     ;;   :config (require 'common-lisp-snippets))
-   #+END_SRC
+      ;; (use-package common-lisp-snippets
+      ;;   :ensure t
+      ;;   :config (require 'common-lisp-snippets))
+    #+END_SRC
    
 * languages
 ** clojure
