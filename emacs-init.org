@@ -70,11 +70,11 @@
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package evil-rsi 
-        :diminish ""
-        :ensure t 
-        :defer t 
-        :config (setq evil-rsi-mode 1) )  
+      ;; (use-package evil-rsi 
+      ;;   :diminish ""
+      ;;   :ensure t 
+      ;;   :defer t 
+      ;;   :config (setq evil-rsi-mode 1) )  
     #+END_SRC
     
 *** evil-org
