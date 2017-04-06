@@ -795,8 +795,8 @@
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package dired+
-:ensure t
-:defer t
+       :ensure t
+       :defer t
        :init
        (progn
          (setq diredp-hide-details-initially-flag t)
@@ -807,30 +807,28 @@
          (toggle-diredp-find-file-reuse-dir 1)
          ))
 
-
      (use-package dired
        :defer t
        :config
-       (evilified-state-evilify dired-mode dired-mode-map
-                                "j"         'evil-next-line
-                                "k"         'evil-previous-line
-                                "-"         'dired-up-directory
-                                "0"         'dired-back-to-start-of-files
-                                (kbd "C-j") 'dired-next-subdir
-                                (kbd "C-k") 'dired-prev-subdir
-                                (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
-                                (kbd "RET") 'dired-find-file-other-window
-                                "f"         'helm-find-files
-                                "J"         'dired-goto-file
-                                (kbd "C-f") 'find-name-dired
-                                "H"         'diredp-dired-recent-dirs
-                                "T"         'dired-tree-down
-                                "K"         'dired-do-kill-lines
-                                "r"         'revert-buffer
-                                (kbd "C-r") 'dired-do-redisplay
-                                "gg"        'evil-goto-first-line
-                                "G"         'evil-goto-line))
-
+       (general-define-key
+        :keymaps '(dired-mode-map)
+        "j"         'evil-next-line
+        "k"         'evil-previous-line
+        "-"         'dired-up-directory
+        "0"         'dired-back-to-start-of-files
+        (kbd "C-j") 'dired-next-subdir
+        (kbd "C-k") 'dired-prev-subdir
+        (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+        (kbd "RET") 'dired-find-file-other-window
+        "f"         'helm-find-files
+        "J"         'dired-goto-file
+        (kbd "C-f") 'find-name-dired
+        "H"         'diredp-dired-recent-dirs
+        "T"         'dired-tree-down
+        "K"         'dired-do-kill-lines
+        "r"         'revert-buffer
+        (kbd "C-r") 'dired-do-redisplay
+        "G"         'evil-goto-line))
      (define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
 *
@@ -849,7 +847,7 @@
       ;;   :ensure t
       ;;   :config (require 'common-lisp-snippets))
     #+END_SRC
-   
+    
 * languages
 ** clojure
    
@@ -1526,7 +1524,7 @@ about what flexible matching means in this context."
     ;; (add-to-list 'load-path  "~/Projects/elisp/mu4e-multi/" )
     ;;       (require 'mu4e-multi)
   #+END_SRC
-
+  
   #+BEGIN_SRC emacs-lisp :results output silent
     (let ((mu-bin (if (eq system-type 'darwin)
                       "/usr/local/bin/mu"
