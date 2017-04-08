@@ -2,6 +2,8 @@
 #+AUTHOR: logan mohseni
 #+EMAIL: mohsenil85@gmail.com 
 
+* todo
+http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
 
 * package config 
   #+BEGIN_SRC emacs-lisp :results output silent
