@@ -141,7 +141,9 @@
        :ensure t
        ;;:defer t
        :commands (elfeed-search-mode elfeed-show-mode)
-       :init (use-package elfeed-goodies :ensure t)
+       :init (progn
+               (use-package elfeed-goodies :ensure t)
+               (use-package elfeed-org :ensure t))
        :config
        (progn
          (require 'elfeed-goodies)
@@ -149,61 +151,18 @@
          (setq 
           elfeed-goodies/powerline-default-separator nil
           elfeed-goodies/entry-pane-position 'bottom)
-         (setq elfeed-feeds
-               '("http://feeds.igvita.com/igvita"
-                 "http://www.tor.com/series/words-of-radiance-reread-on-torcom/feed/"
-                 ("http://nedroid.com/feed/" comic)
-                 ("http://webcomicname.com/rss" comic)
-                 ("http://crawdadswelcome.tumblr.com/rss" comic)
-                 ("http://moonbeard.com/feed/atom/" comic)
-                 ("http://gunshowcomic.com/rss.xml" comic)
-                 ("http://www.goyedogs.com/rss" comic)
-                 ("http://sticksangelica.tumblr.com/rss" comic)
-                 "http://feeds2.feedburner.com/MachineLearningtheory"
-                 "http://infostructuralist.wordpress.com/"
-                 "http://nlpers.blogspot.com/feeds/posts/default"
-                 "http://emacshorrors.com/feed.atom"
-                 ("http://feeds.feedburner.com/thunderpaw?format=xml" comic)
-                 ("http://studygroupcomics.com/main/feed/rss/" comic)
-                 ("http://www.destructorcomics.com/?feed=rss" comic)
-                 ("http://garfieldminusgarfield.net/rss" comic)
-                 "http://www.tor.com/category/all-fiction/feed"
-                 "http://nullprogram.com/feed/"
-                 "http://blog.funcall.org/feed.xml"
-                 ("http://owlturd.com/rss" comic)
-                 "http://planet.lisp.org/rss20.xml"
-                 "http://planet.clojure.in/atom.xml"
-                 "http://cartographerswithoutborders.org/rss"
-                 "http://irreal.org/blog/?feed=rss2"
-                 "http://endlessparentheses.com/atom.xml"
-                 "http://www.newyorker.com/feed/articles"
-                 ("http://www.lunarbaboon.com/comics/rss.xml" comic)
-                 "http://pragmaticemacs.com/feed/"
-                 "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/"
-                 "http://lisptips.com/rss"
-                 "http://what-if.xkcd.com/feed.atom"
-                 ("http://xkcd.com/rss.xml" comic)
-                 ("http://www.smbc-comics.com/rss.php" comic)
-                 ("http://www.qwantz.com/rssfeed.php" comic)
-                 "http://languagelog.ldc.upenn.edu/nll/?feed=rss2"
-                 "http://english.bouletcorp.com/feed/"
-                 ("http://pbfcomics.com/feed/feed.xml" comic)
-                 "http://thecodelesscode.com/rss"
-                 "http://bldgblog.blogspot.com/atom.xml"
-                 "http://divisbyzero.com/feed/"
-                 "http://blog.fogus.me/feed/"
-                 "http://blog.tanyakhovanova.com/?feed=rss"))
+         
          (setq elfeed-db-directory "~/.emacs.d/elfeed")
-        ;; (add-hook 'elfeed-show-mode-hook '(lambda()(evil-emacs-state)))
+         (add-hook 'elfeed-show-mode-hook '(lambda()(imagex-sticky-mode)))
          (add-hook 'elfeed-search-mode-hook '(lambda()(evil-emacs-state)))
 
          ;;(evil-set-initial-state 'elfeed-show 'emacs)
-         ;;(evil-set-initial-state 'elfeed-search 'emacs)
+         (evil-set-initial-state 'elfeed-search 'emacs)
          ;; (setq evil-motion-state-modes 
          ;;       (append evil-motion-state-modes
          ;;               '(elfeed-search-mode elfeed-show-mode)))
          (general-define-key
-          :keymaps '(elfeed-search-mode-map elfeed-show-mode-map)
+          :keymaps '(elfeed-search-mode-map )
            :state '(emacs) 
           "+"   'elfeed-show-tag
           "-"   'elfeed-show-untag
@@ -211,8 +170,8 @@
           "r"   'elfeed-update
           "j"   'next-line
           "k"   'previous-line
-          "l"   'forward-char
-          "h"   'backward-char
+          "l"   'end-of-buffer
+          "h"   'beginning-of-buffer 
           "w"   'forward-word
           "b"   'backward-word
           "/"   'isearch-forward-regexp
@@ -220,21 +179,41 @@
           "C-k" 'elfeed-goodies/split-show-prev
           "RET" 'elfeed-goodies/split-search-show-entry
           "SPC" 'evil-scroll-page-down
+          "DEL" 'evil-scroll-page-up) 
+     (general-define-key
+          :keymaps '(elfeed-show-mode-map )
+           :state '(normal) 
+          "+"   'elfeed-show-tag
+          "-"   'elfeed-show-untag
+          "u"   'elfeed-update
+          "r"   'elfeed-update
+          ;; "j"   'next-line
+          ;; "k"   'previous-line
+          ;; "l"   'forward-char
+          ;; "h"   'backward-char
+          ;; "w"   'forward-word
+          ;; "b"   'backward-word
+          ;; "/"   'isearch-forward-regexp
+          "C-j" 'elfeed-goodies/split-show-next
+          "C-k" 'elfeed-goodies/split-show-prev
+          "RET" 'elfeed-goodies/split-search-show-entry
+          "SPC" 'evil-scroll-page-down
           "DEL" 'evil-scroll-page-up)
-
-         )
+         (require 'elfeed-org)
+         (elfeed-org)
+         (setq rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
        :bind
        ("C-c e" . elfeed))
 
 
 
    #+END_SRC
-   
+** 
 ** evil-magit
    #+BEGIN_SRC emacs-lisp :results output silent
 
+
    #+END_SRC
-   
 ** flx
    #+BEGIN_SRC emacs-lisp :results output silent
      ;(use-package flx :ensure t)
