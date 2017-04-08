@@ -1526,7 +1526,7 @@ about what flexible matching means in this context."
                  send-mail-function 'message-send-mail-with-sendmail
                  message-send-mail-function 'message-send-mail-with-sendmail
                  sendmail-program "/usr/local/bin/msmtp"
-                 mu4e-get-mail-command "mbsync -aqq "
+                 mu4e-get-mail-command "mbsync -a"
                  mu4e-html2text-command "w3m -T text/html"
                  mu4e-update-interval 120
                  mu4e-headers-auto-update t
@@ -1540,11 +1540,7 @@ about what flexible matching means in this context."
                  mu4e-headers-skip-duplicates t)
                 (when (fboundp 'imagemagick-register-types)
                   (imagemagick-register-types))
-                (general-define-key
-                 :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
-                 :states 'motion
-                 "SPC" 'evil-scroll-page-down
-                 "DEL" 'evil-scroll-page-up))
+                )
         :config
         (progn
           (require 'mu4e-contrib)
@@ -1571,11 +1567,6 @@ about what flexible matching means in this context."
                             (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail/")
                             (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")
                             (mu4e-compose-signature . nil)
-                            (mu4e-maildir-shortcuts . ( ("/gmail/Inbox" . ?i)
-                                                        ("/gmail/[Gmail]/.Sent Mail" . ?s)
-                                                        ("/gmail/[Gmail]/.Trash" . ?t)
-                                                        ("/gmail/[Gmail]/.All Mail" . ?a)
-                                                        ("/gmail/[Gmail]/.Drafts" . ?d)))
                             ))
                   ,(make-mu4e-context
                     :name "work"
@@ -1599,14 +1590,11 @@ about what flexible matching means in this context."
                             (mu4e-compose-signature .
                                                     "<#part type=text/html> <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html\; charset=utf-8\"> <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"> <title></title> <meta name=\"Generator\" content=\"Cocoa HTML Writer\"> <meta name=\"CocoaVersion\" content=\"1504.81\"> <style type=\"text/css\"> p.p1 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 14.0px\; font: 12.0px Arial\; color: #38678f\; -webkit-text-stroke: #38678f} p.p2 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 15.0px\; font: 12.0px Arial\; color: #666666\; -webkit-text-stroke: #666666} span.s1 {font-kerning: none} span.s2 {font: 13.0px 'Trebuchet MS'\; font-kerning: none} span.s3 {font: 13.0px 'Trebuchet MS'\; font-kerning: none\; color: #ff931e\; -webkit-text-stroke: 0px #ff931e} span.s4 {font-kerning: none\; color: #000000\; -webkit-text-stroke: 0px #000000} span.s5 {font-kerning: none\; color: #666666\; -webkit-text-stroke: 0px #666666} </style> </head> <body> <p class=\"p1\"><span class=\"s1\">Logan Mohseni | <i>Software Developer</i></span></p> <p class=\"p2\"><span class=\"s2\"><b>single</b></span><span class=\"s3\"><b>mind |</b></span><span class=\"s4\"> </span><span class=\"s1\"><b><i>research • design • build • support</i></b></span></p> <p class=\"p1\"><span class=\"s1\">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p> <p class=\"p1\"><span class=\"s5\"><b>Tel</b></span><span class=\"s1\">: 503.342.8270 | </span><span class=\"s5\"><b>Mobile</b></span><span class=\"s1\">: 307.751.4050</span></p> <p class=\"p1\"><span class=\"s5\"><b>@</b></span><span class=\"s1\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\">logan.mohseni@singlemindconsulting.com</a></span><span class=\"s4\"><span class=\"Apple-converted-space\"> </span></span></p> </body> </html> <#/part>" 
                                                     )
-
-                            
-                            (mu4e-maildir-shortcuts .
-                                                    ( ("/work/Inbox"        . ?i)
-                                                      ("/work/[Gmail]/.Sent Mail"  . ?s)
-                                                      ("/work/[Gmail]/.Trash"        . ?t)
-                                                      ("/work/[Gmail]/.All Mail"        . ?a)
-                                                      ("/work/[Gmail]/.Drafts"       . ?d))))))) 
+                            )))) 
+          (general-define-key
+           :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
+           "SPC" 'evil-scroll-page-down
+           "DEL" 'evil-scroll-page-up)
           )
         :bind ("C-c m" . mu4e)
         ))
