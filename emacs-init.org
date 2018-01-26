@@ -22,7 +22,6 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
   #+END_SRC
 * packages
 ** diminish
-** term
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package diminish :ensure t :defer t)
    #+END_SRC
@@ -135,8 +134,8 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 
 ** evil-evilified-state
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package evil-evilified-state
-       :load-path "~/Projects/elisp/evil-evilified-state/")
+;;   (use-package evil-evilified-state
+;;   :load-path "~/Projects/elisp/evil-evilified-state/")
 
    #+END_SRC
 ** elfeed
@@ -212,7 +211,7 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 
 
    #+END_SRC
-** 
+*** 
 ** evil-magit
    #+BEGIN_SRC emacs-lisp :results output silent
 
@@ -581,7 +580,7 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
       'org-babel-load-languages
       '(
         (lisp . t)
-        (sh . t)
+        (shell . t)
         (python . t)
         ))
 
@@ -769,40 +768,41 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package dired+
-       :ensure t
+       ;; :ensure t
+       :load-path "~/.emacs.d/vendor"
        :defer t
-       :init
+       :config
        (progn
-         (setq diredp-hide-details-initially-flag t)
-         (setq diredp-hide-details-propagate-flag t)
-         ;; use single buffer for all dired navigation
-         ;; disable font themeing from dired+
-         (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
-         (toggle-diredp-find-file-reuse-dir 1)
-         ))
+	 (setq diredp-hide-details-initially-flag t)
+	 (setq diredp-hide-details-propagate-flag t)
+	 ;; use single buffer for all dired navigation
+	 ;; disable font themeing from dired+
+	 (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
+	 (toggle-diredp-find-file-reuse-dir 1)
+	 ))
 
      (use-package dired
        :defer t
        :config
        (general-define-key
-        :keymaps '(dired-mode-map)
-        "j"         'evil-next-line
-        "k"         'evil-previous-line
-        "-"         'dired-up-directory
-        "0"         'dired-back-to-start-of-files
-        (kbd "C-j") 'dired-next-subdir
-        (kbd "C-k") 'dired-prev-subdir
-        (kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
-        (kbd "RET") 'dired-find-file-other-window
-        "f"         'helm-find-files
-        "J"         'dired-goto-file
-        (kbd "C-f") 'find-name-dired
-        "H"         'diredp-dired-recent-dirs
-        "T"         'dired-tree-down
-        "K"         'dired-do-kill-lines
-        "r"         'revert-buffer
-        (kbd "C-r") 'dired-do-redisplay
-        "G"         'evil-goto-line))
+	:keymaps '(dired-mode-map)
+	"j"         'evil-next-line
+	"k"         'evil-previous-line
+	"-"         'dired-up-directory
+	"0"         'dired-back-to-start-of-files
+	(kbd "C-j") 'dired-next-subdir
+	(kbd "C-k") 'dired-prev-subdir
+	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+	(kbd "RET") 'dired-find-file-other-window
+	"f"         'helm-find-files
+	"J"         'dired-goto-file
+	(kbd "C-f") 'find-name-dired
+	"H"         'diredp-dired-recent-dirs
+	"T"         'dired-tree-down
+	"K"         'dired-do-kill-lines
+	"r"         'revert-buffer
+	(kbd "C-r") 'dired-do-redisplay
+	"G"         'evil-goto-line))
      (define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
 *
@@ -821,7 +821,14 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
       ;;   :ensure t
       ;;   :config (require 'common-lisp-snippets))
     #+END_SRC
-    
+* local packages
+  add the vendor directory to the load path
+
+   #+BEGIN_SRC emacs-lisp :results output silent
+        (let ((default-directory "~/.emacs.d/vendor/"))
+          (normal-top-level-add-subdirs-to-load-path))
+   #+END_SRC
+
 * languages
 ** clojure
    
@@ -1507,7 +1514,7 @@ about what flexible matching means in this context."
                             "/usr/local/share/emacs/site-lisp/mu/mu4e/"
                           "/usr/share/emacs/site-lisp/mu4e/") ))
       (use-package mu4e  
-        :load-path mu-load-path
+        ;;:load-path mu-load-path
         :commands (make-mu4e-context)
         :init (progn
                 (setq
