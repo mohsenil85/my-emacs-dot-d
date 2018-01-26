@@ -57,3 +57,4 @@ url*
 /meghanada/meghanada-0.6.0.jar
 *.gpg
 /emojis/*
+/session.*
