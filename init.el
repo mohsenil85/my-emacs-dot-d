@@ -9,9 +9,39 @@
 ;(benchmark-init/activate)
 
 
-(setq custom-file "~/.emacs.d/customizations.el")
-(load-file custom-file)
-(load-file "~/.emacs.d/recentf" )
+(setq package-enable-at-startup nil)
+(setq inhibit-startup-buffer-menu t)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message "lmohseni")
+(setq initial-buffer-choice t)
+(setq initial-scratch-message ":D")
+(setq load-prefer-newer t)
+(setq visible-bell t)
+(scroll-bar-mode 0)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+
+
+(setq package-archives '(("gnu"       . "https://elpa.gnu.org/packages/")
+			 ("melpa"     . "https://melpa.org/packages/")
+			 ("org"       . "http://orgmode.org/elpa/")
+			 ))
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
+
+;(use-package no-littering :ensure t)
+(use-package evil :ensure t :config (evil-mode 1))
+(use-package org :ensure org-plus-contrib)
+
+(use-package better-defaults :ensure t :defer t )
+
+
 (require 'ob-tangle)
 ;(setq debug-on-error t)
 (org-babel-load-file
