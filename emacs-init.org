@@ -7,16 +7,18 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 
 * package config 
   #+BEGIN_SRC emacs-lisp :results output silent
-      (setq package-enable-at-startup nil)
-      (setq package-archives '(("gnu"       . "https://elpa.gnu.org/packages/")
-                               ("melpa"     . "https://melpa.org/packages/")))
-      (package-initialize)
-
-      (unless (package-installed-p 'use-package)
-        (package-refresh-contents)
-        (package-install 'use-package))
-
-      (require 'use-package)
+;;      (setq package-enable-at-startup nil)
+;;      (setq package-archives '(("gnu"       . "https://elpa.gnu.org/packages/")
+;;                               ("melpa"     . "https://melpa.org/packages/")
+;;			       ("org"         . "http://orgmode.org/elpa/")
+;;			       ))
+;;      (package-initialize)
+;;
+;;      (unless (package-installed-p 'use-package)
+;;        (package-refresh-contents)
+;;        (package-install 'use-package))
+;;
+;;      (require 'use-package)
   #+END_SRC
 * packages
 ** diminish
@@ -458,7 +460,7 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package org 
        :ensure
-:diminish ""
+       :diminish ""
        :config
        (progn
          (setq org-catch-invisible-edits t)
