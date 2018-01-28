@@ -3,7 +3,7 @@
 #+EMAIL: mohsenil85@gmail.com 
 
 * todo
-http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
+  http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
 
 * package config 
   #+BEGIN_SRC emacs-lisp :results output silent
@@ -25,17 +25,22 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package diminish :ensure t :defer t)
    #+END_SRC
+** exwm
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package exwm :ensure t :defer t 
+       :config (exwm-config-default))
+   #+END_SRC
 ** term
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package term
-                  :bind (("C-c t" . term)
-                         :map term-mode-map
-                         ("M-p" . term-send-up)
-                         ("M-n" . term-send-down)
-                         :map term-raw-map
-                         ("M-o" . other-window)
-                         ("M-p" . term-send-up)
-                         ("M-n" . term-send-down)))
+		  :bind (("C-c t" . term)
+			 :map term-mode-map
+			 ("M-p" . term-send-up)
+			 ("M-n" . term-send-down)
+			 :map term-raw-map
+			 ("M-o" . other-window)
+			 ("M-p" . term-send-up)
+			 ("M-n" . term-send-down)))
    #+END_SRC
 ** no-littering
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -60,14 +65,14 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 ** evil
 *** main evil
     #+BEGIN_SRC emacs-lisp :results output silent
-      (use-package evil
-                   :ensure t
-                   :config
-                   (progn
-                     (evil-set-initial-state 'snake-mode 'emacs) 
-                     (evil-mode 1))
-                   :bind
-                   ("S-SPC" . evil-exit-emacs-state))
+;;      (use-package evil
+;;                   :ensure t
+;;                   :config
+;;                   (progn
+;;                     (evil-set-initial-state 'snake-mode 'emacs) 
+;;                     (evil-mode 1))
+;;                   :bind
+;;                   ("S-SPC" . evil-exit-emacs-state))
     #+END_SRC
     
     
@@ -145,66 +150,66 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        ;;:defer t
        :commands (elfeed-search-mode elfeed-show-mode)
        :init (progn
-               (use-package elfeed-goodies :ensure t)
-               (use-package elfeed-org :ensure t))
+	       (use-package elfeed-goodies :ensure t)
+	       (use-package elfeed-org :ensure t))
        :config
        (progn
-         (require 'elfeed-goodies)
-         (elfeed-goodies/setup)
-         (setq 
-          elfeed-goodies/powerline-default-separator nil
-          elfeed-goodies/entry-pane-position 'bottom)
-         
-         (setq elfeed-db-directory "~/.emacs.d/elfeed")
-         (add-hook 'elfeed-show-mode-hook '(lambda()(imagex-sticky-mode)))
-         (add-hook 'elfeed-search-mode-hook '(lambda()(evil-emacs-state)))
+	 (require 'elfeed-goodies)
+	 (elfeed-goodies/setup)
+	 (setq 
+	  elfeed-goodies/powerline-default-separator nil
+	  elfeed-goodies/entry-pane-position 'bottom)
+	 
+	 (setq elfeed-db-directory "~/.emacs.d/elfeed")
+	 (add-hook 'elfeed-show-mode-hook '(lambda()(imagex-sticky-mode)))
+	 (add-hook 'elfeed-search-mode-hook '(lambda()(evil-emacs-state)))
 
-         ;;(evil-set-initial-state 'elfeed-show 'emacs)
-         (evil-set-initial-state 'elfeed-search 'emacs)
-         ;; (setq evil-motion-state-modes 
-         ;;       (append evil-motion-state-modes
-         ;;               '(elfeed-search-mode elfeed-show-mode)))
-         (general-define-key
-          :keymaps '(elfeed-search-mode-map )
-           :state '(emacs) 
-          "+"   'elfeed-show-tag
-          "-"   'elfeed-show-untag
-          "u"   'elfeed-update
-          "r"   'elfeed-update
-          "j"   'next-line
-          "k"   'previous-line
-          "l"   'end-of-buffer
-          "h"   'beginning-of-buffer 
-          "w"   'forward-word
-          "b"   'backward-word
-          "/"   'isearch-forward-regexp
-          "C-j" 'elfeed-goodies/split-show-next
-          "C-k" 'elfeed-goodies/split-show-prev
-          "RET" 'elfeed-goodies/split-search-show-entry
-          "SPC" 'evil-scroll-page-down
-          "DEL" 'evil-scroll-page-up) 
+	 ;;(evil-set-initial-state 'elfeed-show 'emacs)
+;;         (evil-set-initial-state 'elfeed-search 'emacs)
+	 ;; (setq evil-motion-state-modes 
+	 ;;       (append evil-motion-state-modes
+	 ;;               '(elfeed-search-mode elfeed-show-mode)))
+	 (general-define-key
+	  :keymaps '(elfeed-search-mode-map )
+	   :state '(emacs) 
+	  "+"   'elfeed-show-tag
+	  "-"   'elfeed-show-untag
+	  "u"   'elfeed-update
+	  "r"   'elfeed-update
+	  "j"   'next-line
+	  "k"   'previous-line
+	  "l"   'end-of-buffer
+	  "h"   'beginning-of-buffer 
+	  "w"   'forward-word
+	  "b"   'backward-word
+	  "/"   'isearch-forward-regexp
+	  "C-j" 'elfeed-goodies/split-show-next
+	  "C-k" 'elfeed-goodies/split-show-prev
+	  "RET" 'elfeed-goodies/split-search-show-entry
+	  "SPC" 'evil-scroll-page-down
+	  "DEL" 'evil-scroll-page-up) 
      (general-define-key
-          :keymaps '(elfeed-show-mode-map )
-           :state '(normal) 
-          "+"   'elfeed-show-tag
-          "-"   'elfeed-show-untag
-          "u"   'elfeed-update
-          "r"   'elfeed-update
-          ;; "j"   'next-line
-          ;; "k"   'previous-line
-          ;; "l"   'forward-char
-          ;; "h"   'backward-char
-          ;; "w"   'forward-word
-          ;; "b"   'backward-word
-          ;; "/"   'isearch-forward-regexp
-          "C-j" 'elfeed-goodies/split-show-next
-          "C-k" 'elfeed-goodies/split-show-prev
-          "RET" 'elfeed-goodies/split-search-show-entry
-          "SPC" 'evil-scroll-page-down
-          "DEL" 'evil-scroll-page-up)
-         (require 'elfeed-org)
-         (elfeed-org)
-         (setq rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
+	  :keymaps '(elfeed-show-mode-map )
+	   :state '(normal) 
+	  "+"   'elfeed-show-tag
+	  "-"   'elfeed-show-untag
+	  "u"   'elfeed-update
+	  "r"   'elfeed-update
+	  ;; "j"   'next-line
+	  ;; "k"   'previous-line
+	  ;; "l"   'forward-char
+	  ;; "h"   'backward-char
+	  ;; "w"   'forward-word
+	  ;; "b"   'backward-word
+	  ;; "/"   'isearch-forward-regexp
+	  "C-j" 'elfeed-goodies/split-show-next
+	  "C-k" 'elfeed-goodies/split-show-prev
+	  "RET" 'elfeed-goodies/split-search-show-entry
+	  "SPC" 'evil-scroll-page-down
+	  "DEL" 'evil-scroll-page-up)
+	 (require 'elfeed-org)
+	 (elfeed-org)
+	 (setq rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
        :bind
        ("C-c e" . elfeed))
 
@@ -232,16 +237,16 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
       (add-hook 'after-init-hook 'global-flycheck-mode)))
       
 
-(flycheck-define-checker proselint
-  "A linter for prose."
-  :command ("proselint" source-inplace)
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":" column ": "
-        (id (one-or-more (not (any " "))))
-        (message) line-end))
-  :modes (text-mode markdown-mode gfm-mode))
-
-(add-to-list 'flycheck-checkers 'proselint)
+;;(flycheck-define-checker proselint
+;;  "A linter for prose."
+;;  :command ("proselint" source-inplace)
+;;  :error-patterns
+;;  ((warning line-start (file-name) ":" line ":" column ": "
+;;        (id (one-or-more (not (any " "))))
+;;        (message) line-end))
+;;  :modes (text-mode markdown-mode gfm-mode))
+;;
+;;(add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
 ** git-gutter-fringe
@@ -265,59 +270,59 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
    - C-h w, which runs where-is
 *** helm proper
     #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package helm
-            :ensure t
-            :diminish ""
-            :config
-            (progn
-              (require 'helm)
-              (require 'helm-config)
-              (setq helm-ff-transformer-show-only-basename nil)
-              (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+	  (use-package helm
+	    :ensure t
+	    :diminish ""
+	    :config
+	    (progn
+	      (require 'helm)
+	      (require 'helm-config)
+	      (setq helm-ff-transformer-show-only-basename nil)
+	      (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
       
       
-              (setq helm-M-x-fuzzy-match t)
-              (setq helm-recentf-fuzzy-match t)
-              (setq helm-mode-fuzzy-match t)
-              (setq helm-buffers-fuzzy-matching t)
-              (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
-              (setq helm-move-to-line-cycle-in-source t)
+	      (setq helm-M-x-fuzzy-match t)
+	      (setq helm-recentf-fuzzy-match t)
+	      (setq helm-mode-fuzzy-match t)
+	      (setq helm-buffers-fuzzy-matching t)
+	      (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
+	      (setq helm-move-to-line-cycle-in-source t)
       
-              
-              (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-              (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-              (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-              ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-              (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
+	      
+	      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+	      (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+	      (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+	      ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+	      (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
       
-              (autoload 'helm-descbinds      "helm-descbinds" t)
-              (autoload 'helm-eshell-history "helm-eshell"    t)
-              (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
+	      (autoload 'helm-descbinds      "helm-descbinds" t)
+	      (autoload 'helm-eshell-history "helm-eshell"    t)
+	      (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
       
-              (setq helm-autoresize-mode t)
-              (setq helm-split-window-in-side-p t)
-              (setq helm-ff-file-name-history-use-recentf t)
-              (setq helm-autoresize-mode t)
+	      (setq helm-autoresize-mode t)
+	      (setq helm-split-window-in-side-p t)
+	      (setq helm-ff-file-name-history-use-recentf t)
+	      (setq helm-autoresize-mode t)
       
       (global-set-key (kbd "C-c h g") 'helm-google-suggest)
       (global-set-key (kbd "C-c h r") 'helm-register)
-              (helm-mode 1))
-            :bind
-            (("M-x" . helm-M-x)
-             ("C-x b" . helm-mini)
-             ("C-h SPC" . helm-all-mark-rings)
-             ("C-x C-b" . helm-buffers-list)
-             ("C-x C-r" . helm-recentf)
-             ("M-y" . helm-show-kill-ring)
-             ("C-x C-f" . helm-find-files)
-             ("M-s o" . helm-occur)))
+	      (helm-mode 1))
+	    :bind
+	    (("M-x" . helm-M-x)
+	     ("C-x b" . helm-mini)
+	     ("C-h SPC" . helm-all-mark-rings)
+	     ("C-x C-b" . helm-buffers-list)
+	     ("C-x C-r" . helm-recentf)
+	     ("M-y" . helm-show-kill-ring)
+	     ("C-x C-f" . helm-find-files)
+	     ("M-s o" . helm-occur)))
       
-          (use-package helm-descbinds :ensure t :defer t :config
-            (progn
-              (require 'helm-descbinds)
-              (helm-descbinds-mode)
-              )
-            )
+	  (use-package helm-descbinds :ensure t :defer t :config
+	    (progn
+	      (require 'helm-descbinds)
+	      (helm-descbinds-mode)
+	      )
+	    )
 
     #+END_SRC
     
@@ -375,43 +380,43 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 *** helm-ack
     #+BEGIN_SRC emacs-lisp :results output silent
       (use-package helm-ack
-        :ensure t :defer t)
-          
+	:ensure t :defer t)
+	  
     #+END_SRC
 *** helm-gtags 
     #+BEGIN_SRC emacs-lisp :results output silent
-        (use-package helm-gtags
-          :ensure t
-          :defer t
-          :config
-          (progn
-            ;;; Enable helm-gtags-mode
-            (add-hook 'c-mode-hook 'helm-gtags-mode)
-            (add-hook 'c++-mode-hook 'helm-gtags-mode)
-            (add-hook 'asm-mode-hook 'helm-gtags-mode)
-            (add-hook 'java-mode-hook 'helm-gtags-mode)
+	(use-package helm-gtags
+	  :ensure t
+	  :defer t
+	  :config
+	  (progn
+	    ;;; Enable helm-gtags-mode
+	    (add-hook 'c-mode-hook 'helm-gtags-mode)
+	    (add-hook 'c++-mode-hook 'helm-gtags-mode)
+	    (add-hook 'asm-mode-hook 'helm-gtags-mode)
+	    (add-hook 'java-mode-hook 'helm-gtags-mode)
 
-            ;; customize
-            (setq
-             helm-gtags-path-style 'relative)
+	    ;; customize
+	    (setq
+	     helm-gtags-path-style 'relative)
       (setq  
-             helm-gtags-auto-update t) 
+	     helm-gtags-auto-update t) 
 
-          (setq helm-gtags-prefix-key "C-t")
+	  (setq helm-gtags-prefix-key "C-t")
     ;      (helm-gtags-suggested-key-mapping t)
-            ;; key bindings
-            (eval-after-load "helm-gtags"
-              '(progn
-                 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-                 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-                 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-                 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-                 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-                 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-                 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+	    ;; key bindings
+	    (eval-after-load "helm-gtags"
+	      '(progn
+		 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+		 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+		 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+		 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+		 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+		 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+		 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
 
-          
-          )
+	  
+	  )
 
     #+END_SRC
     
@@ -422,18 +427,18 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        :defer t
        :config       
        (progn
-         (add-hook 'with-editor-mode-hook 'evil-insert-state)
-         (use-package evil-magit :ensure t ))
+	 (add-hook 'with-editor-mode-hook 'evil-insert-state)
+	 (use-package evil-magit :ensure t ))
 
        :bind ("C-x g" . magit-status))
    #+END_SRC
    
 ** Misc packages
    #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package ag :ensure t :defer t)
-          ;;(use-package ggtags :ensure)
-          (use-package markdown-mode :ensure t :defer t)
-          (use-package tex :ensure auctex :defer t  :config (require 'tex) )
+	  (use-package ag :ensure t :defer t)
+	  ;;(use-package ggtags :ensure)
+	  (use-package markdown-mode :ensure t :defer t)
+	  (use-package tex :ensure auctex :defer t  :config (require 'tex) )
 
 (add-hook 'LaTeX-mode-hook (lambda ()
   (push 
@@ -462,110 +467,110 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        :diminish ""
        :config
        (progn
-         (setq org-catch-invisible-edits t)
-         (setq org-M-RET-may-split-line nil)
-         (setq org-return-follows-link t)
-         (setq org-hide-leading-stars t)
-         (setq org-indent-mode t)
-         ;;(setq org-log-done 'note)
-         (setq org-log-into-drawer t)
-         (setq org-show-hierarchy-above (quote ((default . t))))
-         (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
-         (setq org-default-notes-file "~/org/organizer.org")
-         (setq  org-agenda-files (quote ("~/org")))
-         (setq  org-agenda-ndays 7)
-         (setq  org-deadline-warning-days 14)
-         (setq  org-agenda-show-all-dates t)
-         (setq  org-agenda-skip-deadline-if-done t)
-         (setq  org-agenda-skip-scheduled-if-done t)
-         (setq  org-agenda-start-on-weekday nil)
-         (setq  org-reverse-note-order t)
+	 (setq org-catch-invisible-edits t)
+	 (setq org-M-RET-may-split-line nil)
+	 (setq org-return-follows-link t)
+	 (setq org-hide-leading-stars t)
+	 (setq org-indent-mode t)
+	 ;;(setq org-log-done 'note)
+	 (setq org-log-into-drawer t)
+	 (setq org-show-hierarchy-above (quote ((default . t))))
+	 (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
+	 (setq org-default-notes-file "~/org/organizer.org")
+	 (setq  org-agenda-files (quote ("~/org")))
+	 (setq  org-agenda-ndays 7)
+	 (setq  org-deadline-warning-days 14)
+	 (setq  org-agenda-show-all-dates t)
+	 (setq  org-agenda-skip-deadline-if-done t)
+	 (setq  org-agenda-skip-scheduled-if-done t)
+	 (setq  org-agenda-start-on-weekday nil)
+	 (setq  org-reverse-note-order t)
 
-         (setq org-todo-keywords
-               (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                       (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+	 (setq org-todo-keywords
+	       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+		       (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
-         
+	 
 
-         (setq org-todo-state-tags-triggers
-               (quote (("CANCELLED" ("CANCELLED" . t))
-                       ("WAITING" ("WAITING" . t))
-                       ("HOLD" ("WAITING") ("HOLD" . t))
-                       (done ("WAITING") ("HOLD"))
-                       ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                       ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                       ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-
-
-
-         ;;(setq org-agenda-start-with-follow-mode t)
-         (setq org-use-tag-inheritance t)
-         (setq org-capture-templates
-               (quote (("t" "todo" entry (file+headline "~/org/organizer.org" "inbox")
-                        "* TODO %?\n%U\n%a\n" )
-                       ("n" "note" entry (file+headline "~/org/organizer.org" "inbox")
-                        "* %? :NOTE:\n%U\n%a\n" )
-                       ("i" "idea" entry (file+headline "~/org/organizer.org" "ideas")
-                        "* %?\n" )
-                       ("n" "information" entry (file+headline "~/org/organizer.org" "information")
-                        "* %?\n" )
-                       ("s" "shopping" checkitem
-                        (file+headline "~/org/organizer.org" "shopping")
-                        "- [ ] %?\n")
-                       ("j" "journal" entry (file+datetree "~/org/organizer.org")
-                        "* %?\n %U\n  %i\n  %a")
-                       )))  
+	 (setq org-todo-state-tags-triggers
+	       (quote (("CANCELLED" ("CANCELLED" . t))
+		       ("WAITING" ("WAITING" . t))
+		       ("HOLD" ("WAITING") ("HOLD" . t))
+		       (done ("WAITING") ("HOLD"))
+		       ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+		       ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+		       ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 
-         ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
-         (setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                          (org-agenda-files :maxlevel . 9))))
-         ;; Use full outline paths for refile targets - we file directly with IDO
-         (setq org-refile-use-outline-path t)
-         ;; Targets complete directly with IDO
-                                             ;(setq org-outline-path-complete-in-steps nil)
-         ;; Allow refile to create parent tasks with confirmation
-         (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
-         
-         (setq org-mobile-inbox-for-pull "~/org/flagged.org")
+	 ;;(setq org-agenda-start-with-follow-mode t)
+	 (setq org-use-tag-inheritance t)
+	 (setq org-capture-templates
+	       (quote (("t" "todo" entry (file+headline "~/org/organizer.org" "inbox")
+			"* TODO %?\n%U\n%a\n" )
+		       ("n" "note" entry (file+headline "~/org/organizer.org" "inbox")
+			"* %? :NOTE:\n%U\n%a\n" )
+		       ("i" "idea" entry (file+headline "~/org/organizer.org" "ideas")
+			"* %?\n" )
+		       ("n" "information" entry (file+headline "~/org/organizer.org" "information")
+			"* %?\n" )
+		       ("s" "shopping" checkitem
+			(file+headline "~/org/organizer.org" "shopping")
+			"- [ ] %?\n")
+		       ("j" "journal" entry (file+datetree "~/org/organizer.org")
+			"* %?\n %U\n  %i\n  %a")
+		       )))  
 
-         (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
+
+	 ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+	 (setq org-refile-targets (quote ((nil :maxlevel . 9)
+					  (org-agenda-files :maxlevel . 9))))
+	 ;; Use full outline paths for refile targets - we file directly with IDO
+	 (setq org-refile-use-outline-path t)
+	 ;; Targets complete directly with IDO
+					     ;(setq org-outline-path-complete-in-steps nil)
+	 ;; Allow refile to create parent tasks with confirmation
+	 (setq org-refile-allow-creating-parent-nodes (quote confirm))
+
+	 
+	 (setq org-mobile-inbox-for-pull "~/org/flagged.org")
+
+	 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
        (defvar my-org-mobile-sync-timer nil)
 
        (defvar my-org-mobile-sync-secs (* 60 20))
 
        (defun my-org-mobile-sync-pull-and-push ()
-         (org-mobile-pull)
-         (org-mobile-push)
-         (when (fboundp 'sauron-add-event)
-           (sauron-add-event 'my 3 "Called org-mobile-pull and org-mobile-push")))
+	 (org-mobile-pull)
+	 (org-mobile-push)
+	 (when (fboundp 'sauron-add-event)
+	   (sauron-add-event 'my 3 "Called org-mobile-pull and org-mobile-push")))
 
        (defun my-org-mobile-sync-start ()
-         "Start automated `org-mobile-push'"
-         (interactive)
-         (setq my-org-mobile-sync-timer
-               (run-with-idle-timer my-org-mobile-sync-secs t
-                                    'my-org-mobile-sync-pull-and-push)))
+	 "Start automated `org-mobile-push'"
+	 (interactive)
+	 (setq my-org-mobile-sync-timer
+	       (run-with-idle-timer my-org-mobile-sync-secs t
+				    'my-org-mobile-sync-pull-and-push)))
 
        (defun my-org-mobile-sync-stop ()
-         "Stop automated `org-mobile-push'"
-         (interactive)
-         (cancel-timer my-org-mobile-sync-timer))
+	 "Stop automated `org-mobile-push'"
+	 (interactive)
+	 (cancel-timer my-org-mobile-sync-timer))
 
        (my-org-mobile-sync-start)
        )
        :bind (
-              ("C-c l" . org-store-link)
-              ("C-c a" . org-agenda)
-              ("C-c c" . org-capture)
-              ))
+	      ("C-c l" . org-store-link)
+	      ("C-c a" . org-agenda)
+	      ("C-c c" . org-capture)
+	      ))
 
      ;;put all DONE into archive
      (defun my-org-archive-done-tasks ()
        (interactive)
        (unless
-           (org-map-entries 'org-archive-subtree "/DONE" 'file)))
+	   (org-map-entries 'org-archive-subtree "/DONE" 'file)))
 
 
      ;; (add-hook 'org-mode-hook
@@ -579,10 +584,10 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
      (org-babel-do-load-languages
       'org-babel-load-languages
       '(
-        (lisp . t)
-        (shell . t)
-        (python . t)
-        ))
+	(lisp . t)
+	(shell . t)
+	(python . t)
+	))
 
    #+END_SRC
    
@@ -635,35 +640,35 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        :ensure t
        :config
        (progn
-         (projectile-global-mode)
-         (setq projectile-completion-system 'helm)
-         (setq projectile-create-missing-test-files t)
-         (setq projectile-switch-project-action 'projectile-dired)
-         (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
-         ))
+	 (projectile-global-mode)
+	 (setq projectile-completion-system 'helm)
+	 (setq projectile-create-missing-test-files t)
+	 (setq projectile-switch-project-action 'projectile-dired)
+	 (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
+	 ))
    #+END_SRC
    
 ** recursive narrow
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package recursive-narrow :ensure t :defer t
        :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
-              ("C-x n w" . recursive-widen-dwim)))
+	      ("C-x n w" . recursive-widen-dwim)))
    #+END_SRC
    
 ** sentence navigation
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package sentence-navigation
-        :ensure t
-        :defer t
-        :bind (:map evil-motion-state-map 
-                    ((")" . sentence-nav-evil-forward)
-                     ("(" . sentence-nav-evil-backward)
-                     ("g(" . sentence-nav-evil-backward-end)
-                     ("g)" . sentence-nav-evil-forward-end)))
-        :config
-        (progn
-          (define-key evil-outer-text-objects-map "s" 'sentence-nav-evil-a-sentence)
-          (define-key evil-inner-text-objects-map "s" 'sentence-nav-evil-inner-sentence))
+	:ensure t
+	:defer t
+	:bind (:map evil-motion-state-map 
+		    ((")" . sentence-nav-evil-forward)
+		     ("(" . sentence-nav-evil-backward)
+		     ("g(" . sentence-nav-evil-backward-end)
+		     ("g)" . sentence-nav-evil-forward-end)))
+	:config
+	(progn
+	  (define-key evil-outer-text-objects-map "s" 'sentence-nav-evil-a-sentence)
+	  (define-key evil-inner-text-objects-map "s" 'sentence-nav-evil-inner-sentence))
       )
    #+END_SRC
    
@@ -714,18 +719,18 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
      ;;    ("C-s"   . swiper))        ; find 
      ;;   )
      ;; ;
-                                             ;
+					     ;
    #+END_SRC
    
 ** which key
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package which-key 
-        :ensure t
-        :defer t
-        :init
-        (setq which-key-idle-delay 4)
-        :diminish ""
-        :config (progn (which-key-mode 1) ))
+	:ensure t
+	:defer t
+	:init
+	(setq which-key-idle-delay 4)
+	:diminish ""
+	:config (progn (which-key-mode 1) ))
 
    #+END_SRC
 
@@ -736,31 +741,31 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 :ensure t 
 :defer t 
   :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+	 ("M-g j" . dumb-jump-go)
+	 ("M-g x" . dumb-jump-go-prefer-external)
+	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'helm)
   )
 
    #+END_SRC
 ** image+
    #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package image+
-            :ensure hydra
-            :defer t
-            :config 
+	  (use-package image+
+	    :ensure hydra
+	    :defer t
+	    :config 
      (progn
      (eval-after-load 'image+
        `(when (require 'hydra nil t)
-          (defhydra imagex-sticky-binding (global-map "C-x C-l")
-            "Manipulating Image"
-            ("+" imagex-sticky-zoom-in "zoom in")
-            ("-" imagex-sticky-zoom-out "zoom out")
-            ("M" imagex-sticky-maximize "maximize")
-            ("O" imagex-sticky-restore-original "restore original")
-            ("S" imagex-sticky-save-image "save file")
-            ("r" imagex-sticky-rotate-right "rotate right")
-            ("l" imagex-sticky-rotate-left "rotate left"))))
+	  (defhydra imagex-sticky-binding (global-map "C-x C-l")
+	    "Manipulating Image"
+	    ("+" imagex-sticky-zoom-in "zoom in")
+	    ("-" imagex-sticky-zoom-out "zoom out")
+	    ("M" imagex-sticky-maximize "maximize")
+	    ("O" imagex-sticky-restore-original "restore original")
+	    ("S" imagex-sticky-save-image "save file")
+	    ("r" imagex-sticky-rotate-right "rotate right")
+	    ("l" imagex-sticky-rotate-left "rotate left"))))
      )
      )
    #+END_SRC
@@ -803,11 +808,11 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 	"r"         'revert-buffer
 	(kbd "C-r") 'dired-do-redisplay
 	"G"         'evil-goto-line))
-     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+     ;;(define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
-*
+   *
 ** yasnippet
-    #+BEGIN_SRC emacs-lisp :results output silent
+   #+BEGIN_SRC emacs-lisp :results output silent
       ;; (use-package yasnippet
       ;;   :ensure t
       ;;   :diminish ""
@@ -820,22 +825,22 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
       ;; (use-package common-lisp-snippets
       ;;   :ensure t
       ;;   :config (require 'common-lisp-snippets))
-    #+END_SRC
+   #+END_SRC
 * local packages
   add the vendor directory to the load path
 
-   #+BEGIN_SRC emacs-lisp :results output silent
-        (let ((default-directory "~/.emacs.d/vendor/"))
-          (normal-top-level-add-subdirs-to-load-path))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :results output silent
+	(let ((default-directory "~/.emacs.d/vendor/"))
+	  (normal-top-level-add-subdirs-to-load-path))
+  #+END_SRC
 
 * languages
 ** clojure
    
    #+BEGIN_SRC emacs-lisp :results output silent
-          (use-package clojure-mode :ensure t :defer t)
-          (use-package cider :ensure t :defer t
-            )
+	  (use-package clojure-mode :ensure t :defer t)
+	  (use-package cider :ensure t :defer t
+	    )
    ;  (use-package inf-clojure :ensure t)
      (add-hook 'clojure-mode-hook #'eldoc-mode)
 
@@ -852,10 +857,10 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        :config 
      (progn
      (add-hook 'java-mode-hook
-               (lambda ()
-                 ;; meghanada-mode on
-                 (meghanada-mode t)
-                 (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
+	       (lambda ()
+		 ;; meghanada-mode on
+		 (meghanada-mode t)
+		 (add-hook 'before-save-hook 'meghanada-code-beautify-before-save)))
      )
      )
        ;; (use-package emacs-eclim :ensure
@@ -884,54 +889,54 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 ** lisp
    #+BEGIN_SRC emacs-lisp :results output silent
      (add-hook 'lisp-mode-hook
-               (lambda ()
-                 (set (make-local-variable 'lisp-indent-function)
-                      'common-lisp-indent-function)))
+	       (lambda ()
+		 (set (make-local-variable 'lisp-indent-function)
+		      'common-lisp-indent-function)))
 
      (use-package paredit
        :ensure t
        :config 
        (progn
-         (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-         (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-         (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-         (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-         (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-         (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-         (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-         (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
-         (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
+	 (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+	 (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+	 (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+	 (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+	 (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+	 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+	 (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+	 (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
+	 (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
 
-         (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
-         (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
-         (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
-         (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
+	 (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+	 (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+	 (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+	 (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
 
-         ))
+	 ))
 
-          ;;;     (use-package smartparens
-          ;;;       :ensure t
-          ;;;       :diminish ""
-          ;;;
-          ;;;       :init (require 'smartparens-config)
-          ;;;       :config (smartparens-global-strict-mode 1))
-          ;;;
-          ;;;     (use-package evil-smartparens
-          ;;;       :ensure
-          ;;;       :diminish ""
-          ;;;       :config (progn
-          ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+	  ;;;     (use-package smartparens
+	  ;;;       :ensure t
+	  ;;;       :diminish ""
+	  ;;;
+	  ;;;       :init (require 'smartparens-config)
+	  ;;;       :config (smartparens-global-strict-mode 1))
+	  ;;;
+	  ;;;     (use-package evil-smartparens
+	  ;;;       :ensure
+	  ;;;       :diminish ""
+	  ;;;       :config (progn
+	  ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
 
      (use-package rainbow-delimiters
        :ensure t
        :diminish ""
        :config
        (progn
-         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-         (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-         (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
-         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+	 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+	 (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+	 (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
+	 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
      ;;;     (eval-after-load "slime"
      ;;;       '(progn
@@ -942,26 +947,26 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
        :defer 1
        :load-path  "~/.emacs.d/vendor/slime"
        :config (progn
-                 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-                 (setq inferior-lisp-program 
-                       "/usr/local/bin/sbcl --noinform --no-linedit")
-                 (require 'slime-autoloads)
-                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                 (setq slime-contribs 
-                       '(slime-fancy 
-                         slime-asdf 
-                                             ;slime-banner
-                         slime-indentation
-                         slime-quicklisp 
-                         slime-xref-browser))
-                 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-                 (slime-setup))
+		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+		 (setq inferior-lisp-program 
+		       "/usr/local/bin/sbcl --noinform --no-linedit")
+		 (require 'slime-autoloads)
+		 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+		 (setq slime-contribs 
+		       '(slime-fancy 
+			 slime-asdf 
+					     ;slime-banner
+			 slime-indentation
+			 slime-quicklisp 
+			 slime-xref-browser))
+		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+		 (slime-setup))
        
        :bind (
-              ("C-c s" . slime-selector)
-              ("M-." . slime-edit-definition)
-              ("M-," . slime-pop-definition-stack)
-              )
+	      ("C-c s" . slime-selector)
+	      ("M-." . slime-edit-definition)
+	      ("M-," . slime-pop-definition-stack)
+	      )
        )
 
      (require 'info-look)
@@ -1065,10 +1070,10 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
    
 * itself
 ** name
-    #+BEGIN_SRC emacs-lisp :results output silent
+   #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
     (setq user-mail-address "mohsenil85@gmail.com")
-    #+END_SRC
+   #+END_SRC
     
 ** inital buffer
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1158,7 +1163,7 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
      ;;       (use-package gandalf-theme :ensure t)
      ;;  (use-package mbo70s-theme :ensure t)
      ;;(use-package warm-night-theme :ensure t)
-     (use-package soft-morning-theme :ensure t )
+     ;;(use-package soft-morning-theme :ensure t )
      ;;(use-package alect-themes :ensure t)
      ;;(use-package yoshi-theme :ensure t)
      ;;  (use-package slime-theme :ensure t)
@@ -1166,19 +1171,19 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
      ;;  (use-package minimal-theme :ensure t)
      ;; (use-package white-theme :ensure t)
      ;;(use-package paper-theme :ensure t )
-                                             ;(use-package soft-charcoal-theme :ensure t )
+					     ;(use-package soft-charcoal-theme :ensure t )
      ;;(use-package soft-morning-theme :ensure t )
-                                             ;(use-package django-theme :ensure t )
+					     ;(use-package django-theme :ensure t )
      ;;(use-package hydandata-light-theme :ensure t)
      ;;(use-package solarized-theme :ensure t)
 
-                                             ;(load-theme 'adwaita)
-                                             ;   (load-theme 'gandalf)
-                                             ; (load-theme 'mbo70s)
+					     ;(load-theme 'adwaita)
+					     ;   (load-theme 'gandalf)
+					     ; (load-theme 'mbo70s)
 
-     (setq my-theme 'soft-morning)
-     (enable-theme my-theme)
-     (load-theme my-theme t t)
+     ;;(setq my-theme 'soft-morning)
+     ;;(enable-theme my-theme)
+     ;;(load-theme my-theme t t)
    #+END_SRC
 ** utf-8 stuff
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1203,7 +1208,7 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
 
   (setq kill-buffer-query-functions
     (remq 'process-kill-buffer-query-function
-           kill-buffer-query-functions))
+	   kill-buffer-query-functions))
 
 
    #+END_SRC
@@ -1244,27 +1249,27 @@ http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super
      (defun try-expand-by-dict (old)
        ;; old is true if we have already attempted an expansion
        (unless (bound-and-true-p ispell-minor-mode)
-         (ispell-minor-mode 1))
+	 (ispell-minor-mode 1))
 
        ;; english-words.txt is the fallback dicitonary
        (if (not ispell-alternate-dictionary)
-           (setq ispell-alternate-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
+	   (setq ispell-alternate-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
        (let ((lookup-func (if (fboundp 'ispell-lookup-words)
-                            'ispell-lookup-words
-                            'lookup-words)))
-         (unless old
-           (he-init-string (he-lisp-symbol-beg) (point))
-           (if (not (he-string-member he-search-string he-tried-table))
-             (setq he-tried-table (cons he-search-string he-tried-table)))
-           (setq he-expand-list
-                 (and (not (equal he-search-string ""))
-                      (funcall lookup-func (concat (buffer-substring-no-properties (he-lisp-symbol-beg) (point)) "*")))))
-         (if (null he-expand-list)
-           (if old (he-reset-string))
-           (he-substitute-string (car he-expand-list))
-           (setq he-expand-list (cdr he-expand-list))
-           t)
-         ))
+			    'ispell-lookup-words
+			    'lookup-words)))
+	 (unless old
+	   (he-init-string (he-lisp-symbol-beg) (point))
+	   (if (not (he-string-member he-search-string he-tried-table))
+	     (setq he-tried-table (cons he-search-string he-tried-table)))
+	   (setq he-expand-list
+		 (and (not (equal he-search-string ""))
+		      (funcall lookup-func (concat (buffer-substring-no-properties (he-lisp-symbol-beg) (point)) "*")))))
+	 (if (null he-expand-list)
+	   (if old (he-reset-string))
+	   (he-substitute-string (car he-expand-list))
+	   (setq he-expand-list (cdr he-expand-list))
+	   t)
+	 ))
 
 (defun try-expand-flexible-abbrev (old)
   "Try to complete word using flexible matching.
@@ -1280,36 +1285,36 @@ for subsequent calls (for further possible completions of the same
 string).  It returns t if a new completion is found, nil otherwise."
   (if (not old)
       (progn
-        (he-init-string (he-lisp-symbol-beg) (point))
-        (if (not (he-string-member he-search-string he-tried-table))
-            (setq he-tried-table (cons he-search-string he-tried-table)))
-        (setq he-expand-list
-              (and (not (equal he-search-string ""))
-                   (he-flexible-abbrev-collect he-search-string)))))
+	(he-init-string (he-lisp-symbol-beg) (point))
+	(if (not (he-string-member he-search-string he-tried-table))
+	    (setq he-tried-table (cons he-search-string he-tried-table)))
+	(setq he-expand-list
+	      (and (not (equal he-search-string ""))
+		   (he-flexible-abbrev-collect he-search-string)))))
   (while (and he-expand-list
-              (he-string-member (car he-expand-list) he-tried-table))
+	      (he-string-member (car he-expand-list) he-tried-table))
     (setq he-expand-list (cdr he-expand-list)))
   (if (null he-expand-list)
       (progn
-        (if old (he-reset-string))
-        ())
+	(if old (he-reset-string))
+	())
       (progn
-        (he-substitute-string (car he-expand-list))
-        (setq he-expand-list (cdr he-expand-list))
-        t)))
+	(he-substitute-string (car he-expand-list))
+	(setq he-expand-list (cdr he-expand-list))
+	t)))
 
 (defun he-flexible-abbrev-collect (str)
   "Find and collect all words that flex-matches STR.
 See docstring for `try-expand-flexible-abbrev' for information
 about what flexible matching means in this context."
   (let ((collection nil)
-        (regexp (he-flexible-abbrev-create-regexp str)))
+	(regexp (he-flexible-abbrev-create-regexp str)))
     (save-excursion
       (goto-char (point-min))
       (while (search-forward-regexp regexp nil t)
-        ;; Is there a better or quicker way than using
-        ;; `thing-at-point' here?
-        (setq collection (cons (thing-at-point 'word) collection))))
+	;; Is there a better or quicker way than using
+	;; `thing-at-point' here?
+	(setq collection (cons (thing-at-point 'word) collection))))
     collection))
 
 (defun he-flexible-abbrev-create-regexp (str)
@@ -1317,22 +1322,22 @@ about what flexible matching means in this context."
 See docstring for `try-expand-flexible-abbrev' for information
 about what flexible matching means in this context."
   (concat "\\b" (mapconcat (lambda (x) (concat "\\w*" (list x))) str "")
-          "\\w*" "\\b"))
+	  "\\w*" "\\b"))
 
      (setq hippie-expand-try-functions-list
-           '(try-complete-file-name-partially
-             try-complete-file-name
-             try-expand-all-abbrevs
-             try-expand-list
-             try-expand-line
-             try-expand-dabbrev
-             try-expand-dabbrev-all-buffers
-             try-expand-dabbrev-from-kill
-             try-complete-lisp-symbol-partially
-             try-complete-lisp-symbol
-             try-expand-by-dict
-             ;;try-expand-flexible-abbrev
-             yas-hippie-try-expand
+	   '(try-complete-file-name-partially
+	     try-complete-file-name
+	     try-expand-all-abbrevs
+	     try-expand-list
+	     try-expand-line
+	     try-expand-dabbrev
+	     try-expand-dabbrev-all-buffers
+	     try-expand-dabbrev-from-kill
+	     try-complete-lisp-symbol-partially
+	     try-complete-lisp-symbol
+	     try-expand-by-dict
+	     ;;try-expand-flexible-abbrev
+	     yas-hippie-try-expand
 ))
    #+END_SRC
    
@@ -1398,54 +1403,54 @@ about what flexible matching means in this context."
    #+END_SRC
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
-          (require 'cl)
+	  (require 'cl)
 
       (defun copy-filename-to-clip ()
     "Put the current file name on the clipboard"
-        (interactive)
-        (let ((filename (if (equal major-mode 'dired-mode)
-                            default-directory
-                          (buffer-file-name))))
-          (when filename
-            (with-temp-buffer
-              (insert filename)
-              (clipboard-kill-region (point-min) (point-max)))
-            (message filename))))
+	(interactive)
+	(let ((filename (if (equal major-mode 'dired-mode)
+			    default-directory
+			  (buffer-file-name))))
+	  (when filename
+	    (with-temp-buffer
+	      (insert filename)
+	      (clipboard-kill-region (point-min) (point-max)))
+	    (message filename))))
 
-          (defun load-init-file ()
-            (interactive)
-            (load-file (concat "~/.emacs.d/init.el")))
+	  (defun load-init-file ()
+	    (interactive)
+	    (load-file (concat "~/.emacs.d/init.el")))
 
-          (defun add-hook-to-modes (modes hook)
-            (dolist (mode modes)
-              (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-                        hook)))
+	  (defun add-hook-to-modes (modes hook)
+	    (dolist (mode modes)
+	      (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+			hook)))
 
-          (defun halt ()
-            (interactive)
-            (save-some-buffers)
-            (kill-emacs))
+	  (defun halt ()
+	    (interactive)
+	    (save-some-buffers)
+	    (kill-emacs))
 
-          (defun my-whitespace-mode-hook ()
-            (setq whitespace-action '(auto-cleanup)
-                  whitespace-style  '(face tabs trailing lines-tail empty)
-                  ;; use fill-column value instead
-                  whitespace-line-column nil)
-            (whitespace-mode))
+	  (defun my-whitespace-mode-hook ()
+	    (setq whitespace-action '(auto-cleanup)
+		  whitespace-style  '(face tabs trailing lines-tail empty)
+		  ;; use fill-column value instead
+		  whitespace-line-column nil)
+	    (whitespace-mode))
 
-          (defun my-makefile-mode-hook ()
-            (setq indent-tabs-mode t
-                  tab-width 4))
+	  (defun my-makefile-mode-hook ()
+	    (setq indent-tabs-mode t
+		  tab-width 4))
 
-          (defun make-region-read-only (start end)
-            (interactive "*r")
-            (let ((inhibit-read-only t))
-              (put-text-property start end 'read-only t)))
+	  (defun make-region-read-only (start end)
+	    (interactive "*r")
+	    (let ((inhibit-read-only t))
+	      (put-text-property start end 'read-only t)))
 
-          (defun make-region-read-write (start end)
-            (interactive "*r")
-            (let ((inhibit-read-only t))
-              (put-text-property start end 'read-only nil)))
+	  (defun make-region-read-write (start end)
+	    (interactive "*r")
+	    (let ((inhibit-read-only t))
+	      (put-text-property start end 'read-only nil)))
 
   #+END_SRC
   
@@ -1463,38 +1468,38 @@ about what flexible matching means in this context."
   toggle fullscreen
   #+BEGIN_SRC emacs-lisp :results output silent
     (when (eq system-type 'darwin)
-        (setq mac-command-modifier 'meta)
-        (setq mac-option-modifier 'super)
-        (setq mac-control-modifier 'control)
-        (setq mac-function-modifier 'hyper)
+	(setq mac-command-modifier 'meta)
+	(setq mac-option-modifier 'super)
+	(setq mac-control-modifier 'control)
+	(setq mac-function-modifier 'hyper)
     (setq mac-pass-command-to-system nil) 
-        (defun toggle-fullscreen ()
-          "Toggle full screen"
-          (interactive)
-          (set-frame-parameter
-           nil 'fullscreen
-           (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
-        (defun pbcopy ()
-          (interactive)
-          (call-process-region (point) (mark) "pbcopy")
-          (setq deactivate-mark t))
+	(defun toggle-fullscreen ()
+	  "Toggle full screen"
+	  (interactive)
+	  (set-frame-parameter
+	   nil 'fullscreen
+	   (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
+	(defun pbcopy ()
+	  (interactive)
+	  (call-process-region (point) (mark) "pbcopy")
+	  (setq deactivate-mark t))
 
-        (defun pbpaste ()
-          (interactive)
-          (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
+	(defun pbpaste ()
+	  (interactive)
+	  (call-process-region (point) (if mark-active (mark) (point)) "pbpaste" t t))
 
-        (defun pbcut ()
-          (interactive)
-          (pbcopy)
-          (delete-region (region-beginning) (region-end)))
+	(defun pbcut ()
+	  (interactive)
+	  (pbcopy)
+	  (delete-region (region-beginning) (region-end)))
 
-        (global-set-key (kbd "H-c") 'pbcopy)
-        (global-set-key (kbd "H-v") 'pbpaste)
-        (global-set-key (kbd "H-x") 'pbcut)
+	(global-set-key (kbd "H-c") 'pbcopy)
+	(global-set-key (kbd "H-v") 'pbpaste)
+	(global-set-key (kbd "H-x") 'pbcut)
 
-        ;;recomended by brew
-        (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-          (normal-top-level-add-subdirs-to-load-path))
+	;;recomended by brew
+	(let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+	  (normal-top-level-add-subdirs-to-load-path))
 
       )
 
@@ -1508,107 +1513,107 @@ about what flexible matching means in this context."
   
   #+BEGIN_SRC emacs-lisp :results output silent
     (let ((mu-bin (if (eq system-type 'darwin)
-                      "/usr/local/bin/mu"
-                    "/usr/bin/mu"))
-          (mu-load-path (if (eq system-type 'darwin)
-                            "/usr/local/share/emacs/site-lisp/mu/mu4e/"
-                          "/usr/share/emacs/site-lisp/mu4e/") ))
+		      "/usr/local/bin/mu"
+		    "/usr/bin/mu"))
+	  (mu-load-path (if (eq system-type 'darwin)
+			    "/usr/local/share/emacs/site-lisp/mu/mu4e/"
+			  "/usr/share/emacs/site-lisp/mu4e/") ))
       (use-package mu4e  
-        ;;:load-path mu-load-path
-        :commands (make-mu4e-context)
-        :init (progn
-                (setq
-                 mu4e-mu-binary mu-bin 
-                 mu4e-maildir (expand-file-name "~/.mail/")
-                 mu4e-context-policy 'pick-first
-                 mu4e-reply-to-address  "mohsenil85@gmail.com"
-                 user-mail-address  "mohsenil85@gmail.com"  
-                 user-full-name    "Logan Mohseni" 
-                 mu4e-drafts-folder  "/gmail/[Gmail]/.Drafts"
-                 mu4e-sent-folder  "/gmail/[Gmail]/.Sent Mail"
-                 mu4e-trash-folder  "/gmail/[Gmail]/.Trash"
-                 mu4e-maildir-shortcuts '( ("/gmail/Inbox" . ?i)
-                                           ("/work/[Gmail]/Inbox" . ?w)
-                                           ("/gmail/[Gmail]/.Sent Mail" . ?s)
-                                           ("/gmail/[Gmail]/.Trash" . ?t)
-                                           ("/gmail/[Gmail]/.All Mail" . ?a)
-                                           ("/gmail/[Gmail]/.Drafts" . ?d)) 
-                 user-mail-address "mohsenil85@gmail.com"
-                 send-mail-function 'message-send-mail-with-sendmail
-                 message-send-mail-function 'message-send-mail-with-sendmail
-                 sendmail-program "/usr/local/bin/msmtp"
-                 mu4e-get-mail-command "mbsync -a"
-                 mu4e-html2text-command "w3m -T text/html"
-                 mu4e-update-interval 120
-                 mu4e-headers-auto-update t
-                 mu4e-compose-signature-auto-include nil
-                 mu4e-change-filenames-when-moving t
-                 mu4e-compose-format-flowed t
-                 message-kill-buffer-on-exit t
-                 mu4e-sent-messages-behavior 'delete
-                 mu4e-show-images t
-                 mu4e-confirm-quit nil
-                 mu4e-headers-skip-duplicates t)
-                (when (fboundp 'imagemagick-register-types)
-                  (imagemagick-register-types))
-                )
-        :config
-        (progn
-          (require 'mu4e-contrib)
-          (use-package evil-mu4e :ensure t)
-          (setq mu4e-contexts
-                `( 
-                  ,(make-mu4e-context
-                    :name "private"
-                    :enter-func (lambda ()
-                                  (mu4e-message "Entering Private context"))
-                    :leave-func (lambda ()
-                                  (mu4e-message "Leaving Private context"))
-                    ;; we match based on the contact-fields of the message
-                    :match-func (lambda (msg)
-                                  (when msg 
-                                    (mu4e-message-contact-field-matches 
-                                     msg 
-                                     :to "mohsenil85@gmail.com")))
-                    :vars '( 
-                            (mu4e-reply-to-address . "mohsenil85@gmail.com")
-                            (user-mail-address . "mohsenil85@gmail.com"  )
-                            (user-full-name   . "Logan Mohseni" )
-                            (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
-                            (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail/")
-                            (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")
-                            (mu4e-compose-signature . nil)
-                            ))
-                  ,(make-mu4e-context
-                    :name "work"
-                    :enter-func (lambda ()
-                                  (mu4e-message "Entering Work context"))
-                    :leave-func (lambda ()
-                                  (mu4e-message "Leaving Work context"))
-                    ;; we match based on the contact-fields of the message
-                    :match-func (lambda (msg)
-                                  (when msg 
-                                    (mu4e-message-contact-field-matches 
-                                     msg 
-                                     :to "logan.mohseni@singlemindconsulting.com")))
-                    :vars '( 
-                            (mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
-                            (user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
-                            (user-full-name   . "Logan Mohseni")
-                            (mu4e-drafts-folder . "/work/[Gmail]/.Drafts")
-                            (mu4e-sent-folder . "/work/[Gmail]/.Sent Mail")
-                            (mu4e-trash-folder . "/work/[Gmail]/.Trash")
-                            (mu4e-compose-signature .
-                                                    "<#part type=text/html> <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html\; charset=utf-8\"> <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"> <title></title> <meta name=\"Generator\" content=\"Cocoa HTML Writer\"> <meta name=\"CocoaVersion\" content=\"1504.81\"> <style type=\"text/css\"> p.p1 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 14.0px\; font: 12.0px Arial\; color: #38678f\; -webkit-text-stroke: #38678f} p.p2 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 15.0px\; font: 12.0px Arial\; color: #666666\; -webkit-text-stroke: #666666} span.s1 {font-kerning: none} span.s2 {font: 13.0px 'Trebuchet MS'\; font-kerning: none} span.s3 {font: 13.0px 'Trebuchet MS'\; font-kerning: none\; color: #ff931e\; -webkit-text-stroke: 0px #ff931e} span.s4 {font-kerning: none\; color: #000000\; -webkit-text-stroke: 0px #000000} span.s5 {font-kerning: none\; color: #666666\; -webkit-text-stroke: 0px #666666} </style> </head> <body> <p class=\"p1\"><span class=\"s1\">Logan Mohseni | <i>Software Developer</i></span></p> <p class=\"p2\"><span class=\"s2\"><b>single</b></span><span class=\"s3\"><b>mind |</b></span><span class=\"s4\"> </span><span class=\"s1\"><b><i>research • design • build • support</i></b></span></p> <p class=\"p1\"><span class=\"s1\">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p> <p class=\"p1\"><span class=\"s5\"><b>Tel</b></span><span class=\"s1\">: 503.342.8270 | </span><span class=\"s5\"><b>Mobile</b></span><span class=\"s1\">: 307.751.4050</span></p> <p class=\"p1\"><span class=\"s5\"><b>@</b></span><span class=\"s1\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\">logan.mohseni@singlemindconsulting.com</a></span><span class=\"s4\"><span class=\"Apple-converted-space\"> </span></span></p> </body> </html> <#/part>" 
-                                                    )
-                            )))) 
-          (general-define-key
-           :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
-           "SPC" 'evil-scroll-page-down
-           "DEL" 'evil-scroll-page-up)
-          )
-        :bind ("C-c m" . mu4e)
-        ))
+	;;:load-path mu-load-path
+	:commands (make-mu4e-context)
+	:init (progn
+		(setq
+		 mu4e-mu-binary mu-bin 
+		 mu4e-maildir (expand-file-name "~/.mail/")
+		 mu4e-context-policy 'pick-first
+		 mu4e-reply-to-address  "mohsenil85@gmail.com"
+		 user-mail-address  "mohsenil85@gmail.com"  
+		 user-full-name    "Logan Mohseni" 
+		 mu4e-drafts-folder  "/gmail/[Gmail]/.Drafts"
+		 mu4e-sent-folder  "/gmail/[Gmail]/.Sent Mail"
+		 mu4e-trash-folder  "/gmail/[Gmail]/.Trash"
+		 mu4e-maildir-shortcuts '( ("/gmail/Inbox" . ?i)
+					   ("/work/[Gmail]/Inbox" . ?w)
+					   ("/gmail/[Gmail]/.Sent Mail" . ?s)
+					   ("/gmail/[Gmail]/.Trash" . ?t)
+					   ("/gmail/[Gmail]/.All Mail" . ?a)
+					   ("/gmail/[Gmail]/.Drafts" . ?d)) 
+		 user-mail-address "mohsenil85@gmail.com"
+		 send-mail-function 'message-send-mail-with-sendmail
+		 message-send-mail-function 'message-send-mail-with-sendmail
+		 sendmail-program "/usr/local/bin/msmtp"
+		 mu4e-get-mail-command "mbsync -a"
+		 mu4e-html2text-command "w3m -T text/html"
+		 mu4e-update-interval 120
+		 mu4e-headers-auto-update t
+		 mu4e-compose-signature-auto-include nil
+		 mu4e-change-filenames-when-moving t
+		 mu4e-compose-format-flowed t
+		 message-kill-buffer-on-exit t
+		 mu4e-sent-messages-behavior 'delete
+		 mu4e-show-images t
+		 mu4e-confirm-quit nil
+		 mu4e-headers-skip-duplicates t)
+		(when (fboundp 'imagemagick-register-types)
+		  (imagemagick-register-types))
+		)
+	:config
+	(progn
+	  (require 'mu4e-contrib)
+	  (use-package evil-mu4e :ensure t)
+	  (setq mu4e-contexts
+		`( 
+		  ,(make-mu4e-context
+		    :name "private"
+		    :enter-func (lambda ()
+				  (mu4e-message "Entering Private context"))
+		    :leave-func (lambda ()
+				  (mu4e-message "Leaving Private context"))
+		    ;; we match based on the contact-fields of the message
+		    :match-func (lambda (msg)
+				  (when msg 
+				    (mu4e-message-contact-field-matches 
+				     msg 
+				     :to "mohsenil85@gmail.com")))
+		    :vars '( 
+			    (mu4e-reply-to-address . "mohsenil85@gmail.com")
+			    (user-mail-address . "mohsenil85@gmail.com"  )
+			    (user-full-name   . "Logan Mohseni" )
+			    (mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
+			    (mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail/")
+			    (mu4e-trash-folder . "/gmail/[Gmail]/.Trash")
+			    (mu4e-compose-signature . nil)
+			    ))
+		  ,(make-mu4e-context
+		    :name "work"
+		    :enter-func (lambda ()
+				  (mu4e-message "Entering Work context"))
+		    :leave-func (lambda ()
+				  (mu4e-message "Leaving Work context"))
+		    ;; we match based on the contact-fields of the message
+		    :match-func (lambda (msg)
+				  (when msg 
+				    (mu4e-message-contact-field-matches 
+				     msg 
+				     :to "logan.mohseni@singlemindconsulting.com")))
+		    :vars '( 
+			    (mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
+			    (user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
+			    (user-full-name   . "Logan Mohseni")
+			    (mu4e-drafts-folder . "/work/[Gmail]/.Drafts")
+			    (mu4e-sent-folder . "/work/[Gmail]/.Sent Mail")
+			    (mu4e-trash-folder . "/work/[Gmail]/.Trash")
+			    (mu4e-compose-signature .
+						    "<#part type=text/html> <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html\; charset=utf-8\"> <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"> <title></title> <meta name=\"Generator\" content=\"Cocoa HTML Writer\"> <meta name=\"CocoaVersion\" content=\"1504.81\"> <style type=\"text/css\"> p.p1 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 14.0px\; font: 12.0px Arial\; color: #38678f\; -webkit-text-stroke: #38678f} p.p2 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 15.0px\; font: 12.0px Arial\; color: #666666\; -webkit-text-stroke: #666666} span.s1 {font-kerning: none} span.s2 {font: 13.0px 'Trebuchet MS'\; font-kerning: none} span.s3 {font: 13.0px 'Trebuchet MS'\; font-kerning: none\; color: #ff931e\; -webkit-text-stroke: 0px #ff931e} span.s4 {font-kerning: none\; color: #000000\; -webkit-text-stroke: 0px #000000} span.s5 {font-kerning: none\; color: #666666\; -webkit-text-stroke: 0px #666666} </style> </head> <body> <p class=\"p1\"><span class=\"s1\">Logan Mohseni | <i>Software Developer</i></span></p> <p class=\"p2\"><span class=\"s2\"><b>single</b></span><span class=\"s3\"><b>mind |</b></span><span class=\"s4\"> </span><span class=\"s1\"><b><i>research • design • build • support</i></b></span></p> <p class=\"p1\"><span class=\"s1\">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p> <p class=\"p1\"><span class=\"s5\"><b>Tel</b></span><span class=\"s1\">: 503.342.8270 | </span><span class=\"s5\"><b>Mobile</b></span><span class=\"s1\">: 307.751.4050</span></p> <p class=\"p1\"><span class=\"s5\"><b>@</b></span><span class=\"s1\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\">logan.mohseni@singlemindconsulting.com</a></span><span class=\"s4\"><span class=\"Apple-converted-space\"> </span></span></p> </body> </html> <#/part>" 
+						    )
+			    )))) 
+	  (general-define-key
+	   :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
+	   "SPC" 'evil-scroll-page-down
+	   "DEL" 'evil-scroll-page-up)
+	  )
+	:bind ("C-c m" . mu4e)
+	))
 
 
   #+END_SRC

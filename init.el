@@ -32,7 +32,15 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(require 'use-package)
+
+(setq use-package-enable-imenu-support t)
+(eval-when-compile
+  (require 'use-package))
+;(setq use-package-always-defer t)
+(require 'diminish)
+(require 'bind-key)
+
+(bind-key "C-c h b" #'describe-personal-keybindings)
 
 
 ;(use-package no-littering :ensure t)
@@ -53,9 +61,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("7e376fb329a0e46a04e8285b0e45199a083f98c69b0e1039ec1cb1d366e66e9c" default)))
  '(package-selected-packages
    (quote
-    (evil-magit dired-k soft-morning-theme tide ob-ipython jedi js2-mode rainbow-delimiters paredit meghanada cider clojure-mode dired+ dumb-jump which-key sentence-navigation recursive-narrow projectile persistent-scratch paradox keyfreq page-break-lines use-package org-plus-contrib markdown-mode magit helm-gtags helm-descbinds helm-ag helm-ack git-gutter-fringe general flycheck evil emojify elfeed-org elfeed-goodies diminish bind-map better-defaults auctex ag))))
+    (exwm-x image+ exwm evil-magit dired-k soft-morning-theme tide ob-ipython jedi js2-mode rainbow-delimiters paredit meghanada cider clojure-mode dired+ dumb-jump which-key sentence-navigation recursive-narrow projectile persistent-scratch paradox keyfreq page-break-lines use-package org-plus-contrib markdown-mode magit helm-gtags helm-descbinds helm-ag helm-ack git-gutter-fringe general flycheck evil emojify elfeed-org elfeed-goodies diminish bind-map better-defaults auctex ag))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
