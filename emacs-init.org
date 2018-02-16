@@ -944,14 +944,14 @@
      ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
      ;;;
      (use-package slime
-       :defer 1
-       :load-path  "~/.emacs.d/vendor/slime"
+       //:defer 1
+       //:load-path  "~/.emacs.d/vendor/slime"
        :config (progn
 		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-		 (setq inferior-lisp-program 
-		       "/usr/local/bin/sbcl --noinform --no-linedit")
+;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
+		 (setq inferior-lisp-program "/usr/local/bin/sbcl")
 		 (require 'slime-autoloads)
-		 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+	;;;	 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
 		 (setq slime-contribs 
 		       '(slime-fancy 
 			 slime-asdf 
@@ -1617,5 +1617,6 @@ about what flexible matching means in this context."
 
 
   #+END_SRC
+  
   
   
