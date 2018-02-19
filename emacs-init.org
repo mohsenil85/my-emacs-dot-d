@@ -27,8 +27,8 @@
    #+END_SRC
 ** exwm
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package exwm :ensure t :defer t 
-       :config (exwm-config-default))
+   ;;  (use-package exwm :ensure t :defer t 
+   ;;    :config (exwm-config-default))
    #+END_SRC
 ** term
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -944,12 +944,12 @@
      ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
      ;;;
      (use-package slime
-       //:defer 1
-       //:load-path  "~/.emacs.d/vendor/slime"
+       ;;:defer 1
+       ;;:load-path  "~/.emacs.d/vendor/slime"
        :config (progn
 		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
 ;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
-		 (setq inferior-lisp-program "/usr/local/bin/sbcl")
+		 (setq inferior-lisp-program "/usr/bin/sbcl")
 		 (require 'slime-autoloads)
 	;;;	 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
 		 (setq slime-contribs 
