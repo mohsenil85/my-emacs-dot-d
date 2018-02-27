@@ -947,20 +947,37 @@
        ;;:defer 1
        ;;:load-path  "~/.emacs.d/vendor/slime"
        :config (progn
-		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
-		 (setq inferior-lisp-program "/usr/bin/sbcl")
-		 (require 'slime-autoloads)
-	;;;	 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-		 (setq slime-contribs 
-		       '(slime-fancy 
-			 slime-asdf 
-					     ;slime-banner
-			 slime-indentation
-			 slime-quicklisp 
-			 slime-xref-browser))
-		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-		 (slime-setup))
+;;<<<<<<< Updated upstream
+;;		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;;;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
+;;		 (setq inferior-lisp-program "/usr/bin/sbcl")
+;;		 (require 'slime-autoloads)
+;;	;;;	 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+;;		 (setq slime-contribs 
+;;		       '(slime-fancy 
+;;			 slime-asdf 
+;;					     ;slime-banner
+;;			 slime-indentation
+;;			 slime-quicklisp 
+;;			 slime-xref-browser))
+;;		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+;;		 (slime-setup))
+;;=======
+                 (load (expand-file-name "~/quicklisp/slime-helper.el"))
+                 (setq inferior-lisp-program 
+                       "/usr/local/bin/sbcl --noinform --no-linedit")
+                 (require 'slime-autoloads)
+                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+                 (setq slime-contribs 
+                       '(slime-fancy 
+                         slime-asdf 
+                                             ;slime-banner
+                         slime-indentation
+                         slime-quicklisp 
+                         slime-xref-browser
+))
+                 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+                 (slime-setup))
        
        :bind (
 	      ("C-c s" . slime-selector)
@@ -1237,6 +1254,7 @@
 (set-register ?w (cons 'file "~/org/work.org"))
 (set-register ?z (cons 'file "~/.zshrc"))
 (set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
+(set-register ?s (cons 'file "~/org/stories/ideas.org"))
    #+END_SRC
    
 ** hippie-expand 

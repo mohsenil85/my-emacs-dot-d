@@ -33,7 +33,7 @@
   (package-install 'use-package))
 
 
-(setq use-package-enable-imenu-support t)
+;;;(setq use-package-enable-imenu-support t)
 (eval-when-compile
   (require 'use-package))
 ;(setq use-package-always-defer t)
@@ -51,6 +51,11 @@
 
 
 (require 'ob-tangle)
+
+;;(setq custom-file "~/.emacs.d/customizations.el")
+;;(load-file custom-file)
+;;(load-file "~/.emacs.d/recentf" )
+
 ;(setq debug-on-error t)
 (org-babel-load-file
  (expand-file-name "emacs-init.org"
