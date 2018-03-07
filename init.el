@@ -9,6 +9,7 @@
 ;(benchmark-init/activate)
 
 
+<<<<<<< Updated upstream
 (setq package-enable-at-startup nil)
 (setq inhibit-startup-buffer-menu t)
 (setq inhibit-startup-screen t)
@@ -56,6 +57,15 @@
 ;;(load-file custom-file)
 ;;(load-file "~/.emacs.d/recentf" )
 
+=======
+
+(setq custom-file "~/.emacs.d/customizations.el")
+(load-file custom-file)
+(load-file "~/.emacs.d/recentf" )
+(add-to-list 'load-path "~/.emacs.d/vendor/org-mode/lisp")
+(load-file  "~/.emacs.d/vendor/org-mode/lisp/ob-tangle.el")
+(require 'ob-tangle )
+>>>>>>> Stashed changes
 ;(setq debug-on-error t)
 (org-babel-load-file
  (expand-file-name "emacs-init.org"

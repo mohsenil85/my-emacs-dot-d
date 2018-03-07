@@ -209,7 +209,7 @@
 	  "DEL" 'evil-scroll-page-up)
 	 (require 'elfeed-org)
 	 (elfeed-org)
-	 (setq rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
+	 (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
        :bind
        ("C-c e" . elfeed))
 
@@ -463,8 +463,13 @@
 ** org-mode
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package org 
+<<<<<<< Updated upstream
        :ensure
        :diminish ""
+=======
+ :load-path "~/.emacs.d/vendor/org-mode/lisp"
+:diminish ""
+>>>>>>> Stashed changes
        :config
        (progn
 	 (setq org-catch-invisible-edits t)
@@ -947,6 +952,7 @@
        ;;:defer 1
        ;;:load-path  "~/.emacs.d/vendor/slime"
        :config (progn
+<<<<<<< Updated upstream
 ;;<<<<<<< Updated upstream
 ;;		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
 ;;;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
@@ -963,6 +969,8 @@
 ;;		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
 ;;		 (slime-setup))
 ;;=======
+=======
+>>>>>>> Stashed changes
                  (load (expand-file-name "~/quicklisp/slime-helper.el"))
                  (setq inferior-lisp-program 
                        "/usr/local/bin/sbcl --noinform --no-linedit")
