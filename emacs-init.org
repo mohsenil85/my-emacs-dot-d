@@ -1405,7 +1405,71 @@ about what flexible matching means in this context."
 (global-set-key (kbd "C-h h") 'not-anymore)
 (global-set-key (kbd "C-h C-a") 'not-anymore)
    #+END_SRC
-** 
+** save all, save all on on unfocus
+   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
+#+BEGIN_SRC emacs-lisp
+;; Automatically save on loss of focus.
+(defun save-all ()
+  "Save all file-visiting buffers without prompting."
+  (interactive)
+  (save-some-buffers t) ;; Do not prompt for confirmation.
+  )
+(global-set-key (kbd "C-x s") 'save-all)
+;; Automatically save all file-visiting buffers when Emacs loses focus.
+(add-hook 'focus-out-hook 'save-all)
+
+#+END_SRC
+
+#+RESULTS:
+** enhanced window manip fns
+   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
+   #+BEGIN_SRC emacs-lisp
+(defun delete-window-balance ()
+  "Delete window and rebalance the remaining ones."
+  (interactive)
+  (delete-window)
+  (balance-windows))
+(defun split-window-below-focus ()
+  "Split window horizontally and move focus to other window."
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+ 
+(defun split-window-right-focus ()
+  "Split window vertically and move focus to other window."
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+
+(global-set-key (kbd "M-0") 'delete-window-balance)
+(global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "M-2") 'split-window-below-focus)
+(global-set-key (kbd "M-3") 'split-window-right-focus)
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : split-window-right-focus
+** enhaced buffer jumps
+   #+BEGIN_SRC  emacs-lisp
+;; Or switch-to-buffer if you don't use helm.
+(global-set-key (kbd "M-j") 'helm-mini)
+(global-set-key (kbd "M-{") 'previous-buffer)
+(global-set-key (kbd "M-}") 'next-buffer)
+(global-set-key (kbd "M-k") 'kill-this-buffer)
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : kill-this-buffer
+** refresh = revert
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-r")  'revert-buffer)
+
+#+END_SRC
+
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
 	  (require 'cl)
