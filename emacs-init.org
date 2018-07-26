@@ -463,13 +463,9 @@
 ** org-mode
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package org 
-<<<<<<< Updated upstream
+
        :ensure
        :diminish ""
-=======
- :load-path "~/.emacs.d/vendor/org-mode/lisp"
-:diminish ""
->>>>>>> Stashed changes
        :config
        (progn
 	 (setq org-catch-invisible-edits t)
@@ -952,25 +948,7 @@
        ;;:defer 1
        ;;:load-path  "~/.emacs.d/vendor/slime"
        :config (progn
-<<<<<<< Updated upstream
-;;<<<<<<< Updated upstream
-;;		 (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-;;;;;;		 (setq inferior-lisp-program "/usr/local/bin/sbcl --noinform --no-linedit")
-;;		 (setq inferior-lisp-program "/usr/bin/sbcl")
-;;		 (require 'slime-autoloads)
-;;	;;;	 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-;;		 (setq slime-contribs 
-;;		       '(slime-fancy 
-;;			 slime-asdf 
-;;					     ;slime-banner
-;;			 slime-indentation
-;;			 slime-quicklisp 
-;;			 slime-xref-browser))
-;;		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-;;		 (slime-setup))
-;;=======
-=======
->>>>>>> Stashed changes
+
                  (load (expand-file-name "~/quicklisp/slime-helper.el"))
                  (setq inferior-lisp-program 
                        "/usr/local/bin/sbcl --noinform --no-linedit")
@@ -1375,7 +1353,7 @@ about what flexible matching means in this context."
      ;(add-hook 'text-mode-hook #'(lambda()(linum-mode 0)))
    #+END_SRC
    
-   
+;;; (setq custom-file (make-temp-file "emacs-custom"))  
 ** recentf
    #+BEGIN_SRC emacs-lisp :results output silent
  (recentf-mode 1)
@@ -1427,6 +1405,7 @@ about what flexible matching means in this context."
 (global-set-key (kbd "C-h h") 'not-anymore)
 (global-set-key (kbd "C-h C-a") 'not-anymore)
    #+END_SRC
+** 
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
 	  (require 'cl)
