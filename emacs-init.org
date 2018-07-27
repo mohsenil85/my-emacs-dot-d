@@ -312,6 +312,7 @@
 	     ("C-x b" . helm-mini)
 	     ("C-h SPC" . helm-all-mark-rings)
 	     ("C-x C-b" . helm-buffers-list)
+	     ("s-r" . helm-recentf)
 	     ("C-x C-r" . helm-recentf)
 	     ("M-y" . helm-show-kill-ring)
 	     ("C-x C-f" . helm-find-files)
@@ -1408,19 +1409,18 @@ about what flexible matching means in this context."
 ** save all, save all on on unfocus
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
 #+BEGIN_SRC emacs-lisp
-;; Automatically save on loss of focus.
-(defun save-all ()
-  "Save all file-visiting buffers without prompting."
-  (interactive)
-  (save-some-buffers t) ;; Do not prompt for confirmation.
-  )
-(global-set-key (kbd "C-x s") 'save-all)
-;; Automatically save all file-visiting buffers when Emacs loses focus.
-(add-hook 'focus-out-hook 'save-all)
+  ;; Automatically save on loss of focus.
+  (defun save-all ()
+    "Save all file-visiting buffers without prompting."
+    (interactive)
+    (save-some-buffers t) ;; Do not prompt for confirmation.
+    )
+  (global-set-key (kbd "C-x s") 'save-all)
+  ;; Automatically save all file-visiting buffers when Emacs loses focus.
+  (add-hook 'focus-out-hook 'save-all)
+  (add-hook 'focus-out-hook '(lambda () (message "ran focus out hook")))
 
 #+END_SRC
-
-#+RESULTS:
 ** enhanced window manip fns
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
    #+BEGIN_SRC emacs-lisp
@@ -1456,8 +1456,8 @@ about what flexible matching means in this context."
    #+BEGIN_SRC  emacs-lisp
 ;; Or switch-to-buffer if you don't use helm.
 (global-set-key (kbd "M-j") 'helm-mini)
-(global-set-key (kbd "M-{") 'previous-buffer)
-(global-set-key (kbd "M-}") 'next-buffer)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "M-k") 'kill-this-buffer)
    
    #+END_SRC
