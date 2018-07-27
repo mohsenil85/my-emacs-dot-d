@@ -79,10 +79,10 @@
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp :results output silent
        (use-package evil-rsi 
-         :diminish ""
-         :ensure t 
-         :defer t 
-         :config (evil-rsi-mode 1) )  
+	 :diminish ""
+	 :ensure t 
+	 :defer t 
+	 :config (evil-rsi-mode 1) )  
     #+END_SRC
     
 *** evil-org
@@ -229,24 +229,25 @@
    #+END_SRC
 ** flycheck
    #+BEGIN_SRC emacs-lisp  :results output silent
-   (use-package flycheck
-    :ensure t
-    :diminish ""
-    :config
-    (progn
-      (add-hook 'after-init-hook 'global-flycheck-mode)))
+	(use-package flycheck
+	 :ensure t
+	 :diminish ""
+	 :config
+	 ;; (progn
+	 ;;   (add-hook 'after-init-hook 'global-flycheck-mode))
+     )
       
 
-(flycheck-define-checker proselint
-  "A linter for prose."
-  :command ("proselint" source-inplace)
-  :error-patterns
-  ((warning line-start (file-name) ":" line ":" column ": "
-        (id (one-or-more (not (any " "))))
-        (message) line-end))
-  :modes (text-mode markdown-mode gfm-mode))
+     (flycheck-define-checker proselint
+       "A linter for prose."
+       :command ("proselint" source-inplace)
+       :error-patterns
+       ((warning line-start (file-name) ":" line ":" column ": "
+	     (id (one-or-more (not (any " "))))
+	     (message) line-end))
+       :modes (text-mode markdown-mode gfm-mode))
 
-(add-to-list 'flycheck-checkers 'proselint)
+     (add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
 ** git-gutter-fringe
@@ -771,21 +772,6 @@
 ** dired
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package dired+
-     ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
-     
-       ;;;:ensure t
-       :defer t
-       :load-path  "~/.emacs.d/vendor/"
-       :config
-       (progn
-	 (setq diredp-hide-details-initially-flag t)
-	 (setq diredp-hide-details-propagate-flag t)
-	 ;; use single buffer for all dired navigation
-	 ;; disable font themeing from dired+
-	 (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
-	 (toggle-diredp-find-file-reuse-dir 1)
-	 ))
 
      (use-package dired
        :defer t
@@ -809,8 +795,29 @@
 	"K"         'dired-do-kill-lines
 	"r"         'revert-buffer
 	(kbd "C-r") 'dired-do-redisplay
-	"G"         'evil-goto-line))
-     ;;(define-key evil-normal-state-map (kbd "-") 'dired-jump)
+	"G"         'evil-goto-line)
+       )
+
+
+
+     (use-package dired+
+	  ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
+
+	    ;;;:ensure t
+       ;;;:defer t
+       :load-path  "~/.emacs.d/vendor"
+       :config
+       (progn
+	 (setq diredp-hide-details-initially-flag t)
+	 (setq diredp-hide-details-propagate-flag t)
+	 ;; use single buffer for all dired navigation
+	 ;; disable font themeing from dired+
+	 ;; (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
+	 ;; (toggle-diredp-find-file-reuse-dir 1)
+	 ))
+
+
+     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
 ** yasnippet
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -836,20 +843,6 @@
   #+END_SRC
 
 * languages
-** clojure
-   
-   #+BEGIN_SRC emacs-lisp :results output silent
-	  (use-package clojure-mode :ensure t :defer t)
-	  (use-package cider :ensure t :defer t
-	    )
-   ;  (use-package inf-clojure :ensure t)
-     (add-hook 'clojure-mode-hook #'eldoc-mode)
-
-     (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
-
-
-   #+END_SRC
-   
 ** java
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package meghanada 
@@ -888,94 +881,115 @@
    #+END_SRC
    
 ** lisp
+   general lisp stuff
 
    #+BEGIN_SRC emacs-lisp :results output silent
-     (add-hook 'lisp-mode-hook
-	       (lambda ()
-		 (set (make-local-variable 'lisp-indent-function)
-		      'common-lisp-indent-function)))
+;;	  (add-hook 'lisp-mode-hook
+;;		    (lambda ()
+;;		      (set (make-local-variable 'lisp-indent-function)
+;;			   'common-lisp-indent-function)))
 
-     (use-package paredit
-       :ensure t
-       :config 
-       (progn
-	 (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-	 (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-	 (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-	 (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-	 (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-	 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-	 (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-	 (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
-	 (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
+	  (use-package paredit
+	    :ensure t
+	    :config 
+	    (progn
+	      (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+	      (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+	      (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+	      (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+	      (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+	      (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+	      (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+	      (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
+	      (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
 
-	 (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
-	 (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
-	 (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
-	 (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
+	      (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+	      (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+	      (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+	      (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
 
-	 ))
+	      ))
 
-	  ;;;     (use-package smartparens
-	  ;;;       :ensure t
-	  ;;;       :diminish ""
+	       ;;;     (use-package smartparens
+	       ;;;       :ensure t
+	       ;;;       :diminish ""
+	       ;;;
+	       ;;;       :init (require 'smartparens-config)
+	       ;;;       :config (smartparens-global-strict-mode 1))
+	       ;;;
+	       ;;;     (use-package evil-smartparens
+	       ;;;       :ensure
+	       ;;;       :diminish ""
+	       ;;;       :config (progn
+	       ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+
+	  (use-package rainbow-delimiters
+	    :ensure t
+	    :diminish ""
+	    :config
+	    (progn
+	    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+	      (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+	      (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
+	      (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+
+	  ;;;     (eval-after-load "slime"
+	  ;;;       '(progn
+	  ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+	  ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
 	  ;;;
-	  ;;;       :init (require 'smartparens-config)
-	  ;;;       :config (smartparens-global-strict-mode 1))
-	  ;;;
-	  ;;;     (use-package evil-smartparens
-	  ;;;       :ensure
-	  ;;;       :diminish ""
-	  ;;;       :config (progn
-	  ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+     ;;      (use-package slime
+     ;;        ;;:defer 1
+     ;;        ;;:load-path  "~/.emacs.d/vendor/slime"
+     ;;        :config (progn
 
-     (use-package rainbow-delimiters
-       :ensure t
-       :diminish ""
-       :config
-       (progn
-       (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-	 (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-	 (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
-	 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+     ;; 		 (load (expand-file-name "~/quicklisp/slime-helper.el"))
+     ;; 		 (setq inferior-lisp-program 
+     ;; 		       "/usr/local/bin/sbcl --noinform --no-linedit")
+     ;; 		 (require 'slime-autoloads)
+     ;; 		 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+     ;; 		 (setq slime-contribs 
+     ;; 		       '(slime-fancy 
+     ;; 			 slime-asdf 
+     ;; 					     ;slime-banner
+     ;; 			 slime-indentation
+     ;; 			 slime-quicklisp 
+     ;; 			 slime-xref-browser
+     ;; ))
+     ;; 		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+     ;; 		 (slime-setup))
 
-     ;;;     (eval-after-load "slime"
-     ;;;       '(progn
-     ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
-     ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
-     ;;;
-     (use-package slime
-       ;;:defer 1
-       ;;:load-path  "~/.emacs.d/vendor/slime"
-       :config (progn
+     ;;        :bind (
+     ;; 	      ;; ("C-c s" . slime-selector)
+     ;; 	      ;; ("M-." . slime-edit-definition)
+     ;; 	      ;; ("M-," . slime-pop-definition-stack)
+     ;; 	      )
+     ;;        )
 
-                 (load (expand-file-name "~/quicklisp/slime-helper.el"))
-                 (setq inferior-lisp-program 
-                       "/usr/local/bin/sbcl --noinform --no-linedit")
-                 (require 'slime-autoloads)
-                 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-                 (setq slime-contribs 
-                       '(slime-fancy 
-                         slime-asdf 
-                                             ;slime-banner
-                         slime-indentation
-                         slime-quicklisp 
-                         slime-xref-browser
-))
-                 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-                 (slime-setup))
-       
-       :bind (
-	      ("C-c s" . slime-selector)
-	      ("M-." . slime-edit-definition)
-	      ("M-," . slime-pop-definition-stack)
-	      )
-       )
-
-     (require 'info-look)
+     ;;      (require 'info-look)
    #+END_SRC
    
+
+** elisp
+   #+BEGIN_SRC 
+   
+   
+   #+END_SRC
+
+** clojure
+   
+   #+BEGIN_SRC emacs-lisp :results output silent
+	    (use-package clojure-mode :ensure t :defer t)
+	    (use-package cider :ensure t :defer t
+	      )
+     ;  (use-package inf-clojure :ensure t)
+       (add-hook 'clojure-mode-hook #'eldoc-mode)
+
+       (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
+
+
+   #+END_SRC
 ** javascript
    
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1076,29 +1090,29 @@
 
 ** main global meta bindings
    #+BEGIN_SRC emacs-lisp :results output silent
-   (global-set-key (kbd "M-o") 'other-window)
-   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+	(global-set-key (kbd "M-o") 'other-window)
+	(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
 
-   ;;save
-  (global-set-key (kbd "M-s") 'save-all)
-  ;;dired here
-  (global-set-key (kbd "M-d") 'dired-jump)
-  (global-set-key (kbd "M-D") 'dired-jump-other-window)
+	;;save
+       (global-set-key (kbd "M-s") 'save-all)
+       ;;dired here
+       (global-set-key (kbd "M-d") 'dired-jump)
+       (global-set-key (kbd "M-D") 'dired-jump-other-window)
 
 
-(global-set-key (kbd "M-0") 'delete-window-balance)
-(global-set-key (kbd "M-1") 'delete-other-windows)
-(global-set-key (kbd "M-2") 'split-window-below-focus)
-(global-set-key (kbd "M-3") 'split-window-right-focus)
+     (global-set-key (kbd "M-0") 'delete-window-balance)
+     (global-set-key (kbd "M-1") 'delete-other-windows)
+     (global-set-key (kbd "M-2") 'split-window-below-focus)
+     (global-set-key (kbd "M-3") 'split-window-right-focus)
 
-;; enhaced buffer jumps
-(global-set-key (kbd "M-j") 'helm-mini)
-(global-set-key (kbd "M-[") 'previous-buffer)
-(global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "M-k") 'kill-this-buffer)
+     ;; enhaced buffer jumps
+     (global-set-key (kbd "M-j") 'helm-mini)
+     (global-set-key (kbd "M-[") 'previous-buffer)
+     (global-set-key (kbd "M-]") 'next-buffer)
+     (global-set-key (kbd "M-k") 'kill-this-buffer)
 
-; refresh = revert
-   (global-set-key (kbd "s-r")  'revert-buffer)
+     ; refresh = revert
+	(global-set-key (kbd "s-r")  'revert-buffer)
    #+END_SRC
    
 ** name
@@ -1213,10 +1227,10 @@
      ;;;					     ;   (load-theme 'gandalf)
      ;;;					     ; (load-theme 'mbo70s)
      ;;;
-          ;;;;;(setq my-theme 'minimal-light)
-          ;;(use-package minimal-theme :ensure t)
-          ;;(enable-theme 'minimal-light)
-          ;;;(load-theme  'minimal-light t t)
+	  ;;;;;(setq my-theme 'minimal-light)
+	  ;;(use-package minimal-theme :ensure t)
+	  ;;(enable-theme 'minimal-light)
+	  ;;;(load-theme  'minimal-light t t)
    #+END_SRC
 ** utf-8 stuff
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1253,7 +1267,7 @@
 ** jump to dired
    #+BEGIN_SRC emacs-lisp :results output silent
 
-(require 'dired-x)
+     ;; (require 'dired-x)
 
    #+END_SRC
    
@@ -1382,7 +1396,7 @@ about what flexible matching means in this context."
      ;    ;(add-hook 'text-mode-hook 'writeroom-mode)
    #+END_SRC
    
-;;; (setq custom-file (make-temp-file "emacs-custom"))  
+   ;;; (setq custom-file (make-temp-file "emacs-custom"))  
 ** recentf
    #+BEGIN_SRC emacs-lisp :results output silent
  (recentf-mode 1)
@@ -1435,7 +1449,7 @@ about what flexible matching means in this context."
    #+END_SRC
 ** save all, save all on on unfocus
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; Automatically save on loss of focus.
   (defun save-all ()
     "Save all file-visiting buffers without prompting."
@@ -1446,7 +1460,7 @@ about what flexible matching means in this context."
   (add-hook 'focus-out-hook 'save-all)
   (add-hook 'focus-out-hook '(lambda () (message "ran focus out hook")))
 
-#+END_SRC
+   #+END_SRC
 ** enhanced window manip fns
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
    #+BEGIN_SRC emacs-lisp
@@ -1699,7 +1713,7 @@ about what flexible matching means in this context."
 
   #+END_SRC
 * text-writeroom
-#+BEGIN_SRC emacs-lisp :results output silent
+  #+BEGIN_SRC emacs-lisp :results output silent
 
   (use-package writeroom-mode
     :ensure t
@@ -1711,18 +1725,20 @@ about what flexible matching means in this context."
     ;; 			  ))
     )
 
-  (defun prose-mode ()
-    (interactive)
+    (
+  defun prose-mode ()
+  (interactive)
 
-    (linum-mode 0)
-    (writeroom-mode 1)
-    (page-break-lines-mode 1)
-    (flyspell-mode 1)
-    (abbrev-mode 1)
-    (setq buffer-face-mode-face
-	  '(:family "Times New Roman"
-		    :height 180
-		    :width semi-condensed))
-    (buffer-face-mode)
-    )
-#+END_SRC
+  (linum-mode 0)
+  (writeroom-mode 1)
+  (page-break-lines-mode 1)
+  (flyspell-mode 1)
+  (abbrev-mode 1)
+  (setq buffer-face-mode-face
+	'(:family "Times New Roman"
+		  :height 180
+		  :width semi-condensed))
+  (buffer-face-mode)
+)
+
+  #+END_SRC

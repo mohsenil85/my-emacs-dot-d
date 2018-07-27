@@ -35,17 +35,17 @@
 (eval-when-compile
   (require 'use-package))
 					;(setq use-package-always-defer t)
-(require 'diminish)
-(require 'bind-key)
+;(require 'diminish)
+;(require 'bind-key)
 
-(bind-key "C-c h b" #'describe-personal-keybindings)
+;(bind-key "C-c h b" #'describe-personal-keybindings)
 
 
 					;(use-package no-littering :ensure t)
 (use-package evil :ensure t :config (evil-mode 1))
 (use-package org :ensure org-plus-contrib)
 
-(use-package better-defaults :ensure t :defer t )
+;(use-package better-defaults :ensure t :defer t )
 
 
 (require 'ob-tangle)
