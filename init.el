@@ -1,6 +1,10 @@
 (package-initialize)
 
-(setq custom-file (make-temp-file "~/.emacs.d/custom"))
+(let ((temp-custom (make-temp-file "~/.emacs.d/custom")))
+  (setq custom-file temp-custom )
+  (add-hook 'kill-emacs-hook
+	    '(lambda () (delete-file custom-file)))
+  )
 
 (setq package-enable-at-startup nil)
 (setq inhibit-startup-buffer-menu t)
