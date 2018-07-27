@@ -229,7 +229,7 @@
    #+END_SRC
 ** flycheck
    #+BEGIN_SRC emacs-lisp  :results output silent
-  (use-package flycheck
+   (use-package flycheck
     :ensure t
     :diminish ""
     :config
@@ -800,7 +800,7 @@
 	(kbd "C-k") 'dired-prev-subdir
 	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
 	(kbd "RET") 'dired-find-file
-	(kbd "C-RET") 'dired-find-file-other-window
+	(kbd "C-<return>") 'dired-find-file-other-window
 	"f"         'helm-find-files
 	"J"         'dired-goto-file
 	(kbd "C-f") 'find-name-dired
@@ -812,7 +812,6 @@
 	"G"         'evil-goto-line))
      ;;(define-key evil-normal-state-map (kbd "-") 'dired-jump)
    #+END_SRC
-   *
 ** yasnippet
    #+BEGIN_SRC emacs-lisp :results output silent
       ;; (use-package yasnippet
@@ -889,6 +888,7 @@
    #+END_SRC
    
 ** lisp
+
    #+BEGIN_SRC emacs-lisp :results output silent
      (add-hook 'lisp-mode-hook
 	       (lambda ()
@@ -935,7 +935,7 @@
        :diminish ""
        :config
        (progn
-	 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+       (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 	 (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
 	 (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
 	 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
@@ -1083,6 +1083,7 @@
   (global-set-key (kbd "M-s") 'save-all)
   ;;dired here
   (global-set-key (kbd "M-d") 'dired-jump)
+  (global-set-key (kbd "M-D") 'dired-jump-other-window)
 
 
 (global-set-key (kbd "M-0") 'delete-window-balance)
