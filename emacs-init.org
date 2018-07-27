@@ -237,16 +237,16 @@
       (add-hook 'after-init-hook 'global-flycheck-mode)))
       
 
-;;(flycheck-define-checker proselint
-;;  "A linter for prose."
-;;  :command ("proselint" source-inplace)
-;;  :error-patterns
-;;  ((warning line-start (file-name) ":" line ":" column ": "
-;;        (id (one-or-more (not (any " "))))
-;;        (message) line-end))
-;;  :modes (text-mode markdown-mode gfm-mode))
-;;
-;;(add-to-list 'flycheck-checkers 'proselint)
+(flycheck-define-checker proselint
+  "A linter for prose."
+  :command ("proselint" source-inplace)
+  :error-patterns
+  ((warning line-start (file-name) ":" line ":" column ": "
+        (id (one-or-more (not (any " "))))
+        (message) line-end))
+  :modes (text-mode markdown-mode gfm-mode))
+
+(add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
 ** git-gutter-fringe
@@ -309,14 +309,13 @@
 	      (helm-mode 1))
 	    :bind
 	    (("M-x" . helm-M-x)
-	     ("C-x b" . helm-mini)
-	     ("C-h SPC" . helm-all-mark-rings)
-	     ("C-x C-b" . helm-buffers-list)
+	     ("M-b" . helm-mini)
+	     ("M-m" . helm-all-mark-rings)
+	     ("M-B" . helm-buffers-list)
 	     ("s-r" . helm-recentf)
-	     ("C-x C-r" . helm-recentf)
 	     ("M-y" . helm-show-kill-ring)
-	     ("C-x C-f" . helm-find-files)
-	     ("M-s o" . helm-occur)))
+	     ("M-f" . helm-find-files)
+	     ("s-o" . helm-occur)))
       
 	  (use-package helm-descbinds :ensure t :defer t :config
 	    (progn
@@ -487,12 +486,13 @@
 	 (setq  org-agenda-skip-scheduled-if-done t)
 	 (setq  org-agenda-start-on-weekday nil)
 	 (setq  org-reverse-note-order t)
+	 (setq  org-edit-src-persistent-message nil)
 
 	 (setq org-todo-keywords
 	       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
 		       (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
 
-	 
+
 
 	 (setq org-todo-state-tags-triggers
 	       (quote (("CANCELLED" ("CANCELLED" . t))
@@ -534,7 +534,7 @@
 	 ;; Allow refile to create parent tasks with confirmation
 	 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
-	 
+
 	 (setq org-mobile-inbox-for-pull "~/org/flagged.org")
 
 	 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
@@ -728,11 +728,8 @@
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package which-key 
 	:ensure t
-	:defer t
-	:init
-	(setq which-key-idle-delay 4)
 	:diminish ""
-	:config (progn (which-key-mode 1) ))
+	:config (which-key-mode ) )
 
    #+END_SRC
 
@@ -775,9 +772,11 @@
    vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package dired+
-       ;; :ensure t
-       :load-path "~/.emacs.d/vendor"
+     ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
+     
+       ;;;:ensure t
        :defer t
+       :load-path  "~/.emacs.d/vendor/"
        :config
        (progn
 	 (setq diredp-hide-details-initially-flag t)
@@ -800,7 +799,8 @@
 	(kbd "C-j") 'dired-next-subdir
 	(kbd "C-k") 'dired-prev-subdir
 	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
-	(kbd "RET") 'dired-find-file-other-window
+	(kbd "RET") 'dired-find-file
+	(kbd "C-RET") 'dired-find-file-other-window
 	"f"         'helm-find-files
 	"J"         'dired-goto-file
 	(kbd "C-f") 'find-name-dired
@@ -1073,6 +1073,33 @@
    #+END_SRC
    
 * itself
+
+** main global meta bindings
+   #+BEGIN_SRC emacs-lisp :results output silent
+   (global-set-key (kbd "M-o") 'other-window)
+   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+
+   ;;save
+  (global-set-key (kbd "M-s") 'save-all)
+  ;;dired here
+  (global-set-key (kbd "M-d") 'dired-jump)
+
+
+(global-set-key (kbd "M-0") 'delete-window-balance)
+(global-set-key (kbd "M-1") 'delete-other-windows)
+(global-set-key (kbd "M-2") 'split-window-below-focus)
+(global-set-key (kbd "M-3") 'split-window-right-focus)
+
+;; enhaced buffer jumps
+(global-set-key (kbd "M-j") 'helm-mini)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
+(global-set-key (kbd "M-k") 'kill-this-buffer)
+
+; refresh = revert
+   (global-set-key (kbd "M-r")  'revert-buffer)
+   #+END_SRC
+   
 ** name
    #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
@@ -1198,12 +1225,6 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-   #+END_SRC
-   
-** bindings
-   #+BEGIN_SRC emacs-lisp :results output silent
-   (global-set-key (kbd "M-o") 'other-window)
-   (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
    #+END_SRC
    
 ** prompts
@@ -1350,9 +1371,14 @@ about what flexible matching means in this context."
 ** text-mode stuff
    #+BEGIN_SRC emacs-lisp :results output silent
 
-     ;(add-hook 'text-mode-hook 'flyspell-mode)
-;    ;(add-hook 'text-mode-hook 'writeroom-mode)
-     ;(add-hook 'text-mode-hook #'(lambda()(linum-mode 0)))
+	  ;; (add-hook 'text-mode-hook 'flyspell-mode)
+
+;;;	  (add-hook 'text-mode-hook #'abbrev-mode)
+     
+
+
+     
+     ;    ;(add-hook 'text-mode-hook 'writeroom-mode)
    #+END_SRC
    
 ;;; (setq custom-file (make-temp-file "emacs-custom"))  
@@ -1361,7 +1387,6 @@ about what flexible matching means in this context."
  (recentf-mode 1)
      ;(run-at-time nil (* 5 60) 'recentf-save-list)
    #+END_SRC
-   
    
 ** more sanity
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1416,7 +1441,6 @@ about what flexible matching means in this context."
     (interactive)
     (save-some-buffers t) ;; Do not prompt for confirmation.
     )
-  (global-set-key (kbd "C-x s") 'save-all)
   ;; Automatically save all file-visiting buffers when Emacs loses focus.
   (add-hook 'focus-out-hook 'save-all)
   (add-hook 'focus-out-hook '(lambda () (message "ran focus out hook")))
@@ -1444,33 +1468,11 @@ about what flexible matching means in this context."
   (balance-windows)
   (other-window 1))
 
-(global-set-key (kbd "M-0") 'delete-window-balance)
-(global-set-key (kbd "M-1") 'delete-other-windows)
-(global-set-key (kbd "M-2") 'split-window-below-focus)
-(global-set-key (kbd "M-3") 'split-window-right-focus)
    
    #+END_SRC
 
    #+RESULTS:
    : split-window-right-focus
-** enhaced buffer jumps
-   #+BEGIN_SRC  emacs-lisp
-;; Or switch-to-buffer if you don't use helm.
-(global-set-key (kbd "M-j") 'helm-mini)
-(global-set-key (kbd "M-[") 'previous-buffer)
-(global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "M-k") 'kill-this-buffer)
-   
-   #+END_SRC
-
-   #+RESULTS:
-   : kill-this-buffer
-** refresh = revert
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-r")  'revert-buffer)
-
-#+END_SRC
-
 * functionaria 
   #+BEGIN_SRC emacs-lisp :results output silent
 	  (require 'cl)
@@ -1698,14 +1700,28 @@ about what flexible matching means in this context."
 * text-writeroom
 #+BEGIN_SRC emacs-lisp :results output silent
 
-     (use-package writeroom-mode
-       :ensure t
-       :defer t 
-       ;; :config  (add-to-list 'text-mode-hook 
-       ;; 			(lambda ()
-       ;; 			  (writeroom-mode)
-       ;; 			  (setq org-edit-src-persistent-message "***")
-       ;; 			  ))
-  )
+  (use-package writeroom-mode
+    :ensure t
+    :defer t 
+    ;; :config  (add-to-list 'text-mode-hook 
+    ;; 			(lambda ()
+    ;; 			  (writeroom-mode)
+    ;; 			  (setq org-edit-src-persistent-message "***")
+    ;; 			  ))
+    )
 
+  (defun prose-mode ()
+    (interactive)
+
+    (linum-mode 0)
+    (writeroom-mode 1)
+    (page-break-lines-mode 1)
+    (flyspell-mode 1)
+    (abbrev-mode 1)
+    (setq buffer-face-mode-face
+	  '(:family "Times New Roman"
+		    :height 180
+		    :width semi-condensed))
+    (buffer-face-mode)
+    )
 #+END_SRC
