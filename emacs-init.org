@@ -312,7 +312,7 @@
 	     ("M-b" . helm-mini)
 	     ("M-m" . helm-all-mark-rings)
 	     ("M-B" . helm-buffers-list)
-	     ("s-r" . helm-recentf)
+	     ("M-r" . helm-recentf)
 	     ("M-y" . helm-show-kill-ring)
 	     ("M-f" . helm-find-files)
 	     ("s-o" . helm-occur)))
@@ -1097,7 +1097,7 @@
 (global-set-key (kbd "M-k") 'kill-this-buffer)
 
 ; refresh = revert
-   (global-set-key (kbd "M-r")  'revert-buffer)
+   (global-set-key (kbd "s-r")  'revert-buffer)
    #+END_SRC
    
 ** name
