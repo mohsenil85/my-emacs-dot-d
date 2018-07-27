@@ -5,21 +5,6 @@
 * todo
   http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
 
-* package config 
-  #+BEGIN_SRC emacs-lisp :results output silent
-;;      (setq package-enable-at-startup nil)
-;;      (setq package-archives '(("gnu"       . "https://elpa.gnu.org/packages/")
-;;                               ("melpa"     . "https://melpa.org/packages/")
-;;			       ("org"         . "http://orgmode.org/elpa/")
-;;			       ))
-;;      (package-initialize)
-;;
-;;      (unless (package-installed-p 'use-package)
-;;        (package-refresh-contents)
-;;        (package-install 'use-package))
-;;
-;;      (require 'use-package)
-  #+END_SRC
 * packages
 ** diminish
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -65,24 +50,30 @@
 ** evil
 *** main evil
     #+BEGIN_SRC emacs-lisp :results output silent
-;;      (use-package evil
-;;                   :ensure t
-;;                   :config
-;;                   (progn
-;;                     (evil-set-initial-state 'snake-mode 'emacs) 
-;;                     (evil-mode 1))
-;;                   :bind
-;;                   ("S-SPC" . evil-exit-emacs-state))
+
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
     #+END_SRC
     
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp :results output silent
-       (use-package evil-rsi 
-	 :diminish ""
-	 :ensure t 
-	 :defer t 
-	 :config (evil-rsi-mode 1) )  
+ ;;;      (use-package evil-rsi 
+ ;;;	 :diminish ""
+ ;;;	 :ensure t 
+ ;;;	 :defer t 
+ ;;;	 :config (evil-rsi-mode 1) )  
     #+END_SRC
     
 *** evil-org
@@ -308,15 +299,7 @@
       (global-set-key (kbd "C-c h g") 'helm-google-suggest)
       (global-set-key (kbd "C-c h r") 'helm-register)
 	      (helm-mode 1))
-	    :bind
-	    (("M-x" . helm-M-x)
-	     ("M-b" . helm-mini)
-	     ("M-m" . helm-all-mark-rings)
-	     ("M-B" . helm-buffers-list)
-	     ("M-r" . helm-recentf)
-	     ("M-y" . helm-show-kill-ring)
-	     ("M-f" . helm-find-files)
-	     ("s-o" . helm-occur)))
+)
       
 	  (use-package helm-descbinds :ensure t :defer t :config
 	    (progn
@@ -431,7 +414,7 @@
 	 (add-hook 'with-editor-mode-hook 'evil-insert-state)
 	 (use-package evil-magit :ensure t ))
 
-       :bind ("C-x g" . magit-status))
+)
    #+END_SRC
    
 ** Misc packages
@@ -737,15 +720,15 @@
 ** 
 ** dumb-jump
    #+BEGIN_SRC emacs-lisp :results output silent
-(use-package dumb-jump
-:ensure t 
-:defer t 
-  :bind (("M-g o" . dumb-jump-go-other-window)
-	 ("M-g j" . dumb-jump-go)
-	 ("M-g x" . dumb-jump-go-prefer-external)
-	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'helm)
-  )
+     (use-package dumb-jump
+     :ensure t 
+     :defer t 
+       :bind (("M-g o" . dumb-jump-go-other-window)
+	      ("M-g j" . dumb-jump-go)
+	      ("M-g x" . dumb-jump-go-prefer-external)
+	      ("M-g z" . dumb-jump-go-prefer-external-other-window))
+       :config (setq dumb-jump-selector 'helm)
+       )
 
    #+END_SRC
 ** image+
@@ -1086,35 +1069,8 @@
 
    #+END_SRC
    
-* itself
+* settings
 
-** main global meta bindings
-   #+BEGIN_SRC emacs-lisp :results output silent
-	(global-set-key (kbd "M-o") 'other-window)
-	(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
-
-	;;save
-       (global-set-key (kbd "M-s") 'save-all)
-       ;;dired here
-       (global-set-key (kbd "M-d") 'dired-jump)
-       (global-set-key (kbd "M-D") 'dired-jump-other-window)
-
-
-     (global-set-key (kbd "M-0") 'delete-window-balance)
-     (global-set-key (kbd "M-1") 'delete-other-windows)
-     (global-set-key (kbd "M-2") 'split-window-below-focus)
-     (global-set-key (kbd "M-3") 'split-window-right-focus)
-
-     ;; enhaced buffer jumps
-     (global-set-key (kbd "M-j") 'helm-mini)
-     (global-set-key (kbd "M-[") 'previous-buffer)
-     (global-set-key (kbd "M-]") 'next-buffer)
-     (global-set-key (kbd "M-k") 'kill-this-buffer)
-
-     ; refresh = revert
-	(global-set-key (kbd "s-r")  'revert-buffer)
-   #+END_SRC
-   
 ** name
    #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
@@ -1135,17 +1091,17 @@
    
 ** inital frame size
    #+BEGIN_SRC emacs-lisp :results output silent
-      (add-to-list 'initial-frame-alist '(height . 25 )) 
-      (add-to-list 'initial-frame-alist '(width . 80 )) 
+;;      (add-to-list 'initial-frame-alist '(height . 25 )) 
+ ;;     (add-to-list 'initial-frame-alist '(width . 80 )) 
      ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
      ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
    #+END_SRC
    
 ** tool bars, menu bars, and pop ups
    #+BEGIN_SRC emacs-lisp :results output silent
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
+(scroll-bar-mode 0)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
    #+END_SRC
 ** backups to tmp
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1175,6 +1131,7 @@
 ** silence bell
    #+BEGIN_SRC  emacs-lisp
 (setq ring-bell-function nil)
+(setq visible-bell t)
    #+END_SRC
 ** narrow-to-region
    this is what i'm trying to learn.  
@@ -1242,17 +1199,6 @@
 
    #+END_SRC
    
-** prompts
-   #+BEGIN_SRC emacs-lisp :results output silent
-  (fset 'yes-or-no-p 'y-or-n-p)
-  (setq confirm-nonexistent-file-or-buffer nil)
-
-  (setq kill-buffer-query-functions
-    (remq 'process-kill-buffer-query-function
-	   kill-buffer-query-functions))
-
-
-   #+END_SRC
 ** tool tips
    #+BEGIN_SRC emacs-lisp :results output silent
 (tooltip-mode -1)
@@ -1264,23 +1210,6 @@
   (setq default-directory (getenv "HOME"))
 
    #+END_SRC
-** jump to dired
-   #+BEGIN_SRC emacs-lisp :results output silent
-
-     ;; (require 'dired-x)
-
-   #+END_SRC
-   
-** registers
-   #+BEGIN_SRC emacs-lisp :results output silent
-(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
-(set-register ?o (cons 'file "~/org/organizer.org"))
-(set-register ?w (cons 'file "~/org/work.org"))
-(set-register ?z (cons 'file "~/.zshrc"))
-(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
-(set-register ?s (cons 'file "~/org/stories/ideas.org"))
-   #+END_SRC
-   
 ** hippie-expand 
    as per http://blog.binchen.org/posts/autocomplete-with-a-dictionary-with-hippie-expand.html
    and 
@@ -1402,7 +1331,6 @@ about what flexible matching means in this context."
  (recentf-mode 1)
      ;(run-at-time nil (* 5 60) 'recentf-save-list)
    #+END_SRC
-   
 ** more sanity
    #+BEGIN_SRC emacs-lisp :results output silent
  (setq delete-old-versions t )		; delete excess backup versions silently
@@ -1417,7 +1345,10 @@ about what flexible matching means in this context."
  (setq coding-system-for-write 'utf-8 )
  (setq sentence-end-double-space t)	; 
  (setq default-fill-column 80)		; toggle wrapping text at the 80th character
- (setq initial-scratch-message ";;; B)") ; print a default message in the empty scratch buffer opened at startup
+
+
+(setq load-prefer-newer t)
+;;(setq initial-scratch-message ":D")
 
    #+END_SRC
    
@@ -1434,7 +1365,7 @@ about what flexible matching means in this context."
    #+BEGIN_SRC emacs-lisp :results output silent
    (setq browse-url-browser-function 'eww-browse-url)
    #+END_SRC
-** disasbled functions
+** disabled functions
    #+BEGIN_SRC emacs-lisp :results output silent
 (defun not-anymore ()
 "For overwriting wrong keybindings"
@@ -1447,6 +1378,101 @@ about what flexible matching means in this context."
 (global-set-key (kbd "C-h h") 'not-anymore)
 (global-set-key (kbd "C-h C-a") 'not-anymore)
    #+END_SRC
+* functions
+** load-init file, plus other fun
+  
+  #+BEGIN_SRC emacs-lisp :results output silent
+
+  
+	  (require 'cl)
+
+      (defun copy-filename-to-clip ()
+    "Put the current file name on the clipboard"
+	(interactive)
+	(let ((filename (if (equal major-mode 'dired-mode)
+			    default-directory
+			  (buffer-file-name))))
+	  (when filename
+	    (with-temp-buffer
+	      (insert filename)
+	      (clipboard-kill-region (point-min) (point-max)))
+	    (message filename))))
+
+	  (defun load-init-file ()
+	    (interactive)
+	    (load-file (concat "~/.emacs.d/init.el")))
+	    
+
+	  (defun edit-init-org-file ()
+	    (interactive)
+	    (find-file (concat "~/.emacs.d/emacs-init.el")))
+
+
+	  (defun add-hook-to-modes (modes hook)
+	    (dolist (mode modes)
+	      (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+			hook)))
+
+	  (defun halt ()
+	    (interactive)
+	    (save-some-buffers)
+	    (kill-emacs))
+
+	  (defun my-whitespace-mode-hook ()
+	    (setq whitespace-action '(auto-cleanup)
+		  whitespace-style  '(face tabs trailing lines-tail empty)
+		  ;; use fill-column value instead
+		  whitespace-line-column nil)
+	    (whitespace-mode))
+
+	  (defun my-makefile-mode-hook ()
+	    (setq indent-tabs-mode t
+		  tab-width 4))
+
+	  (defun make-region-read-only (start end)
+	    (interactive "*r")
+	    (let ((inhibit-read-only t))
+	      (put-text-property start end 'read-only t)))
+
+	  (defun make-region-read-write (start end)
+	    (interactive "*r")
+	    (let ((inhibit-read-only t))
+	      (put-text-property start end 'read-only nil)))
+
+  #+END_SRC
+  
+  
+** swap buffers
+   taken from:  https://stackoverflow.com/questions/1774832/how-to-swap-the-buffers-in-2-windows-emacs
+#+BEGIN_SRC emacs-lisp
+
+(defun swap-buffers ()
+  "Put the buffer from the selected window in next window, and vice versa"
+  (interactive)
+  (let* ((this (selected-window))
+     (other (next-window))
+     (this-buffer (window-buffer this))
+     (other-buffer (window-buffer other)))
+    (set-window-buffer other this-buffer)
+    (set-window-buffer this other-buffer)
+    )
+    (other-window 1) ;;keep focus on starting window
+  )
+
+#+END_SRC
+
+#+RESULTS:
+: swap-buffers
+
+** clipboard-to-elfeed
+   #+BEGIN_SRC emacs-lisp :results output silent
+  (defun my-clipboard-to-elfeed ()
+    (interactive)
+    (let ((link (pbpaste)))
+      (elfeed-add-feed link)))
+   #+END_SRC
+   
+
 ** save all, save all on on unfocus
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
    #+BEGIN_SRC emacs-lisp
@@ -1488,68 +1514,38 @@ about what flexible matching means in this context."
 
    #+RESULTS:
    : split-window-right-focus
-* functionaria 
-  #+BEGIN_SRC emacs-lisp :results output silent
-	  (require 'cl)
+** switch vertical and horizontal layout
+   taken from:  
+https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-horizontal-split-to-a-vertical-split-in-one-move#14881250
+#+BEGIN_SRC emacs-lisp
 
-      (defun copy-filename-to-clip ()
-    "Put the current file name on the clipboard"
-	(interactive)
-	(let ((filename (if (equal major-mode 'dired-mode)
-			    default-directory
-			  (buffer-file-name))))
-	  (when filename
-	    (with-temp-buffer
-	      (insert filename)
-	      (clipboard-kill-region (point-min) (point-max)))
-	    (message filename))))
 
-	  (defun load-init-file ()
-	    (interactive)
-	    (load-file (concat "~/.emacs.d/init.el")))
+(defun vertical-horizontal-swizzle ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+         (next-win-buffer (window-buffer (next-window)))
+         (this-win-edges (window-edges (selected-window)))
+         (next-win-edges (window-edges (next-window)))
+         (this-win-2nd (not (and (<= (car this-win-edges)
+                     (car next-win-edges))
+                     (<= (cadr this-win-edges)
+                     (cadr next-win-edges)))))
+         (splitter
+          (if (= (car this-win-edges)
+             (car (window-edges (next-window))))
+          'split-window-horizontally
+        'split-window-vertically)))
+    (delete-other-windows)
+    (let ((first-win (selected-window)))
+      (funcall splitter)
+      (if this-win-2nd (other-window 1))
+      (set-window-buffer (selected-window) this-win-buffer)
+      (set-window-buffer (next-window) next-win-buffer)
+      (select-window first-win)
+      (if this-win-2nd (other-window 1))))))
 
-	  (defun add-hook-to-modes (modes hook)
-	    (dolist (mode modes)
-	      (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-			hook)))
-
-	  (defun halt ()
-	    (interactive)
-	    (save-some-buffers)
-	    (kill-emacs))
-
-	  (defun my-whitespace-mode-hook ()
-	    (setq whitespace-action '(auto-cleanup)
-		  whitespace-style  '(face tabs trailing lines-tail empty)
-		  ;; use fill-column value instead
-		  whitespace-line-column nil)
-	    (whitespace-mode))
-
-	  (defun my-makefile-mode-hook ()
-	    (setq indent-tabs-mode t
-		  tab-width 4))
-
-	  (defun make-region-read-only (start end)
-	    (interactive "*r")
-	    (let ((inhibit-read-only t))
-	      (put-text-property start end 'read-only t)))
-
-	  (defun make-region-read-write (start end)
-	    (interactive "*r")
-	    (let ((inhibit-read-only t))
-	      (put-text-property start end 'read-only nil)))
-
-  #+END_SRC
-  
-  
-** clipboard-to-elfeed
-   #+BEGIN_SRC emacs-lisp :results output silent
-  (defun my-clipboard-to-elfeed ()
-    (interactive)
-    (let ((link (pbpaste)))
-      (elfeed-add-feed link)))
-   #+END_SRC
-   
+#+END_SRC
 * osx specific 
   handle meta as command
   toggle fullscreen
@@ -1715,30 +1711,93 @@ about what flexible matching means in this context."
 * text-writeroom
   #+BEGIN_SRC emacs-lisp :results output silent
 
-  (use-package writeroom-mode
-    :ensure t
-    :defer t 
-    ;; :config  (add-to-list 'text-mode-hook 
-    ;; 			(lambda ()
-    ;; 			  (writeroom-mode)
-    ;; 			  (setq org-edit-src-persistent-message "***")
-    ;; 			  ))
-    )
+    (use-package writeroom-mode
+      :ensure t
+      :defer t 
+      ;; :config  (add-to-list 'text-mode-hook 
+      ;; 			(lambda ()
+      ;; 			  (writeroom-mode)
+      ;; 			  (setq org-edit-src-persistent-message "***")
+      ;; 			  ))
+      )
 
-    (
-  defun prose-mode ()
-  (interactive)
+    (defun prose-mode ()
+      (interactive)
 
-  (linum-mode 0)
-  (writeroom-mode 1)
-  (page-break-lines-mode 1)
-  (flyspell-mode 1)
-  (abbrev-mode 1)
-  (setq buffer-face-mode-face
-	'(:family "Times New Roman"
-		  :height 180
-		  :width semi-condensed))
-  (buffer-face-mode)
-)
+      (linum-mode 0)
+      (writeroom-mode 1)
+      (page-break-lines-mode 1)
+      (flyspell-mode 1)
+      (abbrev-mode 1)
+      (setq buffer-face-mode-face
+	    '(:family "Times New Roman"
+		      :height 180
+		      :width semi-condensed))
+      (buffer-face-mode)
+      )
 
   #+END_SRC
+* interface
+** registers
+   #+BEGIN_SRC emacs-lisp :results output silent
+(set-register ?e (cons 'file "~/.emacs.d/emacs-init.org"))
+(set-register ?o (cons 'file "~/org/organizer.org"))
+(set-register ?w (cons 'file "~/org/work.org"))
+(set-register ?z (cons 'file "~/.zshrc"))
+(set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
+(set-register ?p (cons 'file "~/Projects/"))
+(set-register ?s (cons 'file "~/org/stories/ideas.org"))
+   #+END_SRC
+   
+** main global meta bindings
+   #+BEGIN_SRC emacs-lisp :results output silent
+
+     (global-set-key (kbd "M-0") 'delete-window-balance)
+     (global-set-key (kbd "M-1") 'delete-other-windows)
+     (global-set-key (kbd "M-2") 'split-window-below-focus)
+     (global-set-key (kbd "M-3") 'split-window-right-focus)
+
+     (global-set-key (kbd "M-N") 'evil-buffer-new)
+     (global-set-key (kbd "M-P") 'package-install)
+
+     (global-set-key (kbd "M-[") 'previous-buffer)
+     (global-set-key (kbd "M-]") 'next-buffer)
+
+     (global-set-key (kbd "M-B") 'ibuffer)
+     (global-set-key (kbd "M-b") 'helm-mini)
+     (global-set-key (kbd "M-d") 'dired-jump)
+     (global-set-key (kbd "M-D") 'dired-jump-other-window)
+     (global-set-key (kbd "M-e") 'edit-init-org-file)
+     (global-set-key (kbd "M-f") 'helm-find-files)
+     (global-set-key (kbd "M-i") 'helm-info)
+     (global-set-key (kbd "M-k") 'kill-this-buffer)
+     (global-set-key (kbd "M-m") 'helm-all-mark-rings)
+     (global-set-key (kbd "M-o") 'other-window)
+     (global-set-key (kbd "M-r") 'helm-recentf)
+     (global-set-key (kbd "M-s") 'save-all)
+     (global-set-key (kbd "M-t") 'swap-buffers)
+     (global-set-key (kbd "M-T") 'vertical-horizontal-swizzle)
+     (global-set-key (kbd "M-x") 'helm-M-x)
+     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+     (global-set-key (kbd "s-g") 'magit-status)
+     (global-set-key (kbd "s-i") 'load-init-file)
+     (global-set-key (kbd "s-o") 'helm-occur)
+     (global-set-key (kbd "s-p") 'package-list-packages-no-fetch)
+     (global-set-key (kbd "s-r")  'revert-buffer)
+     (global-set-key (kbd "s-s")  'sort-lines)
+     ;; enhaced buffer jumps
+     ;;; refresh = revert
+     ;;dired here
+     ;;save
+     ;;swap buffers
+;;     (global-set-key (kbd "M-j") 'helm-mini) ;;;dumbjump
+
+     ;;fallbacks
+     (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+     (global-set-key (kbd "C-x C-j") 'dired-jump)
+     (global-set-key (kbd "C-x C-b") 'helm-mini)
+
+
+   #+END_SRC
+   
