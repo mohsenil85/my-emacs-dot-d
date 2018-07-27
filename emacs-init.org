@@ -78,11 +78,11 @@
     
 *** evil-rsi
     #+BEGIN_SRC emacs-lisp :results output silent
-      ;; (use-package evil-rsi 
-      ;;   :diminish ""
-      ;;   :ensure t 
-      ;;   :defer t 
-      ;;   :config (setq evil-rsi-mode 1) )  
+       (use-package evil-rsi 
+         :diminish ""
+         :ensure t 
+         :defer t 
+         :config (evil-rsi-mode 1) )  
     #+END_SRC
     
 *** evil-org
@@ -219,7 +219,7 @@
 *** 
 ** evil-magit
    #+BEGIN_SRC emacs-lisp :results output silent
-
+   
 
    #+END_SRC
 ** flx
@@ -1164,30 +1164,31 @@
    #+END_SRC
 ** color theme
    #+BEGIN_SRC emacs-lisp :results output silent
-     ;;       (use-package gandalf-theme :ensure t)
-     ;;  (use-package mbo70s-theme :ensure t)
-     ;;(use-package warm-night-theme :ensure t)
-     ;;(use-package soft-morning-theme :ensure t )
-     ;;(use-package alect-themes :ensure t)
-     ;;(use-package yoshi-theme :ensure t)
-     ;;  (use-package slime-theme :ensure t)
-     ;;  (use-package basic-theme :ensure t)
-     ;;  (use-package minimal-theme :ensure t)
-     ;; (use-package white-theme :ensure t)
-     ;;(use-package paper-theme :ensure t )
-					     ;(use-package soft-charcoal-theme :ensure t )
-     ;;(use-package soft-morning-theme :ensure t )
-					     ;(use-package django-theme :ensure t )
-     ;;(use-package hydandata-light-theme :ensure t)
-     ;;(use-package solarized-theme :ensure t)
-
-					     ;(load-theme 'adwaita)
-					     ;   (load-theme 'gandalf)
-					     ; (load-theme 'mbo70s)
-
-     ;;(setq my-theme 'soft-morning)
-     ;;(enable-theme my-theme)
-     ;;(load-theme my-theme t t)
+     ;;;     ;;       (use-package gandalf-theme :ensure t)
+     ;;;       (use-package mbo70s-theme :ensure t)
+     ;;;     (use-package warm-night-theme :ensure t)
+     ;;;     (use-package soft-morning-theme :ensure t )
+     ;;;     (use-package alect-themes :ensure t)
+     ;;;     (use-package yoshi-theme :ensure t)
+     ;;;       (use-package slime-theme :ensure t)
+     ;;;       (use-package basic-theme :ensure t)
+     ;;;       (use-package minimal-theme :ensure t)
+     ;;;      (use-package white-theme :ensure t)
+     ;;;     (use-package paper-theme :ensure t )
+     ;;;					     ;(use-package soft-charcoal-theme :ensure t )
+     ;;;     (use-package soft-morning-theme :ensure t )
+     ;;;					     ;(use-package django-theme :ensure t )
+     ;;;     (use-package hydandata-light-theme :ensure t)
+     ;;;     (use-package solarized-theme :ensure t)
+     ;;;
+     ;;;					     ;(load-theme 'adwaita)
+     ;;;					     ;   (load-theme 'gandalf)
+     ;;;					     ; (load-theme 'mbo70s)
+     ;;;
+          ;;;;;(setq my-theme 'minimal-light)
+          ;;(use-package minimal-theme :ensure t)
+          ;;(enable-theme 'minimal-light)
+          ;;;(load-theme  'minimal-light t t)
    #+END_SRC
 ** utf-8 stuff
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1374,9 +1375,9 @@ about what flexible matching means in this context."
  (setq ring-bell-function 'ignore )	; silent bell when you make a mistake
  (setq coding-system-for-read 'utf-8 )	; use utf-8 by default
  (setq coding-system-for-write 'utf-8 )
- (setq sentence-end-double-space nil)	; sentence SHOULD end with only a point.
+ (setq sentence-end-double-space t)	; 
  (setq default-fill-column 80)		; toggle wrapping text at the 80th character
- (setq initial-scratch-message ";;;;happy hacking") ; print a default message in the empty scratch buffer opened at startup
+ (setq initial-scratch-message ";;; B)") ; print a default message in the empty scratch buffer opened at startup
 
    #+END_SRC
    
@@ -1574,6 +1575,14 @@ about what flexible matching means in this context."
 
   #+END_SRC
   
+* zig specific
+
+  #+BEGIN_SRC emacs-lisp :results output silent
+;  (when (string= (system-name) "zig") 
+  ;(set-frame-font "Inconsolata-16")
+  ;;(load-theme 'alect-black)  
+  ;)
+  #+END_SRC
 * email stuff
   #+BEGIN_SRC emacs-lisp :results output silent
     ;; (add-to-list 'load-path  "~/Projects/elisp/mu4e-multi/" )
@@ -1686,6 +1695,17 @@ about what flexible matching means in this context."
 
 
   #+END_SRC
-  
-  
-  
+* text-writeroom
+#+BEGIN_SRC emacs-lisp :results output silent
+
+     (use-package writeroom-mode
+       :ensure t
+       :defer t 
+       ;; :config  (add-to-list 'text-mode-hook 
+       ;; 			(lambda ()
+       ;; 			  (writeroom-mode)
+       ;; 			  (setq org-edit-src-persistent-message "***")
+       ;; 			  ))
+  )
+
+#+END_SRC
