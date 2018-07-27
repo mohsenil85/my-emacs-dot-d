@@ -422,13 +422,13 @@
 	  (use-package ag :ensure t :defer t)
 	  ;;(use-package ggtags :ensure)
 	  (use-package markdown-mode :ensure t :defer t)
-	  (use-package tex :ensure auctex :defer t  :config (require 'tex) )
+	  ;;(use-package tex :ensure auctex :defer t  :config (require 'tex) )
 
-(add-hook 'LaTeX-mode-hook (lambda ()
-  (push 
-    '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-      :help "Run Latexmk on file")
-    TeX-command-list)))
+;;(add-hook 'LaTeX-mode-hook (lambda ()
+;;  (push 
+;;    '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+;;      :help "Run Latexmk on file")
+;;    TeX-command-list)))
 
    #+END_SRC
    
