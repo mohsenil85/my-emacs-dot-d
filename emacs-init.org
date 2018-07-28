@@ -1241,9 +1241,9 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 	  (pbcopy)
 	  (delete-region (region-beginning) (region-end)))
 
-	(global-set-key (kbd "H-c") 'pbcopy)
-	(global-set-key (kbd "H-v") 'pbpaste)
-	(global-set-key (kbd "H-x") 'pbcut)
+	(global-set-key (kbd "M-c") 'pbcopy)
+	(global-set-key (kbd "M-v") 'pbpaste)
+	(global-set-key (kbd "M-X") 'pbcut)
 
 	;;recomended by brew
 	(let ((default-directory "/usr/local/share/emacs/site-lisp/"))
@@ -1256,10 +1256,17 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 * zig specific
 
   #+BEGIN_SRC emacs-lisp :results output silent
-;  (when (string= (system-name) "zig") 
-  ;(set-frame-font "Inconsolata-16")
-  ;;(load-theme 'alect-black)  
-  ;)
+    (when (eq system-type 'gnu/linux)
+	(global-set-key (kbd "M-V") 'mouse-yank-primary)
+	(global-set-key (kbd "M-v") 'evil-paste-after)
+	(global-set-key (kbd "M-c") 'evil-copy)
+	(global-set-key (kbd "M-X") 'evil-delete-char)
+
+      )
+    ;  (when (string= (system-name) "zig") 
+      ;(set-frame-font "Inconsolata-16")
+      ;;(load-theme 'alect-black)  
+      ;)
   #+END_SRC
 * email stuff
   #+BEGIN_SRC emacs-lisp :results output silent
@@ -1435,11 +1442,13 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 	  (global-set-key (kbd "M-b") 'helm-mini)
 	  (global-set-key (kbd "M-d") 'dired-jump)
 	  (global-set-key (kbd "M-e") 'edit-init-org-file)
-	  (global-set-key (kbd "M-f") 'ag)
+	  (global-set-key (kbd "M-f") 'helm-ag)
 	  (global-set-key (kbd "M-F") 'ag-dired)
 	  (global-set-key (kbd "M-i") 'helm-info)
 	  (global-set-key (kbd "M-k") 'kill-this-buffer)
 	  (global-set-key (kbd "M-m") 'helm-all-mark-rings)
+	  (global-set-key (kbd "M-u") 'helm-occur)
+	  (global-set-key (kbd "M-U") 'undo-tree-visualize)
 	  (global-set-key (kbd "M-o") 'helm-find-files)
 	  (global-set-key (kbd "M-O") 'projectile-switch-project)
 	  (global-set-key (kbd "M-q") 'save-buffers-kill-emacs)
