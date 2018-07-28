@@ -6,132 +6,67 @@
   http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
 
 * packages
-** diminish
+** dired
+   vinagresque
    #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package diminish :ensure t :defer t)
-   #+END_SRC
-** exwm
-   #+BEGIN_SRC emacs-lisp :results output silent
-   ;;  (use-package exwm :ensure t :defer t 
-   ;;    :config (exwm-config-default))
-   #+END_SRC
-** term
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package term
-		  :bind (("C-c t" . term)
-			 :map term-mode-map
-			 ("M-p" . term-send-up)
-			 ("M-n" . term-send-down)
-			 :map term-raw-map
-			 ("M-o" . other-window)
-			 ("M-p" . term-send-up)
-			 ("M-n" . term-send-down)))
-   #+END_SRC
-** no-littering
-   #+BEGIN_SRC emacs-lisp :results output silent
-   ;  (use-package no-littering :ensure t )
-   #+END_SRC
-** emojify
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package emojify :ensure t :defer t )
-   #+END_SRC
-** bind-map
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package bind-map :ensure t :defer t)
-   #+END_SRC
-** general
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package general
-       :ensure t   
-       :defer 1   
-       :config   (setq leader "SPC"))
-   #+END_SRC
-   
-** evil
-*** main evil
-    #+BEGIN_SRC emacs-lisp :results output silent
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration nil)
-  :config
-  (evil-mode 1))
+     (use-package dired
+       :defer t
+       :config
+       (general-define-key
+	:keymaps '(dired-mode-map)
+	"j"         'evil-next-line
+	"k"         'evil-previous-line
+	"-"         'dired-up-directory
+	"0"         'dired-back-to-start-of-files
+	(kbd "C-j") 'dired-next-subdir
+	(kbd "C-k") 'dired-prev-subdir
+	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+	(kbd "RET") 'dired-find-file
+	(kbd "C-<return>") 'dired-find-file-other-window
+	"f"         'helm-find-files
+	"J"         'dired-goto-file
+	(kbd "C-f") 'find-name-dired
+	"H"         'diredp-dired-recent-dirs
+	"T"         'dired-tree-down
+	"K"         'dired-do-kill-lines
+	"r"         'revert-buffer
+	(kbd "C-r") 'dired-do-redisplay
+	"G"         'evil-goto-line)
+       )
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
 
-    #+END_SRC
-    
-    
-*** evil-rsi
-    #+BEGIN_SRC emacs-lisp :results output silent
- ;;;      (use-package evil-rsi 
- ;;;	 :diminish ""
- ;;;	 :ensure t 
- ;;;	 :defer t 
- ;;;	 :config (evil-rsi-mode 1) )  
-    #+END_SRC
-    
-*** evil-org
-    #+BEGIN_SRC emacs-lisp :results output silent
-    ;  (use-package evil-org :ensure t :defer t  :init (require 'evil-org))  
-    #+END_SRC
-    
-*** vimmish fold
-    #+BEGIN_SRC emacs-lisp :results output silent
-      ;; (use-package vimish-fold
-      ;;   :ensure t
-      ;;   :config
-      ;;   (progn
-      ;;     (evil-leader/set-key "ff" 'vimish-fold)
-      ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
-      ;;     ))
-    #+END_SRC
-** ac mode
-   #+BEGIN_SRC emacs-lisp :results output silent
-      ;      (use-package auto-complete
-      ;        :ensure
-      ;        :config
-      ;        (progn
-      ;          (require 'auto-complete-config)
-      ;          (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
-      ;          (ac-config-default)
-      ;          (ac-set-trigger-key "TAB")
-      ;          (ac-set-trigger-key "<tab>")
-      ; ))
-   #+END_SRC
-   
-** avy
-   #+BEGIN_SRC emacs-lisp :results output silent
-;(use-package avy :ensure t
-;  :commands (avy-goto-word-1))
-   #+END_SRC
-   
-** better-defaults
-   #+BEGIN_SRC emacs-lisp :results output silent
-  (use-package better-defaults :ensure t :defer t )
-   #+END_SRC
-   
-** deft org
-   #+BEGIN_SRC emacs-lisp :results output silent
-;  (use-package deft 
-;    :ensure t
-;    :config (progn
-;              (setq
-;               deft-extension "org"
-;               deft-directory "~/org/"
-;               deft-text-mode 'org-mode)
-;              (global-set-key (kbd "H-d") 'deft)))
-   #+END_SRC
 
-** evil-evilified-state
+     (use-package dired+
+	  ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
+
+	    ;;;:ensure t
+       ;;;:defer t
+       :load-path  "~/.emacs.d/vendor"
+       :config
+       (progn
+	 (setq diredp-hide-details-initially-flag t)
+	 (setq diredp-hide-details-propagate-flag t)
+	 ;; use single buffer for all dired navigation
+	 ;; disable font themeing from dired+
+	 ;; (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
+	 ;; (toggle-diredp-find-file-reuse-dir 1)
+	 ))
+
+
+
+   #+END_SRC
+** dumb-jump
    #+BEGIN_SRC emacs-lisp :results output silent
-;;   (use-package evil-evilified-state
-;;   :load-path "~/Projects/elisp/evil-evilified-state/")
+     (use-package dumb-jump
+     :ensure t 
+     :defer t 
+       :bind (("M-g o" . dumb-jump-go-other-window)
+	      ("M-g j" . dumb-jump-go)
+	      ("M-g x" . dumb-jump-go-prefer-external)
+	      ("M-g z" . dumb-jump-go-prefer-external-other-window))
+       :config (setq dumb-jump-selector 'helm)
+       )
 
    #+END_SRC
 ** elfeed
@@ -208,16 +143,27 @@
 
    #+END_SRC
 *** 
-** evil-magit
-   #+BEGIN_SRC emacs-lisp :results output silent
-   
+** evil
+*** main evil
+    
+    #+BEGIN_SRC emacs-lisp :results output silent
 
-   #+END_SRC
-** flx
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;(use-package flx :ensure t)
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration nil)
+  :config
+  (evil-mode 1))
 
-   #+END_SRC
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+    #+END_SRC
+    
+    
 ** flycheck
    #+BEGIN_SRC emacs-lisp  :results output silent
 	(use-package flycheck
@@ -241,6 +187,14 @@
      (add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
+** general
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package general
+       :ensure t   
+       :defer 1   
+       :config   (setq leader "SPC"))
+   #+END_SRC
+   
 ** git-gutter-fringe
    #+BEGIN_SRC emacs-lisp :results output silent
   (use-package git-gutter-fringe
@@ -310,52 +264,6 @@
 
     #+END_SRC
     
-*** helm-swoop
-    #+BEGIN_SRC emacs-lisp :results output silent
-;;      (use-package helm-swoop 
-;;        :ensure
-;;        :config
-;;        (progn
-;;          (global-set-key (kbd "M-i") 'helm-swoop)
-;;          (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-;;          (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-;;          (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
-;;
-;;          ;; When doing isearch, hand the word over to helm-swoop
-;;          (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
-;;          ;; From helm-swoop to helm-multi-swoop-all
-;;          (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-;;          ;; When doing evil-search, hand the word over to helm-swoop
-;;          ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
-;;
-;;          ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-;;          (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-;;
-;;          ;; Move up and down like isearch
-;;          (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-;;          (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-;;          (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-;;          (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-;;
-;;          ;; Save buffer when helm-multi-swoop-edit complete
-;;          (setq helm-multi-swoop-edit-save t)
-;;
-;;          ;; If this value is t, split window inside the current window
-;;          (setq helm-swoop-split-with-multiple-windows nil)
-;;
-;;          ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-;;          (setq helm-swoop-split-direction 'split-window-vertically)
-;;
-;;          ;; If nil, you can slightly boost invoke speed in exchange for text color
-;;          (setq helm-swoop-speed-or-color nil)
-;;
-;;          ;; ;; Go to the opposite side of line from the end or beginning of line
-;;          (setq helm-swoop-move-to-line-cycle t)
-;;
-;;          ;; Optional face for line numbers
-;;          ;; Face name is `helm-swoop-line-number-face`
-;;          (setq helm-swoop-use-line-number-face t)))
-    #+END_SRC
 *** helm-ag
     #+BEGIN_SRC emacs-lisp :results output silent
 (use-package helm-ag :ensure t :defer t)
@@ -404,6 +312,40 @@
 
     #+END_SRC
     
+** image+
+   #+BEGIN_SRC emacs-lisp :results output silent
+	  (use-package image+
+	    :ensure hydra
+	    :defer t
+	    :config 
+     (progn
+     (eval-after-load 'image+
+       `(when (require 'hydra nil t)
+	  (defhydra imagex-sticky-binding (global-map "C-x C-l")
+	    "Manipulating Image"
+	    ("+" imagex-sticky-zoom-in "zoom in")
+	    ("-" imagex-sticky-zoom-out "zoom out")
+	    ("M" imagex-sticky-maximize "maximize")
+	    ("O" imagex-sticky-restore-original "restore original")
+	    ("S" imagex-sticky-save-image "save file")
+	    ("r" imagex-sticky-rotate-right "rotate right")
+	    ("l" imagex-sticky-rotate-left "rotate left"))))
+     )
+     )
+   #+END_SRC
+** keyfreq
+   #+BEGIN_SRC emacs-lisp :results output silent
+(use-package keyfreq
+ :ensure t
+ :defer t
+:init
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
+
+ )
+   #+END_SRC
+   
 ** magit
    #+BEGIN_SRC emacs-lisp :results output silent
      (use-package magit 
@@ -417,32 +359,15 @@
 )
    #+END_SRC
    
-** Misc packages
+** one liners
    #+BEGIN_SRC emacs-lisp :results output silent
-	  (use-package ag :ensure t :defer t)
-	  ;;(use-package ggtags :ensure)
-	  (use-package markdown-mode :ensure t :defer t)
-	  ;;(use-package tex :ensure auctex :defer t  :config (require 'tex) )
-
-;;(add-hook 'LaTeX-mode-hook (lambda ()
-;;  (push 
-;;    '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-;;      :help "Run Latexmk on file")
-;;    TeX-command-list)))
-
-   #+END_SRC
-   
-** org-ac
-   #+BEGIN_SRC emacs-lisp :results output silent
-;;      (use-package org-ac
-;;        :ensure
-;;        :init
-;;        (progn
-;;          (require 'org-ac)
-;;          ;; Make config suit for you. About the config item, eval the following sexp.
-;;          ;; (customize-group "org-ac")
-;;          (org-ac/config-default)
-;;          ) )  
+     (use-package ag :ensure t :defer t)
+     (use-package better-defaults :ensure t :defer t )
+     (use-package bind-map :ensure t :defer t)
+     (use-package diminish :ensure t :defer t)
+     (use-package emojify :ensure t :defer t )
+     (use-package markdown-mode :ensure t :defer t)
+     (use-package recursive-narrow :ensure t :defer t)
    #+END_SRC
 ** org-mode
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -587,37 +512,10 @@
 
    #+end_src
    
-** keyfreq
-   #+BEGIN_SRC emacs-lisp :results output silent
-(use-package keyfreq
- :ensure t
- :defer t
-:init
-(require 'keyfreq)
-(keyfreq-mode 1)
-(keyfreq-autosave-mode 1)
-
- )
-   #+END_SRC
-   
-** paradox --better package search
-   #+BEGIN_SRC emacs-lisp :results output silent
-;(use-package paradox :ensure t :defer t)
-   #+END_SRC
-   
 ** persistent scratch
    #+BEGIN_SRC emacs-lisp :results output silent
 (use-package persistent-scratch :ensure t
 :config (persistent-scratch-setup-default))
-   #+END_SRC
-   
-** powerline
-   #+BEGIN_SRC emacs-lisp :results output silent
-  ;; (use-package powerline 
-  ;;   :ensure
-  ;;   :config (progn
-  ;;             (require 'powerline)
-  ;;             (powerline-center-evil-theme)))
    #+END_SRC
    
 ** projectile
@@ -632,13 +530,6 @@
 	 (setq projectile-switch-project-action 'projectile-dired)
 	 (setq projectile-mode-line '(:eval (format " [%s]" (projectile-project-name))))
 	 ))
-   #+END_SRC
-   
-** recursive narrow
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package recursive-narrow :ensure t :defer t
-       :bind (("C-x n n" . recursive-narrow-or-widen-dwim)
-	      ("C-x n w" . recursive-widen-dwim)))
    #+END_SRC
    
 ** sentence navigation
@@ -658,56 +549,18 @@
       )
    #+END_SRC
    
-** swiper et al
-   
+** term
    #+BEGIN_SRC emacs-lisp :results output silent
-     ;; (use-package ivy 
-     ;;   :ensure  ivy-hydra 
-     ;;   :diminish (ivy-mode . "") ; does not display ivy in the modeline
-     ;;   :init (ivy-mode 1)        ; enable ivy globally at startup
-     ;;   :bind (:map ivy-mode-map  ; bind in the ivy buffer
-     ;;               ("C-'" . ivy-avy)) ; C-' to ivy-avy
-     ;;   :config
-     ;;   (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
-     ;;   (setq ivy-height 10)               ; set height of the ivy window
-     ;;   (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
-     ;;   (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-     ;;                                         ;(setq ivy-display-style 'nil)
-     ;;   (defun ivy-yank-action (x)
-     ;;     (kill-new x))
-
-     ;;   (defun ivy-copy-to-buffer-action (x)
-     ;;     (with-ivy-window
-     ;;       (insert x)))
-
-     ;;   (ivy-set-actions
-     ;;    t
-     ;;    '(("i" ivy-copy-to-buffer-action "insert")
-     ;;      ("y" ivy-yank-action "yank")))
-     ;;   )
-
-     ;; (use-package counsel :ensure t
-     ;;   :bind*                           ; load counsel when pressed
-     ;;   (("M-x"     . counsel-M-x)       ; M-x use counsel
-     ;;    ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
-     ;;    ("C-x C-r" . counsel-recentf)   ; search recently edited files
-     ;;                                         ;("C-c f"   . counsel-git)       ; search for files in git repo
-     ;;                                         ;("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
-     ;;    ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
-     ;;                                         ;("C-c l"   . counsel-locate)   ; search for files or else using locate
-     ;;    ("C-h b"   . counsel-descbinds)   ; search for files or else using locate
-     ;;    ("C-h v"   . counsel-describe-variable)   ; search for files or else using locate
-     ;;    ("M-y"   . counsel-yank-pop)   ; clipboard
-     ;;    ("C-h f"   . counsel-describe-function)   ; search for files or else using locate
-     ;;    ("C-c C-r" . ivy-resume)
-
-
-     ;;    ("C-s"   . swiper))        ; find 
-     ;;   )
-     ;; ;
-					     ;
+     (use-package term
+		  :bind (("C-c t" . term)
+			 :map term-mode-map
+			 ("M-p" . term-send-up)
+			 ("M-n" . term-send-down)
+			 :map term-raw-map
+			 ("M-o" . other-window)
+			 ("M-p" . term-send-up)
+			 ("M-n" . term-send-down)))
    #+END_SRC
-   
 ** which key
    #+BEGIN_SRC emacs-lisp :results output silent
       (use-package which-key 
@@ -717,106 +570,6 @@
 
    #+END_SRC
 
-** 
-** dumb-jump
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package dumb-jump
-     :ensure t 
-     :defer t 
-       :bind (("M-g o" . dumb-jump-go-other-window)
-	      ("M-g j" . dumb-jump-go)
-	      ("M-g x" . dumb-jump-go-prefer-external)
-	      ("M-g z" . dumb-jump-go-prefer-external-other-window))
-       :config (setq dumb-jump-selector 'helm)
-       )
-
-   #+END_SRC
-** image+
-   #+BEGIN_SRC emacs-lisp :results output silent
-	  (use-package image+
-	    :ensure hydra
-	    :defer t
-	    :config 
-     (progn
-     (eval-after-load 'image+
-       `(when (require 'hydra nil t)
-	  (defhydra imagex-sticky-binding (global-map "C-x C-l")
-	    "Manipulating Image"
-	    ("+" imagex-sticky-zoom-in "zoom in")
-	    ("-" imagex-sticky-zoom-out "zoom out")
-	    ("M" imagex-sticky-maximize "maximize")
-	    ("O" imagex-sticky-restore-original "restore original")
-	    ("S" imagex-sticky-save-image "save file")
-	    ("r" imagex-sticky-rotate-right "rotate right")
-	    ("l" imagex-sticky-rotate-left "rotate left"))))
-     )
-     )
-   #+END_SRC
-** dired
-   vinagresque
-   #+BEGIN_SRC emacs-lisp :results output silent
-
-     (use-package dired
-       :defer t
-       :config
-       (general-define-key
-	:keymaps '(dired-mode-map)
-	"j"         'evil-next-line
-	"k"         'evil-previous-line
-	"-"         'dired-up-directory
-	"0"         'dired-back-to-start-of-files
-	(kbd "C-j") 'dired-next-subdir
-	(kbd "C-k") 'dired-prev-subdir
-	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
-	(kbd "RET") 'dired-find-file
-	(kbd "C-<return>") 'dired-find-file-other-window
-	"f"         'helm-find-files
-	"J"         'dired-goto-file
-	(kbd "C-f") 'find-name-dired
-	"H"         'diredp-dired-recent-dirs
-	"T"         'dired-tree-down
-	"K"         'dired-do-kill-lines
-	"r"         'revert-buffer
-	(kbd "C-r") 'dired-do-redisplay
-	"G"         'evil-goto-line)
-       )
-
-
-
-     (use-package dired+
-	  ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
-
-	    ;;;:ensure t
-       ;;;:defer t
-       :load-path  "~/.emacs.d/vendor"
-       :config
-       (progn
-	 (setq diredp-hide-details-initially-flag t)
-	 (setq diredp-hide-details-propagate-flag t)
-	 ;; use single buffer for all dired navigation
-	 ;; disable font themeing from dired+
-	 ;; (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
-	 ;; (toggle-diredp-find-file-reuse-dir 1)
-	 ))
-
-
-     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
-   #+END_SRC
-** yasnippet
-   #+BEGIN_SRC emacs-lisp :results output silent
-      ;; (use-package yasnippet
-      ;;   :ensure t
-      ;;   :diminish ""
-      ;;   :config
-      ;;   (progn
-      ;;   (yas-global-mode 1)
-      ;;     (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
-      ;;     ))
-
-      ;; (use-package common-lisp-snippets
-      ;;   :ensure t
-      ;;   :config (require 'common-lisp-snippets))
-   #+END_SRC
 * local packages
   add the vendor directory to the load path
 
@@ -1070,33 +823,12 @@
    #+END_SRC
    
 * settings
-
 ** name
    #+BEGIN_SRC emacs-lisp :results output silent
     (setq user-full-name "Logan Mohseni")
     (setq user-mail-address "mohsenil85@gmail.com")
    #+END_SRC
     
-** inital buffer
-   #+BEGIN_SRC emacs-lisp :results output silent
-  ;(setq initial-buffer-choice "~/org")
-  ;(setq initial-buffer-choice "~/org/organizer.org")
-  
-;(setq initial-buffer-choice  (bookmark-bmenu-list))
-
-;  (org-agenda-list)
-;  (delete-other-windows)
-;  (org-agenda-day-view)
-   #+END_SRC
-   
-** inital frame size
-   #+BEGIN_SRC emacs-lisp :results output silent
-;;      (add-to-list 'initial-frame-alist '(height . 25 )) 
- ;;     (add-to-list 'initial-frame-alist '(width . 80 )) 
-     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
-     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
-   #+END_SRC
-   
 ** tool bars, menu bars, and pop ups
    #+BEGIN_SRC emacs-lisp :results output silent
 (scroll-bar-mode 0)
@@ -1118,10 +850,6 @@
      (setq inhibit-startup-message t)
    #+END_SRC
    
-** mark mode
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;;;(transient-mark-mode t)
-   #+END_SRC
 ** Asking questions
    #+BEGIN_SRC emacs-lisp :results output silent
    (defalias 'yes-or-no-p 'y-or-n-p)
@@ -1132,19 +860,6 @@
    #+BEGIN_SRC  emacs-lisp
 (setq ring-bell-function nil)
 (setq visible-bell t)
-   #+END_SRC
-** narrow-to-region
-   this is what i'm trying to learn.  
-   C-x n p to narrow and
-   C-x n w to widen to a page (delineated by ^L chars)
-   #+BEGIN_SRC emacs-lisp :results output silent
-;(put 'narrow-to-page 'disabled nil)
-   #+END_SRC 
-** Mode line defaults
-   #+BEGIN_SRC emacs-lisp :results output silent
-;(line-number-mode t)
-;(column-number-mode t)
-;(size-indication-mode t)
    #+END_SRC
 ** line-wraping
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1160,34 +875,6 @@
    #+BEGIN_SRC emacs-lisp :results output silent
   (show-paren-mode t)
   (setq show-paren-style 'parenthesis)
-   #+END_SRC
-** color theme
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;;;     ;;       (use-package gandalf-theme :ensure t)
-     ;;;       (use-package mbo70s-theme :ensure t)
-     ;;;     (use-package warm-night-theme :ensure t)
-     ;;;     (use-package soft-morning-theme :ensure t )
-     ;;;     (use-package alect-themes :ensure t)
-     ;;;     (use-package yoshi-theme :ensure t)
-     ;;;       (use-package slime-theme :ensure t)
-     ;;;       (use-package basic-theme :ensure t)
-     ;;;       (use-package minimal-theme :ensure t)
-     ;;;      (use-package white-theme :ensure t)
-     ;;;     (use-package paper-theme :ensure t )
-     ;;;					     ;(use-package soft-charcoal-theme :ensure t )
-     ;;;     (use-package soft-morning-theme :ensure t )
-     ;;;					     ;(use-package django-theme :ensure t )
-     ;;;     (use-package hydandata-light-theme :ensure t)
-     ;;;     (use-package solarized-theme :ensure t)
-     ;;;
-     ;;;					     ;(load-theme 'adwaita)
-     ;;;					     ;   (load-theme 'gandalf)
-     ;;;					     ; (load-theme 'mbo70s)
-     ;;;
-	  ;;;;;(setq my-theme 'minimal-light)
-	  ;;(use-package minimal-theme :ensure t)
-	  ;;(enable-theme 'minimal-light)
-	  ;;;(load-theme  'minimal-light t t)
    #+END_SRC
 ** utf-8 stuff
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1214,7 +901,6 @@
    as per http://blog.binchen.org/posts/autocomplete-with-a-dictionary-with-hippie-expand.html
    and 
    #+BEGIN_SRC emacs-lisp :results output silent
-     (global-set-key (kbd "M-/") 'hippie-expand)
 
      ;; The actual expansion function
      (defun try-expand-by-dict (old)
@@ -1312,20 +998,6 @@ about what flexible matching means in this context."
 ))
    #+END_SRC
    
-** text-mode stuff
-   #+BEGIN_SRC emacs-lisp :results output silent
-
-	  ;; (add-hook 'text-mode-hook 'flyspell-mode)
-
-;;;	  (add-hook 'text-mode-hook #'abbrev-mode)
-     
-
-
-     
-     ;    ;(add-hook 'text-mode-hook 'writeroom-mode)
-   #+END_SRC
-   
-   ;;; (setq custom-file (make-temp-file "emacs-custom"))  
 ** recentf
    #+BEGIN_SRC emacs-lisp :results output silent
  (recentf-mode 1)
@@ -1361,23 +1033,6 @@ about what flexible matching means in this context."
      (setq savehist-file "~/.emacs.d/tmp/savehist")
    #+END_SRC
 
-** browse with eww
-   #+BEGIN_SRC emacs-lisp :results output silent
-   (setq browse-url-browser-function 'eww-browse-url)
-   #+END_SRC
-** disabled functions
-   #+BEGIN_SRC emacs-lisp :results output silent
-(defun not-anymore ()
-"For overwriting wrong keybindings"
-  (interactive)
-  (message "not anymore")
-)
-
-
-;(global-set-key (kbd "C-x C-c") 'not-anymore)
-(global-set-key (kbd "C-h h") 'not-anymore)
-(global-set-key (kbd "C-h C-a") 'not-anymore)
-   #+END_SRC
 * functions
 ** load-init file, plus other fun
   
@@ -1405,7 +1060,7 @@ about what flexible matching means in this context."
 
 	  (defun edit-init-org-file ()
 	    (interactive)
-	    (find-file (concat "~/.emacs.d/emacs-init.el")))
+	    (find-file (concat "~/.emacs.d/emacs-init.org")))
 
 
 	  (defun add-hook-to-modes (modes hook)
@@ -1545,6 +1200,16 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
       (select-window first-win)
       (if this-win-2nd (other-window 1))))))
 
+#+END_SRC
+** not anymore
+#+BEGIN_SRC emacs-lisp
+
+
+(defun not-anymore ()
+"For overwriting wrong keybindings"
+  (interactive)
+  (message "not anymore")
+)
 #+END_SRC
 * osx specific 
   handle meta as command
@@ -1752,53 +1417,376 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 ** main global meta bindings
    #+BEGIN_SRC emacs-lisp :results output silent
 
-     (global-set-key (kbd "M-0") 'delete-window-balance)
-     (global-set-key (kbd "M-1") 'delete-other-windows)
-     (global-set-key (kbd "M-2") 'split-window-below-focus)
-     (global-set-key (kbd "M-3") 'split-window-right-focus)
+	  (global-set-key (kbd "M-0") 'delete-window-balance)
+	  (global-set-key (kbd "M-1") 'delete-other-windows)
+	  (global-set-key (kbd "M-2") 'split-window-below-focus)
+	  (global-set-key (kbd "M-3") 'split-window-right-focus)
 
-     (global-set-key (kbd "M-N") 'evil-buffer-new)
-     (global-set-key (kbd "M-P") 'package-install)
+	  (global-set-key (kbd "M-N") 'evil-buffer-new)
+	  (global-set-key (kbd "M-P") 'package-install)
 
-     (global-set-key (kbd "M-[") 'previous-buffer)
-     (global-set-key (kbd "M-]") 'next-buffer)
+	  (global-set-key (kbd "M-[") 'previous-buffer)
+	  (global-set-key (kbd "M-]") 'next-buffer)
 
-     (global-set-key (kbd "M-B") 'ibuffer)
-     (global-set-key (kbd "M-D") 'dired-jump-other-window)
-     (global-set-key (kbd "M-T") 'vertical-horizontal-swizzle)
-     (global-set-key (kbd "M-b") 'helm-mini)
-     (global-set-key (kbd "M-d") 'dired-jump)
-     (global-set-key (kbd "M-e") 'edit-init-org-file)
-     (global-set-key (kbd "M-f") 'helm-find-files)
-     (global-set-key (kbd "M-i") 'helm-info)
-     (global-set-key (kbd "M-k") 'kill-this-buffer)
-     (global-set-key (kbd "M-m") 'helm-all-mark-rings)
-     (global-set-key (kbd "M-o") 'other-window)
-     (global-set-key (kbd "M-q") 'save-buffers-kill-emacs)
-     (global-set-key (kbd "M-r") 'helm-recentf)
-     (global-set-key (kbd "M-s") 'save-all)
-     (global-set-key (kbd "M-t") 'swap-buffers)
-     (global-set-key (kbd "M-x") 'helm-M-x)
-     (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+	  (global-set-key (kbd "M-B") 'ibuffer)
+	  (global-set-key (kbd "M-D") 'dired-jump-other-window)
+	  (global-set-key (kbd "M-T") 'vertical-horizontal-swizzle)
+	  (global-set-key (kbd "M-W") 'recursive-widen-dwim)
+	  (global-set-key (kbd "M-b") 'helm-mini)
+	  (global-set-key (kbd "M-d") 'dired-jump)
+	  (global-set-key (kbd "M-e") 'edit-init-org-file)
+	  (global-set-key (kbd "M-f") 'ag)
+	  (global-set-key (kbd "M-F") 'ag-dired)
+	  (global-set-key (kbd "M-i") 'helm-info)
+	  (global-set-key (kbd "M-k") 'kill-this-buffer)
+	  (global-set-key (kbd "M-m") 'helm-all-mark-rings)
+	  (global-set-key (kbd "M-o") 'helm-find-files)
+	  (global-set-key (kbd "M-O") 'projectile-switch-project)
+	  (global-set-key (kbd "M-q") 'save-buffers-kill-emacs)
+	  (global-set-key (kbd "M-r") 'helm-recentf)
+	  (global-set-key (kbd "M-s") 'save-all)
+	  (global-set-key (kbd "M-t") 'swap-buffers)
+	  (global-set-key (kbd "M-w") 'recursive-narrow-or-widen-dwim)
+	  (global-set-key (kbd "M-x") 'helm-M-x)
+	  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
-     (global-set-key (kbd "s-g") 'magit-status)
-     (global-set-key (kbd "s-i") 'load-init-file)
-     (global-set-key (kbd "s-o") 'helm-occur)
-     (global-set-key (kbd "s-p") 'package-list-packages-no-fetch)
-     (global-set-key (kbd "s-r")  'revert-buffer)
-     (global-set-key (kbd "s-s")  'sort-lines)
-     ;; enhaced buffer jumps
-     ;;; refresh = revert
-     ;;dired here
-     ;;save
-     ;;swap buffers
-;;     (global-set-key (kbd "M-j") 'helm-mini) ;;;dumbjump
+	  (global-set-key (kbd "M-/") 'hippie-expand)
 
-     ;;fallbacks
-     (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
-     (global-set-key (kbd "C-x C-j") 'dired-jump)
-     (global-set-key (kbd "C-x C-b") 'helm-mini)
+	  (global-set-key (kbd "s-g") 'magit-status)
+	  (global-set-key (kbd "s-i") 'load-init-file)
+	  (global-set-key (kbd "s-o") 'helm-occur)
+	  (global-set-key (kbd "s-p") 'package-list-packages-no-fetch)
+	  (global-set-key (kbd "s-r")  'revert-buffer)
+	  (global-set-key (kbd "s-s")  'sort-lines)
+	  ;; enhaced buffer jumps
+	  ;;; refresh = revert
+	  ;;dired here
+	  ;;save
+	  ;;swap buffers
+     ;;     (global-set-key (kbd "M-j") 'helm-mini) ;;;dumbjump
 
+	  ;;fallbacks
+	  (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+	  (global-set-key (kbd "C-x C-j") 'dired-jump)
+	  (global-set-key (kbd "C-x C-b") 'helm-mini)
+
+	  (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+
+   #+END_SRC
+
+** disabled functions
+   #+BEGIN_SRC emacs-lisp :results output silent
+
+
+(global-set-key (kbd "C-h h") 'not-anymore)
+(global-set-key (kbd "C-h C-a") 'not-anymore)
+   #+END_SRC
+* deleted
+** browse with eww
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; (setq browse-url-browser-function 'eww-browse-url)
+   #+END_SRC
+** text-mode stuff
+   #+BEGIN_SRC emacs-lisp :results output silent
+
+	  ;; (add-hook 'text-mode-hook 'flyspell-mode)
+
+;;;	  (add-hook 'text-mode-hook #'abbrev-mode)
+     
+
+
+     
+     ;    ;(add-hook 'text-mode-hook 'writeroom-mode)
+   #+END_SRC
+   
+   ;;; (setq custom-file (make-temp-file "emacs-custom"))  
+** color theme
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;;;     ;;       (use-package gandalf-theme :ensure t)
+     ;;;       (use-package mbo70s-theme :ensure t)
+     ;;;     (use-package warm-night-theme :ensure t)
+     ;;;     (use-package soft-morning-theme :ensure t )
+     ;;;     (use-package alect-themes :ensure t)
+     ;;;     (use-package yoshi-theme :ensure t)
+     ;;;       (use-package slime-theme :ensure t)
+     ;;;       (use-package basic-theme :ensure t)
+     ;;;       (use-package minimal-theme :ensure t)
+     ;;;      (use-package white-theme :ensure t)
+     ;;;     (use-package paper-theme :ensure t )
+     ;;;					     ;(use-package soft-charcoal-theme :ensure t )
+     ;;;     (use-package soft-morning-theme :ensure t )
+     ;;;					     ;(use-package django-theme :ensure t )
+     ;;;     (use-package hydandata-light-theme :ensure t)
+     ;;;     (use-package solarized-theme :ensure t)
+     ;;;
+     ;;;					     ;(load-theme 'adwaita)
+     ;;;					     ;   (load-theme 'gandalf)
+     ;;;					     ; (load-theme 'mbo70s)
+     ;;;
+	  ;;;;;(setq my-theme 'minimal-light)
+	  ;;(use-package minimal-theme :ensure t)
+	  ;;(enable-theme 'minimal-light)
+	  ;;;(load-theme  'minimal-light t t)
+   #+END_SRC
+** Mode line defaults
+   #+BEGIN_SRC emacs-lisp :results output silent
+;(line-number-mode t)
+;(column-number-mode t)
+;(size-indication-mode t)
+   #+END_SRC
+** narrow-to-region
+   this is what i'm trying to learn.  
+   C-x n p to narrow and
+   C-x n w to widen to a page (delineated by ^L chars)
+   #+BEGIN_SRC emacs-lisp :results output silent
+;(put 'narrow-to-page 'disabled nil)
+   #+END_SRC 
+** mark mode
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;;;(transient-mark-mode t)
+   #+END_SRC
+** inital frame size
+   #+BEGIN_SRC emacs-lisp :results output silent
+;;      (add-to-list 'initial-frame-alist '(height . 25 )) 
+ ;;     (add-to-list 'initial-frame-alist '(width . 80 )) 
+     ;; (add-to-list 'initial-frame-alist '(top . 1 )) 
+     ;; (add-to-list 'initial-frame-alist '(left . 1 )) 
+   #+END_SRC
+   
+** inital buffer
+   #+BEGIN_SRC emacs-lisp :results output silent
+  ;(setq initial-buffer-choice "~/org")
+  ;(setq initial-buffer-choice "~/org/organizer.org")
+  
+;(setq initial-buffer-choice  (bookmark-bmenu-list))
+
+;  (org-agenda-list)
+;  (delete-other-windows)
+;  (org-agenda-day-view)
+   #+END_SRC
+   
+** ac mode
+   #+BEGIN_SRC emacs-lisp :results output silent
+      ;      (use-package auto-complete
+      ;        :ensure
+      ;        :config
+      ;        (progn
+      ;          (require 'auto-complete-config)
+      ;          (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
+      ;          (ac-config-default)
+      ;          (ac-set-trigger-key "TAB")
+      ;          (ac-set-trigger-key "<tab>")
+      ; ))
+   #+END_SRC
+   
+** avy
+   #+BEGIN_SRC emacs-lisp :results output silent
+;(use-package avy :ensure t
+;  :commands (avy-goto-word-1))
+   #+END_SRC
+   
+** deft org
+   #+BEGIN_SRC emacs-lisp :results output silent
+;  (use-package deft 
+;    :ensure t
+;    :config (progn
+;              (setq
+;               deft-extension "org"
+;               deft-directory "~/org/"
+;               deft-text-mode 'org-mode)
+;              (global-set-key (kbd "H-d") 'deft)))
+   #+END_SRC
+
+** evil-evilified-state
+   #+BEGIN_SRC emacs-lisp :results output silent
+;;   (use-package evil-evilified-state
+;;   :load-path "~/Projects/elisp/evil-evilified-state/")
+
+   #+END_SRC
+** evil-org
+   #+BEGIN_SRC emacs-lisp :results output silent
+   ;  (use-package evil-org :ensure t :defer t  :init (require 'evil-org))  
+   #+END_SRC
+    
+** evil-rsi
+   #+BEGIN_SRC emacs-lisp :results output silent
+;;;      (use-package evil-rsi 
+;;;	 :diminish ""
+;;;	 :ensure t 
+;;;	 :defer t 
+;;;	 :config (evil-rsi-mode 1) )  
+   #+END_SRC
+    
+** exwm
+   #+BEGIN_SRC emacs-lisp :results output silent
+   ;;  (use-package exwm :ensure t :defer t 
+   ;;    :config (exwm-config-default))
+   #+END_SRC
+** flx
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;(use-package flx :ensure t)
+
+   #+END_SRC
+** helm-swoop
+    #+BEGIN_SRC emacs-lisp :results output silent
+;;      (use-package helm-swoop 
+;;        :ensure
+;;        :config
+;;        (progn
+;;          (global-set-key (kbd "M-i") 'helm-swoop)
+;;          (global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
+;;          (global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
+;;          (global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+;;
+;;          ;; When doing isearch, hand the word over to helm-swoop
+;;          (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+;;          ;; From helm-swoop to helm-multi-swoop-all
+;;          (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+;;          ;; When doing evil-search, hand the word over to helm-swoop
+;;          ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
+;;
+;;          ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+;;          (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+;;
+;;          ;; Move up and down like isearch
+;;          (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+;;          (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+;;          (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+;;          (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+;;
+;;          ;; Save buffer when helm-multi-swoop-edit complete
+;;          (setq helm-multi-swoop-edit-save t)
+;;
+;;          ;; If this value is t, split window inside the current window
+;;          (setq helm-swoop-split-with-multiple-windows nil)
+;;
+;;          ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+;;          (setq helm-swoop-split-direction 'split-window-vertically)
+;;
+;;          ;; If nil, you can slightly boost invoke speed in exchange for text color
+;;          (setq helm-swoop-speed-or-color nil)
+;;
+;;          ;; ;; Go to the opposite side of line from the end or beginning of line
+;;          (setq helm-swoop-move-to-line-cycle t)
+;;
+;;          ;; Optional face for line numbers
+;;          ;; Face name is `helm-swoop-line-number-face`
+;;          (setq helm-swoop-use-line-number-face t)))
+    #+END_SRC
+** no-littering
+   #+BEGIN_SRC emacs-lisp :results output silent
+   ;  (use-package no-littering :ensure t )
+   #+END_SRC
+** org-ac
+   #+BEGIN_SRC emacs-lisp :results output silent
+;;      (use-package org-ac
+;;        :ensure
+;;        :init
+;;        (progn
+;;          (require 'org-ac)
+;;          ;; Make config suit for you. About the config item, eval the following sexp.
+;;          ;; (customize-group "org-ac")
+;;          (org-ac/config-default)
+;;          ) )  
+   #+END_SRC
+** paradox --better package search
+   #+BEGIN_SRC emacs-lisp :results output silent
+;(use-package paradox :ensure t :defer t)
+   #+END_SRC
+   
+** powerline
+   #+BEGIN_SRC emacs-lisp :results output silent
+  ;; (use-package powerline 
+  ;;   :ensure
+  ;;   :config (progn
+  ;;             (require 'powerline)
+  ;;             (powerline-center-evil-theme)))
+   #+END_SRC
+   
+** swiper et al
+   
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; (use-package ivy 
+     ;;   :ensure  ivy-hydra 
+     ;;   :diminish (ivy-mode . "") ; does not display ivy in the modeline
+     ;;   :init (ivy-mode 1)        ; enable ivy globally at startup
+     ;;   :bind (:map ivy-mode-map  ; bind in the ivy buffer
+     ;;               ("C-'" . ivy-avy)) ; C-' to ivy-avy
+     ;;   :config
+     ;;   (setq ivy-use-virtual-buffers t)   ; extend searching to bookmarks and …
+     ;;   (setq ivy-height 10)               ; set height of the ivy window
+     ;;   (setq ivy-count-format "(%d/%d) ") ; count format, from the ivy help page
+     ;;   (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+     ;;                                         ;(setq ivy-display-style 'nil)
+     ;;   (defun ivy-yank-action (x)
+     ;;     (kill-new x))
+
+     ;;   (defun ivy-copy-to-buffer-action (x)
+     ;;     (with-ivy-window
+     ;;       (insert x)))
+
+     ;;   (ivy-set-actions
+     ;;    t
+     ;;    '(("i" ivy-copy-to-buffer-action "insert")
+     ;;      ("y" ivy-yank-action "yank")))
+     ;;   )
+
+     ;; (use-package counsel :ensure t
+     ;;   :bind*                           ; load counsel when pressed
+     ;;   (("M-x"     . counsel-M-x)       ; M-x use counsel
+     ;;    ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+     ;;    ("C-x C-r" . counsel-recentf)   ; search recently edited files
+     ;;                                         ;("C-c f"   . counsel-git)       ; search for files in git repo
+     ;;                                         ;("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+     ;;    ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+     ;;                                         ;("C-c l"   . counsel-locate)   ; search for files or else using locate
+     ;;    ("C-h b"   . counsel-descbinds)   ; search for files or else using locate
+     ;;    ("C-h v"   . counsel-describe-variable)   ; search for files or else using locate
+     ;;    ("M-y"   . counsel-yank-pop)   ; clipboard
+     ;;    ("C-h f"   . counsel-describe-function)   ; search for files or else using locate
+     ;;    ("C-c C-r" . ivy-resume)
+
+
+     ;;    ("C-s"   . swiper))        ; find 
+     ;;   )
+     ;; ;
+					     ;
+   #+END_SRC
+   
+** tex n friends
+   #+BEGIN_SRC emacs-lisp :results output silent
+	  ;;(use-package tex :ensure auctex :defer t  :config (require 'tex) )
+
+;;(add-hook 'LaTeX-mode-hook (lambda ()
+;;  (push 
+;;    '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+;;      :help "Run Latexmk on file")
+;;    TeX-command-list)))
 
    #+END_SRC
    
+** vimmish fold
+   #+BEGIN_SRC emacs-lisp :results output silent
+     ;; (use-package vimish-fold
+     ;;   :ensure t
+     ;;   :config
+     ;;   (progn
+     ;;     (evil-leader/set-key "ff" 'vimish-fold)
+     ;;     (evil-leader/set-key "fd" 'vimish-fold-delete)
+     ;;     ))
+   #+END_SRC
+** yasnippet
+   #+BEGIN_SRC emacs-lisp :results output silent
+      ;; (use-package yasnippet
+      ;;   :ensure t
+      ;;   :diminish ""
+      ;;   :config
+      ;;   (progn
+      ;;   (yas-global-mode 1)
+      ;;     (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets"))
+      ;;     ))
+
+      ;; (use-package common-lisp-snippets
+      ;;   :ensure t
+      ;;   :config (require 'common-lisp-snippets))
+   #+END_SRC
