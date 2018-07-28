@@ -148,18 +148,19 @@
     
     #+BEGIN_SRC emacs-lisp :results output silent
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-integration nil)
-  :config
-  (evil-mode 1))
+      (use-package evil
+	:ensure t
+	:init
+	(setq evil-want-integration nil)
+	:config
+	(evil-mode 1))
 
-(use-package evil-collection
-  :after evil
-  :ensure t
-  :config
-  (evil-collection-init))
+      (use-package evil-collection
+	:after evil
+	:ensure t
+	:custom (evil-collection-outline-bind-tab-p nil)
+	:config
+	(evil-collection-init))
 
     #+END_SRC
     
@@ -377,25 +378,25 @@
        :diminish ""
        :config
        (progn
+	 (setq org-M-RET-may-split-line t)
+	 (setq org-agenda-files (quote ("~/org")))
+	 (setq org-agenda-ndays 7)
+	 (setq org-agenda-show-all-dates t)
+	 (setq org-agenda-skip-deadline-if-done t)
+	 (setq org-agenda-skip-scheduled-if-done t)
+	 (setq org-agenda-start-on-weekday nil)
 	 (setq org-catch-invisible-edits t)
-	 (setq org-M-RET-may-split-line nil)
-	 (setq org-return-follows-link t)
+	 (setq org-deadline-warning-days 14)
+	 (setq org-default-notes-file "~/org/organizer.org")
+	 (setq org-edit-src-persistent-message nil)
 	 (setq org-hide-leading-stars t)
 	 (setq org-indent-mode t)
-	 ;;(setq org-log-done 'note)
 	 (setq org-log-into-drawer t)
+	 (setq org-return-follows-link t)
+	 (setq org-reverse-note-order t)
 	 (setq org-show-hierarchy-above (quote ((default . t))))
 	 (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
-	 (setq org-default-notes-file "~/org/organizer.org")
-	 (setq  org-agenda-files (quote ("~/org")))
-	 (setq  org-agenda-ndays 7)
-	 (setq  org-deadline-warning-days 14)
-	 (setq  org-agenda-show-all-dates t)
-	 (setq  org-agenda-skip-deadline-if-done t)
-	 (setq  org-agenda-skip-scheduled-if-done t)
-	 (setq  org-agenda-start-on-weekday nil)
-	 (setq  org-reverse-note-order t)
-	 (setq  org-edit-src-persistent-message nil)
+	 ;;(setq org-log-done 'note)
 
 	 (setq org-todo-keywords
 	       (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
@@ -1274,7 +1275,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
     (when (eq system-type 'gnu/linux)
 	(global-set-key (kbd "M-V") 'mouse-yank-primary)
 	(global-set-key (kbd "M-v") 'evil-paste-after)
-	(global-set-key (kbd "M-c") 'evil-copy)
+	(global-set-key (kbd "M-c") 'evil-yank)
 	(global-set-key (kbd "M-X") 'evil-delete-char)
 
       )
@@ -1451,9 +1452,11 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 	       (global-set-key (kbd "M-]") 'next-buffer)
 
 	       (global-set-key (kbd "M-B") 'ibuffer)
+	       (global-set-key (kbd "M-E") 'load-init-file)
 	       (global-set-key (kbd "M-D") 'dired-jump-other-window)
 	       (global-set-key (kbd "M-T") 'vertical-horizontal-swizzle)
 	       (global-set-key (kbd "M-W") 'recursive-widen-dwim)
+	       (global-set-key (kbd "M-a") 'mark-whole-buffer)
 	       (global-set-key (kbd "M-b") 'helm-mini)
 	       (global-set-key (kbd "M-d") 'dired-jump)
 	       (global-set-key (kbd "M-e") 'edit-init-org-file)
@@ -1477,7 +1480,6 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 	       (global-set-key (kbd "M-/") 'hippie-expand)
 
 	       (global-set-key (kbd "s-g") 'magit-status)
-	       (global-set-key (kbd "s-i") 'load-init-file)
 	       (global-set-key (kbd "s-o") 'helm-occur)
 	       (global-set-key (kbd "s-p") 'package-list-packages-no-fetch)
 	       (global-set-key (kbd "s-r")  'revert-buffer)
