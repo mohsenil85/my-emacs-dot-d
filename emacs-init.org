@@ -620,90 +620,90 @@
    general lisp stuff
 
    #+BEGIN_SRC emacs-lisp :results output silent
-;;	  (add-hook 'lisp-mode-hook
-;;		    (lambda ()
-;;		      (set (make-local-variable 'lisp-indent-function)
-;;			   'common-lisp-indent-function)))
+     ;;	  (add-hook 'lisp-mode-hook
+     ;;		    (lambda ()
+     ;;		      (set (make-local-variable 'lisp-indent-function)
+     ;;			   'common-lisp-indent-function)))
 
-	  (use-package paredit
-	    :ensure t
-	    :config 
-	    (progn
-	      (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-	      (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-	      (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-	      (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-	      (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-	      (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-	      (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-	      (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
-	      (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
+	       ;; (use-package paredit
+	       ;;   :ensure t
+	       ;;   :config 
+	       ;;   (progn
+	       ;;     (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+	       ;;     (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+	       ;;     (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+	       ;;     (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+	       ;;     (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+	       ;;     (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+	       ;;     (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+	       ;;     (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
+	       ;;     (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
 
-	      (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
-	      (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
-	      (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
-	      (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
+	       ;;     (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+	       ;;     (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+	       ;;     (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+	       ;;     (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
 
-	      ))
+	       ;;     ))
 
-	       ;;;     (use-package smartparens
-	       ;;;       :ensure t
-	       ;;;       :diminish ""
+		    ;;;     (use-package smartparens
+		    ;;;       :ensure t
+		    ;;;       :diminish ""
+		    ;;;
+		    ;;;       :init (require 'smartparens-config)
+		    ;;;       :config (smartparens-global-strict-mode 1))
+		    ;;;
+		    ;;;     (use-package evil-smartparens
+		    ;;;       :ensure
+		    ;;;       :diminish ""
+		    ;;;       :config (progn
+		    ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+
+	       (use-package rainbow-delimiters
+		 :ensure t
+		 :diminish ""
+		 :config
+		 (progn
+		 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+		   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+		   (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
+		   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+
+	       ;;;     (eval-after-load "slime"
+	       ;;;       '(progn
+	       ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+	       ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
 	       ;;;
-	       ;;;       :init (require 'smartparens-config)
-	       ;;;       :config (smartparens-global-strict-mode 1))
-	       ;;;
-	       ;;;     (use-package evil-smartparens
-	       ;;;       :ensure
-	       ;;;       :diminish ""
-	       ;;;       :config (progn
-	       ;;;                 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+	  ;;      (use-package slime
+	  ;;        ;;:defer 1
+	  ;;        ;;:load-path  "~/.emacs.d/vendor/slime"
+	  ;;        :config (progn
 
-	  (use-package rainbow-delimiters
-	    :ensure t
-	    :diminish ""
-	    :config
-	    (progn
-	    (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-	      (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-	      (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
-	      (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
+	  ;; 		 (load (expand-file-name "~/quicklisp/slime-helper.el"))
+	  ;; 		 (setq inferior-lisp-program 
+	  ;; 		       "/usr/local/bin/sbcl --noinform --no-linedit")
+	  ;; 		 (require 'slime-autoloads)
+	  ;; 		 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
+	  ;; 		 (setq slime-contribs 
+	  ;; 		       '(slime-fancy 
+	  ;; 			 slime-asdf 
+	  ;; 					     ;slime-banner
+	  ;; 			 slime-indentation
+	  ;; 			 slime-quicklisp 
+	  ;; 			 slime-xref-browser
+	  ;; ))
+	  ;; 		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
+	  ;; 		 (slime-setup))
 
-	  ;;;     (eval-after-load "slime"
-	  ;;;       '(progn
-	  ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
-	  ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
-	  ;;;
-     ;;      (use-package slime
-     ;;        ;;:defer 1
-     ;;        ;;:load-path  "~/.emacs.d/vendor/slime"
-     ;;        :config (progn
+	  ;;        :bind (
+	  ;; 	      ;; ("C-c s" . slime-selector)
+	  ;; 	      ;; ("M-." . slime-edit-definition)
+	  ;; 	      ;; ("M-," . slime-pop-definition-stack)
+	  ;; 	      )
+	  ;;        )
 
-     ;; 		 (load (expand-file-name "~/quicklisp/slime-helper.el"))
-     ;; 		 (setq inferior-lisp-program 
-     ;; 		       "/usr/local/bin/sbcl --noinform --no-linedit")
-     ;; 		 (require 'slime-autoloads)
-     ;; 		 (add-to-list 'load-path "~/.emacs.d/vendor/slime/contrib")
-     ;; 		 (setq slime-contribs 
-     ;; 		       '(slime-fancy 
-     ;; 			 slime-asdf 
-     ;; 					     ;slime-banner
-     ;; 			 slime-indentation
-     ;; 			 slime-quicklisp 
-     ;; 			 slime-xref-browser
-     ;; ))
-     ;; 		 (setq slime-complete-symbol-function 'slime-fuzzy-complete-symbol)
-     ;; 		 (slime-setup))
-
-     ;;        :bind (
-     ;; 	      ;; ("C-c s" . slime-selector)
-     ;; 	      ;; ("M-." . slime-edit-definition)
-     ;; 	      ;; ("M-," . slime-pop-definition-stack)
-     ;; 	      )
-     ;;        )
-
-     ;;      (require 'info-look)
+	  ;;      (require 'info-look)
    #+END_SRC
    
 
