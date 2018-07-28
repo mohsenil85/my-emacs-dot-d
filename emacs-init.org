@@ -602,7 +602,7 @@
    
 ** paradox --better package search
    #+BEGIN_SRC emacs-lisp :results output silent
-(use-package paradox :ensure t :defer t)
+;(use-package paradox :ensure t :defer t)
    #+END_SRC
    
 ** persistent scratch
