@@ -29,42 +29,42 @@
 	  :ensure t
 	  :config 
       ;;     (evil-collection-init 'ace-jump-mode)
-           (evil-collection-init 'ag)
+	   (evil-collection-init 'ag)
       ;;     (evil-collection-init 'alchemist)
       ;;     (evil-collection-init 'anaconda-mode)
       ;;     (evil-collection-init 'arc-mode)
-           (evil-collection-init 'avy)
-           (evil-collection-init 'bookmark)
-           (evil-collection-init 'buff-menu)
-           (evil-collection-init 'calc)
-           (evil-collection-init 'calendar)
+	   (evil-collection-init 'avy)
+	   (evil-collection-init 'bookmark)
+	   (evil-collection-init 'buff-menu)
+	   (evil-collection-init 'calc)
+	   (evil-collection-init 'calendar)
       ;;     (evil-collection-init 'cider)
       ;;     (evil-collection-init 'cmake-mode)
       ;;     (evil-collection-init 'comint)
       ;;     (evil-collection-init 'company)
-           (evil-collection-init 'compile)
+	   (evil-collection-init 'compile)
       ;;     (evil-collection-init 'custom)
       ;;     (evil-collection-init 'cus-theme)
       ;;     (evil-collection-init 'daemons)
       ;;     (evil-collection-init 'deadgrep)
       ;;     (evil-collection-init 'debbugs)
-           (evil-collection-init 'debug)
+	   (evil-collection-init 'debug)
       ;;     (evil-collection-init 'diff-mode)
-           (evil-collection-init 'doc-view)
+	   (evil-collection-init 'doc-view)
       ;;     (evil-collection-init 'edebug)
-           (evil-collection-init 'ediff)
-           (evil-collection-init 'eldoc)
+	   (evil-collection-init 'ediff)
+	   (evil-collection-init 'eldoc)
 	   (evil-collection-init 'elfeed)
-           (evil-collection-init 'elisp-mode)
-           (evil-collection-init 'elisp-refs)
+	   (evil-collection-init 'elisp-mode)
+	   (evil-collection-init 'elisp-refs)
       ;;     (evil-collection-init 'emms)
       ;;     (evil-collection-init 'epa)
       ;;     (evil-collection-init 'ert)
       ;;     (evil-collection-init 'eshell)
       ;;     (evil-collection-init 'eval-sexp-fu)
       ;;     (evil-collection-init 'etags-select)
-           (evil-collection-init 'eww)
-           (evil-collection-init 'flycheck)
+	   (evil-collection-init 'eww)
+	   (evil-collection-init 'flycheck)
       ;;     (evil-collection-init 'free-keys)
       ;;     (evil-collection-init 'geiser)
       ;;     (evil-collection-init 'ggtags)
@@ -74,13 +74,13 @@
       ;;     (evil-collection-init 'help)
       ;;     (evil-collection-init 'guix)
       ;;     (evil-collection-init 'helm)
-           (evil-collection-init 'ibuffer)
+	   (evil-collection-init 'ibuffer)
       ;;     (evil-collection-init 'image)
       ;;     (evil-collection-init 'image+)
-           (evil-collection-init 'imenu-list)
+	   (evil-collection-init 'imenu-list)
       ;;     (evil-collection-init 'indium)
-           (evil-collection-init 'info)
-           (evil-collection-init 'ivy)
+	   (evil-collection-init 'info)
+	   (evil-collection-init 'ivy)
       ;;     (evil-collection-init 'js2-mode)
       ;;     (evil-collection-init 'log-view)
       ;;     (evil-collection-init 'lsp-ui-imenu)
@@ -88,7 +88,7 @@
       ;;     (evil-collection-init 'kotlin-mode)
       ;;     (evil-collection-init 'macrostep)
       ;;     (evil-collection-init 'man)
-           (evil-collection-init 'magit)
+	   (evil-collection-init 'magit)
       ;;     (evil-collection-init 'magit-todos)
       ;;     (evil-collection-init 'mu4e)
       ;;     (evil-collection-init 'mu4e-conversation)
@@ -101,7 +101,7 @@
       ;;     (evil-collection-init 'paren)
       ;;     (evil-collection-init 'pass)
       ;;     (evil-collection-init 'popup)
-           (evil-collection-init 'proced)
+	   (evil-collection-init 'proced)
       ;;     (evil-collection-init 'prodigy)
       ;;     (evil-collection-init 'profiler)
       ;;     (evil-collection-init 'python)
@@ -115,7 +115,7 @@
       ;;     (evil-collection-init 'rtags)
       ;;     (evil-collection-init 'simple)
       ;;     (evil-collection-init 'slime)
-           (evil-collection-init 'term)
+	   (evil-collection-init 'term)
       ;;     (evil-collection-init 'ansi-term)
       ;;     (evil-collection-init 'multi-term)
       ;;     (evil-collection-init 'tide)
@@ -919,215 +919,84 @@
    #+END_SRC
    
 * settings
-** name
-   #+BEGIN_SRC emacs-lisp :results output silent
-    (setq user-full-name "Logan Mohseni")
-    (setq user-mail-address "mohsenil85@gmail.com")
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp 
+	(setq user-full-name "Logan Mohseni")
+	(setq user-mail-address "mohsenil85@gmail.com")
+
+	(scroll-bar-mode 0)
+	(tool-bar-mode 0)
+	(menu-bar-mode 0)
+	(blink-cursor-mode -1)
+	(tooltip-mode -1)
+    (delete-selection-mode 1)
+
+	(setq backup-directory-alist
+	      `((".*" . ,temporary-file-directory)))
+	(setq auto-save-file-name-transforms
+	      `((".*" ,temporary-file-directory t)))
+
+	(setq inhibit-startup-screen t)
+	(setq inhibit-startup-echo-area-message "lmohseni")
+	(setq inhibit-startup-message t)
     
-** tool bars, menu bars, and pop ups
-   #+BEGIN_SRC emacs-lisp :results output silent
-(scroll-bar-mode 0)
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-   #+END_SRC
-** backups to tmp
-   #+BEGIN_SRC emacs-lisp :results output silent
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-   #+END_SRC
-** cursor and startup screen
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (blink-cursor-mode -1)
-     (setq inhibit-startup-screen t)
-     (setq inhibit-startup-echo-area-message "lmohseni")
-     (setq inhibit-startup-message t)
-   #+END_SRC
-   
-** Asking questions
-   #+BEGIN_SRC emacs-lisp :results output silent
-   (defalias 'yes-or-no-p 'y-or-n-p)
-   (setq use-dialog-box nil)
-   #+END_SRC
-   
-** silence bell
-   #+BEGIN_SRC  emacs-lisp
-(setq ring-bell-function nil)
-(setq visible-bell t)
-   #+END_SRC
-** line-wraping
-   #+BEGIN_SRC emacs-lisp :results output silent
-(global-visual-line-mode t)
+    (setq confirm-nonexistent-file-or-buffer nil)
+    (setq confirm-kill-processes nil)
 
-   #+END_SRC
-   
-** global linum mode
-   #+BEGIN_SRC emacs-lisp :results output silent
-(global-linum-mode)
-   #+END_SRC
-** line and paren highlighting
-   #+BEGIN_SRC emacs-lisp :results output silent
-  (show-paren-mode t)
-  (setq show-paren-style 'parenthesis)
-   #+END_SRC
-** utf-8 stuff
-   #+BEGIN_SRC emacs-lisp :results output silent
- (setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+	(defalias 'yes-or-no-p 'y-or-n-p)
+	(setq use-dialog-box nil)
 
-   #+END_SRC
-   
-** tool tips
-   #+BEGIN_SRC emacs-lisp :results output silent
-(tooltip-mode -1)
-(setq tooltip-use-echo-area t)
+	(setq visible-bell t)
 
-   #+END_SRC
-** hippie-expand 
-   as per http://blog.binchen.org/posts/autocomplete-with-a-dictionary-with-hippie-expand.html
-   and 
-   #+BEGIN_SRC emacs-lisp :results output silent
+	(global-visual-line-mode t)
+	(global-linum-mode)
+	(recentf-mode 1)
 
-     ;; The actual expansion function
-     (defun try-expand-by-dict (old)
-       ;; old is true if we have already attempted an expansion
-       (unless (bound-and-true-p ispell-minor-mode)
-	 (ispell-minor-mode 1))
+	(electric-pair-mode 1)
+	(electric-quote-mode 1)
 
-       ;; english-words.txt is the fallback dicitonary
-       (if (not ispell-alternate-dictionary)
-	   (setq ispell-alternate-dictionary (file-truename "~/.emacs.d/misc/english-words.txt")))
-       (let ((lookup-func (if (fboundp 'ispell-lookup-words)
-			    'ispell-lookup-words
-			    'lookup-words)))
-	 (unless old
-	   (he-init-string (he-lisp-symbol-beg) (point))
-	   (if (not (he-string-member he-search-string he-tried-table))
-	     (setq he-tried-table (cons he-search-string he-tried-table)))
-	   (setq he-expand-list
-		 (and (not (equal he-search-string ""))
-		      (funcall lookup-func (concat (buffer-substring-no-properties (he-lisp-symbol-beg) (point)) "*")))))
-	 (if (null he-expand-list)
-	   (if old (he-reset-string))
-	   (he-substitute-string (car he-expand-list))
-	   (setq he-expand-list (cdr he-expand-list))
-	   t)
-	 ))
+	(show-paren-mode t)
+	(setq show-paren-style 'parenthesis)
 
-(defun try-expand-flexible-abbrev (old)
-  "Try to complete word using flexible matching.
+	(setq locale-coding-system 'utf-8)
+	(set-terminal-coding-system 'utf-8-unix)
+	(set-keyboard-coding-system 'utf-8)
+	(set-selection-coding-system 'utf-8)
+	(prefer-coding-system 'utf-8)
 
-Flexible matching works by taking the search string and then
-interspersing it with a regexp for any character. So, if you try
-to do a flexible match for `foo' it will match the word
-`findOtherOtter' but also `fixTheBoringOrange' and
-`ifthisisboringstopreadingnow'.
+	(setq tooltip-use-echo-area t)
 
-The argument OLD has to be nil the first call of this function, and t
-for subsequent calls (for further possible completions of the same
-string).  It returns t if a new completion is found, nil otherwise."
-  (if (not old)
-      (progn
-	(he-init-string (he-lisp-symbol-beg) (point))
-	(if (not (he-string-member he-search-string he-tried-table))
-	    (setq he-tried-table (cons he-search-string he-tried-table)))
-	(setq he-expand-list
-	      (and (not (equal he-search-string ""))
-		   (he-flexible-abbrev-collect he-search-string)))))
-  (while (and he-expand-list
-	      (he-string-member (car he-expand-list) he-tried-table))
-    (setq he-expand-list (cdr he-expand-list)))
-  (if (null he-expand-list)
-      (progn
-	(if old (he-reset-string))
-	())
-      (progn
-	(he-substitute-string (car he-expand-list))
-	(setq he-expand-list (cdr he-expand-list))
-	t)))
+	(savehist-mode 1)
+	(setq savehist-additional-variables 
+	      '(kill-ring search-ring regexp-search-ring))
+	(setq savehist-file "~/.emacs.d/var/savehist")
+	(setq delete-old-versions t )		; delete excess backup versions silently
+	(setq version-control t )		; use version control
+	(setq vc-make-backup-files t )		; make backups file even when in version controlled dir
+	(setq vc-follow-symlinks t )				       ; don't ask for confirmation when opening symlinked file
+	(setq ring-bell-function 'ignore )	; silent bell when you make a mistake
 
-(defun he-flexible-abbrev-collect (str)
-  "Find and collect all words that flex-matches STR.
-See docstring for `try-expand-flexible-abbrev' for information
-about what flexible matching means in this context."
-  (let ((collection nil)
-	(regexp (he-flexible-abbrev-create-regexp str)))
-    (save-excursion
-      (goto-char (point-min))
-      (while (search-forward-regexp regexp nil t)
-	;; Is there a better or quicker way than using
-	;; `thing-at-point' here?
-	(setq collection (cons (thing-at-point 'word) collection))))
-    collection))
-
-(defun he-flexible-abbrev-create-regexp (str)
-  "Generate regexp for flexible matching of STR.
-See docstring for `try-expand-flexible-abbrev' for information
-about what flexible matching means in this context."
-  (concat "\\b" (mapconcat (lambda (x) (concat "\\w*" (list x))) str "")
-	  "\\w*" "\\b"))
-
-     (setq hippie-expand-try-functions-list
-	   '(try-complete-file-name-partially
-	     try-complete-file-name
-	     try-expand-all-abbrevs
-	     try-expand-list
-	     try-expand-line
-	     try-expand-dabbrev
-	     try-expand-dabbrev-all-buffers
-	     try-expand-dabbrev-from-kill
-	     try-complete-lisp-symbol-partially
-	     try-complete-lisp-symbol
-	     try-expand-by-dict
-	     ;;try-expand-flexible-abbrev
-	     yas-hippie-try-expand
-))
-   #+END_SRC
-   
-** recentf
-   #+BEGIN_SRC emacs-lisp :results output silent
- (recentf-mode 1)
-     ;(run-at-time nil (* 5 60) 'recentf-save-list)
-   #+END_SRC
-** more sanity
-   #+BEGIN_SRC emacs-lisp :results output silent
- (setq delete-old-versions t )		; delete excess backup versions silently
- (setq version-control t )		; use version control
- (setq vc-make-backup-files t )		; make backups file even when in version controlled dir
- (setq backup-directory-alist `(("." . "~/.emacs.d/backups")) ) ; which directory to put backups file
- (setq vc-follow-symlinks t )				       ; don't ask for confirmation when opening symlinked file
- (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)) ) ;transform backups file name
- (setq inhibit-startup-screen t )	; inhibit useless and old-school startup screen
- (setq ring-bell-function 'ignore )	; silent bell when you make a mistake
- (setq coding-system-for-read 'utf-8 )	; use utf-8 by default
- (setq coding-system-for-write 'utf-8 )
- (setq sentence-end-double-space t)	; 
- (setq default-fill-column 80)		; toggle wrapping text at the 80th character
+	(setq sentence-end-double-space t)	; 
+	(setq default-fill-column 80)		; toggle wrapping text at the 80th character
 
 
-(setq load-prefer-newer t)
-;;(setq initial-scratch-message ":D")
+	(setq load-prefer-newer t)
+	(setq initial-scratch-message ";) happy hacking")
+    
+    (require 'uniquify)
+    (setq uniquify-buffer-name-style 'forward)
+    (winner-mode 1)
 
-   #+END_SRC
-   
-** persist kill ring
 
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (savehist-mode 1)
-     (setq savehist-additional-variables 
-     '(kill-ring search-ring regexp-search-ring))
-     (setq savehist-file "~/.emacs.d/tmp/savehist")
-   #+END_SRC
+
+  #+END_SRC
+
+  #+RESULTS:
+  : t
 
 * functionaria
 ** load-init file, plus other fun
   
-  #+BEGIN_SRC emacs-lisp :results output silent
+   #+BEGIN_SRC emacs-lisp :results output silent
 
   
 	  (require 'cl)
@@ -1189,12 +1058,12 @@ about what flexible matching means in this context."
 	    (let ((inhibit-read-only t))
 	      (put-text-property start end 'read-only nil)))
 
-  #+END_SRC
+   #+END_SRC
   
   
 ** swap buffers
    taken from:  https://stackoverflow.com/questions/1774832/how-to-swap-the-buffers-in-2-windows-emacs
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 
 (defun swap-buffers ()
   "Put the buffer from the selected window in next window, and vice versa"
@@ -1209,10 +1078,10 @@ about what flexible matching means in this context."
     (other-window 1) ;;keep focus on starting window
   )
 
-#+END_SRC
+   #+END_SRC
 
-#+RESULTS:
-: swap-buffers
+   #+RESULTS:
+   : swap-buffers
 
 ** previous window
 
@@ -1254,16 +1123,16 @@ about what flexible matching means in this context."
    
 
 ** which-key for this buffer
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   ;; (defun which-key-this-buffer ()
   ;; (interactive)
   ;; (which-key-show-keymap   major-mode))
   ;; 
 
-#+END_SRC
+   #+END_SRC
 
-#+RESULTS:
-: which-key-this-buffer
+   #+RESULTS:
+   : which-key-this-buffer
 
 ** save all, save all on on unfocus
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
@@ -1308,7 +1177,7 @@ about what flexible matching means in this context."
    : split-window-right-focus
 ** switch
 ** package mode
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
   (eval-after-load "package-menu" (progn
 				    (add-to-list 'evil-normal-state-modes 'package-menu-mode)
 
@@ -1326,32 +1195,32 @@ about what flexible matching means in this context."
    "r" 'package-menu-refresh
    )
 
-#+END_SRC
+   #+END_SRC
 
-#+RESULTS:
+   #+RESULTS:
 
 ** vertical and horizontal layout
    taken from:  
-https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-horizontal-split-to-a-vertical-split-in-one-move#14881250
-#+BEGIN_SRC emacs-lisp
+   https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-horizontal-split-to-a-vertical-split-in-one-move#14881250
+   #+BEGIN_SRC emacs-lisp
 
 
 (defun vertical-horizontal-swizzle ()
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
-         (next-win-buffer (window-buffer (next-window)))
-         (this-win-edges (window-edges (selected-window)))
-         (next-win-edges (window-edges (next-window)))
-         (this-win-2nd (not (and (<= (car this-win-edges)
-                     (car next-win-edges))
-                     (<= (cadr this-win-edges)
-                     (cadr next-win-edges)))))
-         (splitter
-          (if (= (car this-win-edges)
-             (car (window-edges (next-window))))
-          'split-window-horizontally
-        'split-window-vertically)))
+	 (next-win-buffer (window-buffer (next-window)))
+	 (this-win-edges (window-edges (selected-window)))
+	 (next-win-edges (window-edges (next-window)))
+	 (this-win-2nd (not (and (<= (car this-win-edges)
+		     (car next-win-edges))
+		     (<= (cadr this-win-edges)
+		     (cadr next-win-edges)))))
+	 (splitter
+	  (if (= (car this-win-edges)
+	     (car (window-edges (next-window))))
+	  'split-window-horizontally
+	'split-window-vertically)))
     (delete-other-windows)
     (let ((first-win (selected-window)))
       (funcall splitter)
@@ -1361,9 +1230,9 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
       (select-window first-win)
       (if this-win-2nd (other-window 1))))))
 
-#+END_SRC
+   #+END_SRC
 ** not anymore
-#+BEGIN_SRC emacs-lisp
+   #+BEGIN_SRC emacs-lisp
 
 
 (defun not-anymore ()
@@ -1371,7 +1240,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
   (interactive)
   (message "not anymore")
 )
-#+END_SRC
+   #+END_SRC
 * osx specific 
   handle meta as command
   toggle fullscreen
@@ -1716,7 +1585,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 
    #+END_SRC
 ** helm-swoop
-    #+BEGIN_SRC emacs-lisp :results output silent
+   #+BEGIN_SRC emacs-lisp :results output silent
 ;;      (use-package helm-swoop 
 ;;        :ensure
 ;;        :config
@@ -1760,7 +1629,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 ;;          ;; Optional face for line numbers
 ;;          ;; Face name is `helm-swoop-line-number-face`
 ;;          (setq helm-swoop-use-line-number-face t)))
-    #+END_SRC
+   #+END_SRC
 ** no-littering
    #+BEGIN_SRC emacs-lisp :results output silent
    ;  (use-package no-littering :ensure t )
@@ -1850,6 +1719,8 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
 
        (global-set-key (kbd "M-[") 'previous-buffer)
        (global-set-key (kbd "M-]") 'next-buffer)
+       (global-set-key (kbd "C-M-[") 'winner-undo)
+       (global-set-key (kbd "C-M-]") 'winner-redo)
 
        (global-set-key (kbd "M-b") 'bookmark-bmenu-list) ;;buffers
        (global-set-key (kbd "M-B") 'bookmark-set)
