@@ -8,5 +8,5 @@ fi
 
 if [ ! -e "./vendor/dired+.el" ]
 then
-    wget https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
+    wget https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el -O "./vendor/dired+.el"
 fi

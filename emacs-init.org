@@ -48,15 +48,15 @@
       ;;     (evil-collection-init 'daemons)
       ;;     (evil-collection-init 'deadgrep)
       ;;     (evil-collection-init 'debbugs)
-      ;;     (evil-collection-init 'debug)
+           (evil-collection-init 'debug)
       ;;     (evil-collection-init 'diff-mode)
-      ;;     (evil-collection-init 'doc-view)
+           (evil-collection-init 'doc-view)
       ;;     (evil-collection-init 'edebug)
-      ;;     (evil-collection-init 'ediff)
-      ;;     (evil-collection-init 'eldoc)
+           (evil-collection-init 'ediff)
+           (evil-collection-init 'eldoc)
 	   (evil-collection-init 'elfeed)
-      ;;     (evil-collection-init 'elisp-mode)
-      ;;     (evil-collection-init 'elisp-refs)
+           (evil-collection-init 'elisp-mode)
+           (evil-collection-init 'elisp-refs)
       ;;     (evil-collection-init 'emms)
       ;;     (evil-collection-init 'epa)
       ;;     (evil-collection-init 'ert)
@@ -64,7 +64,7 @@
       ;;     (evil-collection-init 'eval-sexp-fu)
       ;;     (evil-collection-init 'etags-select)
            (evil-collection-init 'eww)
-      ;;     (evil-collection-init 'flycheck)
+           (evil-collection-init 'flycheck)
       ;;     (evil-collection-init 'free-keys)
       ;;     (evil-collection-init 'geiser)
       ;;     (evil-collection-init 'ggtags)
@@ -73,11 +73,11 @@
       ;;     (evil-collection-init 'grep)
       ;;     (evil-collection-init 'help)
       ;;     (evil-collection-init 'guix)
-      ;;     (evil-collection-init 'helm)
+           (evil-collection-init 'helm)
            (evil-collection-init 'ibuffer)
       ;;     (evil-collection-init 'image)
       ;;     (evil-collection-init 'image+)
-      ;;     (evil-collection-init 'imenu-list)
+           (evil-collection-init 'imenu-list)
       ;;     (evil-collection-init 'indium)
            (evil-collection-init 'info)
       ;;     (evil-collection-init 'ivy)
@@ -88,7 +88,7 @@
       ;;     (evil-collection-init 'kotlin-mode)
       ;;     (evil-collection-init 'macrostep)
       ;;     (evil-collection-init 'man)
-      ;;     (evil-collection-init 'magit)
+           (evil-collection-init 'magit)
       ;;     (evil-collection-init 'magit-todos)
       ;;     (evil-collection-init 'mu4e)
       ;;     (evil-collection-init 'mu4e-conversation)
@@ -115,7 +115,7 @@
       ;;     (evil-collection-init 'rtags)
       ;;     (evil-collection-init 'simple)
       ;;     (evil-collection-init 'slime)
-      ;;     (evil-collection-init 'term)
+           (evil-collection-init 'term)
       ;;     (evil-collection-init 'ansi-term)
       ;;     (evil-collection-init 'multi-term)
       ;;     (evil-collection-init 'tide)
@@ -420,11 +420,7 @@
        :ensure t
        :defer t
        :config       
-       (progn
-	 (add-hook 'with-editor-mode-hook 'evil-insert-state)
 	 (use-package evil-magit :ensure t ))
-
-)
    #+END_SRC
    
 ** one liners
@@ -1104,7 +1100,7 @@ about what flexible matching means in this context."
      (setq savehist-file "~/.emacs.d/tmp/savehist")
    #+END_SRC
 
-* functions
+* functionaria
 ** load-init file, plus other fun
   
   #+BEGIN_SRC emacs-lisp :results output silent
@@ -1209,6 +1205,21 @@ about what flexible matching means in this context."
    #+RESULTS:
    : prev-window
 
+** kill other buffer
+   #+BEGIN_SRC emacs-lisp
+   (defun kill-other-buffer ()
+   (interactive)
+   (other-window 1)
+   (kill-this-buffer)
+   (other-window 1)
+   )
+
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : kill-other-buffer
+
 ** clipboard-to-elfeed
    #+BEGIN_SRC emacs-lisp :results output silent
   (defun my-clipboard-to-elfeed ()
@@ -1217,6 +1228,18 @@ about what flexible matching means in this context."
       (elfeed-add-feed link)))
    #+END_SRC
    
+
+** which-key for this buffer
+#+BEGIN_SRC emacs-lisp
+  ;; (defun which-key-this-buffer ()
+  ;; (interactive)
+  ;; (which-key-show-keymap   major-mode))
+  ;; 
+
+#+END_SRC
+
+#+RESULTS:
+: which-key-this-buffer
 
 ** save all, save all on on unfocus
    taken from: https://www.bytedude.com/useful-emacs-shortcuts/
@@ -1262,8 +1285,22 @@ about what flexible matching means in this context."
 ** switch
 ** package mode
 #+BEGIN_SRC emacs-lisp
-(eval-after-load "package-menu"
-(add-to-list 'evil-normal-state-modes 'package-menu-mode))
+  (eval-after-load "package-menu" (progn
+				    (add-to-list 'evil-normal-state-modes 'package-menu-mode)
+
+				    ))
+
+  (general-define-key
+   :keymaps '(package-menu-mode-map )
+   "SPC" 'evil-scroll-page-down
+   "DEL" 'evil-scroll-page-up
+   "I" 'package-menu-mark-install
+   "X" 'package-menu-execute          	  
+   "D" 'package-menu-mark-delete
+   ;;"u" 'package-menu-mark-unmark
+   "RET" 'package-menu-describe-package 
+   "r" 'package-menu-refresh
+   )
 
 #+END_SRC
 
@@ -1863,8 +1900,9 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
        ;; (global-set-key (kbd "M-k") 'kill-this-buffer)
        (global-set-key (kbd "M-m") 'helm-all-mark-rings)
        (global-set-key (kbd "M-u") 'helm-occur)
-       (global-set-key (kbd "M-o") 'helm-find-files)
-       (global-set-key (kbd "M-O") 'projectile-switch-project)
+       (global-set-key (kbd "M-U") 'projectile-switch-project)
+       (global-set-key (kbd "M-o") 'other-window)
+       (global-set-key (kbd "M-O") 'helm-find-files)
        (global-set-key (kbd "M-q") 'save-buffers-kill-emacs)
        (global-set-key (kbd "M-r") 'helm-recentf)
        (global-set-key (kbd "M-n") 'next-error)
@@ -1874,6 +1912,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
        (global-set-key (kbd "M-s") 'save-all)
        (global-set-key (kbd "M-t") 'swap-buffers)
        (global-set-key (kbd "M-w") 'kill-this-buffer)
+       (global-set-key (kbd "M-W") 'kill-other-buffer)
        (global-set-key (kbd "M-x") 'helm-M-x)
        (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
