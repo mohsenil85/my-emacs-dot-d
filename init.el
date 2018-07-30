@@ -21,7 +21,7 @@
 ;;used in debugging
 ;;(use-package no-littering :ensure t)
 ;;(use-package evil :ensure t :config (evil-mode 1))
-;;(setq debug-on-error t)
+(setq debug-on-error t)
 (use-package org :ensure org-plus-contrib)
 
 (require 'ob-tangle)
