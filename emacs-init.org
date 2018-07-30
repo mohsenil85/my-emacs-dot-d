@@ -6,97 +6,6 @@
   http://pragmaticemacs.com/emacs/use-your-digits-and-a-personal-key-map-for-super-shortcuts/
 
 * packages
-** dired
-   vinagresque
-   #+BEGIN_SRC emacs-lisp :results output silent
-
-     (use-package dired
-       :defer t
-       :config
-       (general-define-key
-	:keymaps '(dired-mode-map)
-	"j"         'evil-next-line
-	"k"         'evil-previous-line
-	"-"         'dired-up-directory
-	"0"         'dired-back-to-start-of-files
-	(kbd "C-j") 'dired-next-subdir
-	(kbd "C-k") 'dired-prev-subdir
-	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
-	(kbd "RET") 'dired-find-file
-	(kbd "C-<return>") 'dired-find-file-other-window
-	"f"         'helm-find-files
-	"J"         'dired-goto-file
-	(kbd "C-f") 'find-name-dired
-	"H"         'diredp-dired-recent-dirs
-	"T"         'dired-tree-down
-	"K"         'dired-do-kill-lines
-	"r"         'revert-buffer
-	(kbd "C-r") 'dired-do-redisplay
-	"G"         'evil-goto-line)
-       )
-
-
-
-     (use-package dired+
-	  ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
-
-	    ;;;:ensure t
-       ;;;:defer t
-       :load-path  "~/.emacs.d/vendor"
-       :config
-       (progn
-	 (setq diredp-hide-details-initially-flag t)
-	 (setq diredp-hide-details-propagate-flag t)
-	 ;; use single buffer for all dired navigation
-	 ;; disable font themeing from dired+
-	 ;; (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
-	 ;; (toggle-diredp-find-file-reuse-dir 1)
-	 ))
-
-
-
-   #+END_SRC
-** dumb-jump
-   #+BEGIN_SRC emacs-lisp :results output silent
-   ;;re-write using M-.
-     ;; (use-package dumb-jump
-     ;; :ensure t 
-     ;; :defer t 
-     ;;   :bind (("M-g o" . dumb-jump-go-other-window)
-     ;; 	 ("M-g j" . dumb-jump-go)
-     ;; 	 ("M-g x" . dumb-jump-go-prefer-external)
-     ;; 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-     ;;   :config (setq dumb-jump-selector 'helm)
-     ;;   )
-
-   #+END_SRC
-** elfeed
-   #+BEGIN_SRC emacs-lisp :results output silent
-	  (use-package elfeed
-	    :ensure t
-	    ;;:defer t
-	    :commands (elfeed-search-mode elfeed-show-mode)
-	    :init (progn
-		    (use-package elfeed-goodies :ensure t)
-		    (use-package elfeed-org :ensure t))
-	    :config
-	    (progn
-	      (require 'elfeed-goodies)
-	      (elfeed-goodies/setup)
-	      (setq 
-	       elfeed-goodies/powerline-default-separator nil
-	       elfeed-goodies/entry-pane-position 'bottom)
-
-	      (setq elfeed-db-directory "~/.emacs.d/elfeed")
-	      (require 'elfeed-org)
-	      (elfeed-org)
-	      (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
-	      )
-
-
-
-   #+END_SRC
-*** 
 ** evil
 *** main evil
     
@@ -233,8 +142,104 @@
 	(evil-visual-mark-mode 1))
 
     #+END_SRC
-    
-    
+** general
+   #+BEGIN_SRC emacs-lisp :results output silent
+     (use-package general
+       :ensure t   
+       :defer 1   
+       :config   (setq leader "SPC"))
+   #+END_SRC
+** dired
+   vinagresque
+   #+BEGIN_SRC emacs-lisp :results output silent
+
+     (use-package dired
+       :defer t
+       :config
+       (general-define-key
+	:keymaps '(dired-mode-map)
+	"j"         'evil-next-line
+	"k"         'evil-previous-line
+	"-"         'dired-up-directory
+	"0"         'dired-back-to-start-of-files
+	(kbd "C-j") 'dired-next-subdir
+	(kbd "C-k") 'dired-prev-subdir
+	(kbd "~")   '(lambda ()(interactive) (find-alternate-file "~/"))
+	(kbd "RET") 'dired-find-file
+	(kbd "C-<return>") 'dired-find-file-other-window
+	"f"         'helm-find-files
+	"J"         'dired-goto-file
+	(kbd "C-f") 'find-name-dired
+	"H"         'diredp-dired-recent-dirs
+	"T"         'dired-tree-down
+	"K"         'dired-do-kill-lines
+	"r"         'revert-buffer
+	(kbd "C-r") 'dired-do-redisplay
+	"G"         'evil-goto-line)
+       )
+
+
+
+     (use-package dired+
+	  ;;; https://raw.githubusercontent.com/emacsmirror/emacswiki.org/master/dired%2B.el
+
+	    ;;;:ensure t
+       ;;;:defer t
+       :load-path  "~/.emacs.d/vendor"
+       :config
+       (progn
+	 (setq diredp-hide-details-initially-flag t)
+	 (setq diredp-hide-details-propagate-flag t)
+	 ;; use single buffer for all dired navigation
+	 ;; disable font themeing from dired+
+	 ;; (setq font-lock-maximum-decoration (quote ((dired-mode . 1) (t . t))))
+	 ;; (toggle-diredp-find-file-reuse-dir 1)
+	 ))
+
+
+
+   #+END_SRC
+** dumb-jump
+   #+BEGIN_SRC emacs-lisp :results output silent
+   ;;re-write using M-.
+     ;; (use-package dumb-jump
+     ;; :ensure t 
+     ;; :defer t 
+     ;;   :bind (("M-g o" . dumb-jump-go-other-window)
+     ;; 	 ("M-g j" . dumb-jump-go)
+     ;; 	 ("M-g x" . dumb-jump-go-prefer-external)
+     ;; 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
+     ;;   :config (setq dumb-jump-selector 'helm)
+     ;;   )
+
+   #+END_SRC
+** elfeed
+   #+BEGIN_SRC emacs-lisp :results output silent
+	  (use-package elfeed
+	    :ensure t
+	    ;;:defer t
+	    :commands (elfeed-search-mode elfeed-show-mode)
+	    :init (progn
+		    (use-package elfeed-goodies :ensure t)
+		    (use-package elfeed-org :ensure t))
+	    :config
+	    (progn
+	      (require 'elfeed-goodies)
+	      (elfeed-goodies/setup)
+	      (setq 
+	       elfeed-goodies/powerline-default-separator nil
+	       elfeed-goodies/entry-pane-position 'bottom)
+
+	      (setq elfeed-db-directory "~/.emacs.d/elfeed")
+	      (require 'elfeed-org)
+	      (elfeed-org)
+	      (setq rmh-elfeed-org-files (list "~/Dropbox/elfeed.org")))
+	      )
+
+
+
+   #+END_SRC
+*** 
 ** flycheck
    #+BEGIN_SRC emacs-lisp  :results output silent
 	(use-package flycheck
@@ -258,13 +263,6 @@
      (add-to-list 'flycheck-checkers 'proselint)
 
    #+end_src
-** general
-   #+BEGIN_SRC emacs-lisp :results output silent
-     (use-package general
-       :ensure t   
-       :defer 1   
-       :config   (setq leader "SPC"))
-   #+END_SRC
    
 ** git-gutter-fringe
    #+BEGIN_SRC emacs-lisp :results output silent
@@ -1869,6 +1867,10 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
        (global-set-key (kbd "M-O") 'projectile-switch-project)
        (global-set-key (kbd "M-q") 'save-buffers-kill-emacs)
        (global-set-key (kbd "M-r") 'helm-recentf)
+       (global-set-key (kbd "M-n") 'next-error)
+       (global-set-key (kbd "M-p") 'previous-error)
+       (global-set-key (kbd "M-N") 'git-gutter:next-hunk)
+       (global-set-key (kbd "M-P") 'git-gutter:previous-hunk)
        (global-set-key (kbd "M-s") 'save-all)
        (global-set-key (kbd "M-t") 'swap-buffers)
        (global-set-key (kbd "M-w") 'kill-this-buffer)
@@ -1888,6 +1890,7 @@ https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-hor
        (global-set-key (kbd "M-z")  'undo)
        (global-set-key (kbd "M-Z")  'undo-tree-redo)
        (global-set-key (kbd "s-z") 'undo-tree-visualize)
+       (global-set-key (kbd "s-Z") 'git-gutter:revert-hunk)
        ;;would like s-Z to be revert git gutter chunk
 
        ;;fallbacks
