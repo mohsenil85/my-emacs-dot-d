@@ -1136,6 +1136,10 @@
    general lisp stuff
 
    #+BEGIN_SRC emacs-lisp :results output silent
+     (defvar lispular-modes-list
+       'emacs-lisp-mode-hook
+       'lisp-mode-hook)
+
      (add-hook 'lisp-mode-hook
 	       (lambda ()
 		 (set (make-local-variable 'lisp-indent-function)
@@ -1149,19 +1153,15 @@
        :init 
        (require 'smartparens-config)
 
-       (unbind-key "M-s" smartparens-strict-mode-map)
-       (unbind-key "M-S" smartparens-strict-mode-map)
-       (unbind-key "M-r" smartparens-strict-mode-map)
-
        (unbind-key  "C-M-f" smartparens-strict-mode-map)
        (unbind-key  "C-M-b" smartparens-strict-mode-map)
        (unbind-key  "C-M-u" smartparens-strict-mode-map)
        (unbind-key  "C-M-d" smartparens-strict-mode-map)
        (unbind-key  "C-M-p" smartparens-strict-mode-map)
        (unbind-key  "C-M-n" smartparens-strict-mode-map)
-       (unbind-key  "M-s" smartparens-strict-mode-map)
-       (unbind-key  "M-<up>"smartparens-strict-mode-map)
-       (unbind-key  "M-<down>"smartparens-strict-mode-map)
+       (unbind-key  "M-s"   smartparens-strict-mode-map)
+       (unbind-key  "M-<up>" smartparens-strict-mode-map)
+       (unbind-key  "M-<down>"  smartparens-strict-mode-map)
        (unbind-key  "M-r" smartparens-strict-mode-map)
        (unbind-key  "M-(" smartparens-strict-mode-map)
        (unbind-key  "C-)"  smartparens-strict-mode-map)
@@ -1176,7 +1176,10 @@
        (unbind-key  "M-j" smartparens-strict-mode-map)
        (unbind-key  "M-?" smartparens-strict-mode-map)
 
+       (add-hook 'emacs-lisp-mode-hook #'evil-smartparens-mode)
 
+
+       :config
        (general-define-key
 	:keymaps 'smartparens-mode-map
 	:prefix ","
@@ -1189,8 +1192,6 @@
 	"j" 'sp-join-sexp
 	"r" 'sp-raise-sexp
 	)
-
-
        (general-define-key
 	:keymaps 'smartparens-mode-map
 	:states '(normal visual motion)
@@ -1207,7 +1208,8 @@
        (use-package evil-smartparens
 	 :ensure t
 	 :init 
-	 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)))
+	 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
+       )
 
      (use-package rainbow-delimiters
        :ensure t
@@ -1219,11 +1221,11 @@
 	 (add-hook 'slime-repl-mode-hook #'rainbow-delimiters-mode)
 	 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)))
 
-			      ;;;     (eval-after-load "slime"
-			      ;;;       '(progn
-			      ;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
-			      ;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
-			      ;;;
+				;;;     (eval-after-load "slime"
+				;;;       '(progn
+				;;;          (define-key evil-normal-state-map (kbd "M-.") 'slime-edit-definition)
+				;;;          (define-key evil-normal-state-map (kbd "M-,") 'slime-pop-find-definition-stack)))
+				;;;
      ;;      (use-package slime
      ;;        ;;:defer 1
      ;;        ;;:load-path  "~/.emacs.d/vendor/slime"
@@ -1902,7 +1904,8 @@
 
        (global-set-key (kbd "M-a") 'mark-whole-buffer)
        (global-set-key (kbd "M-b") 'bookmark-bmenu-list) ;;buffers
-       (global-set-key (kbd "M-B") 'bookmark-set)
+      (global-set-key (kbd "M-B") 'bookmark-set)
+      
        (global-set-key (kbd "s-b") 'ibuffer)
        ;; (global-set-key (kbd "M-W") 'recursive-widen-dwim)
        (global-set-key (kbd "M-g") 'ivy-switch-buffer) ;;buffers "go"
