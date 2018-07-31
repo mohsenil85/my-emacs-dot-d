@@ -1906,6 +1906,7 @@
        (global-set-key (kbd "s-b") 'ibuffer)
        ;; (global-set-key (kbd "M-W") 'recursive-widen-dwim)
        (global-set-key (kbd "M-g") 'ivy-switch-buffer) ;;buffers "go"
+       (global-set-key (kbd "C-M-g") 'magit-status)
        (global-set-key (kbd "M-d") 'dired-jump)
        (global-set-key (kbd "M-D") 'dired-jump-other-window)
        (global-set-key (kbd "M-e") 'edit-init-org-file)
@@ -1948,7 +1949,6 @@
        (global-set-key (kbd "s-s")  'sort-lines)
        (global-set-key (kbd "s-t")  '(lambda()(interactive)(term "/usr/bin/zsh")))
        (global-set-key (kbd "s-f")  'elfeed)
-       (global-set-key (kbd "s-g") 'magit-status)
 
 
        (global-set-key (kbd "M-z")  'undo)
