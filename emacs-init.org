@@ -3,377 +3,6 @@
 #+EMAIL: mohsenil85@gmail.com 
 
 
-* itself
-  #+BEGIN_SRC emacs-lisp 
-    (blink-cursor-mode -1)
-    (delete-selection-mode 1)
-    (electric-pair-mode 1)
-    (global-linum-mode)
-    (global-visual-line-mode t)
-    (menu-bar-mode 0)
-    (prefer-coding-system 'utf-8)
-    (recentf-mode 1)
-    (scroll-bar-mode 0)
-    (set-keyboard-coding-system 'utf-8)
-    (set-selection-coding-system 'utf-8)
-    (set-terminal-coding-system 'utf-8-unix)
-    (defalias 'yes-or-no-p 'y-or-n-p)
-    (tool-bar-mode 0)
-    (tooltip-mode -1)
-    (show-paren-mode 1)
-
-    (setq
-     auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
-     backup-directory-alist `((".*" . ,temporary-file-directory))
-     confirm-kill-processes nil
-     confirm-nonexistent-file-or-buffer nil
-     default-fill-column 80		; toggle wrapping text at the 80th character
-     delete-old-versions t 		; delete excess backup versions silently
-     history-length 250 
-     inhibit-startup-echo-area-message "lmohseni"
-     inhibit-startup-message t
-     inhibit-startup-screen t
-     initial-scratch-message "; happy hacking"
-     kill-ring-max 5000                     ;truncate kill ring after 5000 entries
-     load-prefer-newer t
-     locale-coding-system 'utf-8
-     mark-ring-max 5000 
-     recentf-max-saved-items 5000  
-     ring-bell-function 'ignore 	; silent bell when you make a mistake
-     sentence-end-double-space t	; 
-     show-paren-delay 0
-     show-paren-style 'parenthesis
-     show-paren-when-point-inside-paren t
-     switch-to-buffer-preserve-window-point t
-     tab-always-indent 'complete 
-     tooltip-use-echo-area t
-     use-dialog-box nil
-     user-full-name "Logan Mohseni"
-     user-mail-address "mohsenil85@gmail.com"
-     vc-follow-symlinks t 				       ; don't ask for confirmation when opening symlinked file
-     vc-make-backup-files t 		; make backups file even when in version controlled dir
-     version-control t 		; use version control
-     visible-bell t)
-
-
-    (require 'uniquify)
-    (setq uniquify-buffer-name-style 'forward)
-    (winner-mode 1)
-
-
-
-  #+END_SRC
-
-  #+RESULTS:
-  : t
-
-* functionaria
-** load-init file, plus other fun
-  
-   #+BEGIN_SRC emacs-lisp :results output silent
-
-
-     (require 'cl)
-
-     (defun copy-filename-to-clip ()
-       "Put the current file name on the clipboard"
-       (interactive)
-       (let ((filename (if (equal major-mode 'dired-mode)
-			   default-directory
-			 (buffer-file-name))))
-	 (when filename
-	   (with-temp-buffer
-	     (insert filename)
-	     (clipboard-kill-region (point-min) (point-max)))
-	   (message filename))))
-
-     (defun load-init-file ()
-       (interactive)
-       (load-file (concat "~/.emacs.d/init.el")))
-
-     (defun foobl (ak)
-       (let ((foo 'bar)
-	     (zip 'ping)
-	     ))
-       (print foo))
-
-     (defun edit-init-org-file ()
-       (interactive)
-       (if (string= buffer-file-name  (expand-file-name ".emacs.d/emacs-init.org" "~") ) ;; weirdness around the actual buffer file name of 
-	   (find-file (concat "~/.emacs.d/init.el"))
-	 (find-file (concat "~/.emacs.d/emacs-init.org"))))
-
-
-
-
-     (defun add-hook-to-modes (modes hook)
-       (dolist (mode modes)
-	 (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
-		   hook)))
-
-     (defun halt ()
-       (interactive)
-       (save-some-buffers)
-       (kill-emacs))
-
-     (defun my-whitespace-mode-hook ()
-       (setq whitespace-action '(auto-cleanup)
-	     whitespace-style  '(face tabs trailing lines-tail empty)
-	     ;; use fill-column value instead
-	     whitespace-line-column nil)
-       (whitespace-mode))
-
-     (defun my-makefile-mode-hook ()
-       (setq indent-tabs-mode t
-	     tab-width 4))
-
-     (defun make-region-read-only (start end)
-       (interactive "*r")
-       (let ((inhibit-read-only t))
-	 (put-text-property start end 'read-only t)))
-
-     (defun make-region-read-write (start end)
-       (interactive "*r")
-       (let ((inhibit-read-only t))
-	 (put-text-property start end 'read-only nil)))
-
-
-   #+END_SRC
-  
-** swap buffers
-   taken from:  https://stackoverflow.com/questions/1774832/how-to-swap-the-buffers-in-2-windows-emacs
-   #+BEGIN_SRC emacs-lisp
-
-(defun swap-buffers ()
-  "Put the buffer from the selected window in next window, and vice versa"
-  (interactive)
-  (let* ((this (selected-window))
-     (other (next-window))
-     (this-buffer (window-buffer this))
-     (other-buffer (window-buffer other)))
-    (set-window-buffer other this-buffer)
-    (set-window-buffer this other-buffer)
-    )
-    (other-window 1) ;;keep focus on starting window
-  )
-
-   #+END_SRC
-
-   #+RESULTS:
-   : swap-buffers
-
-** previous window
-
-   #+BEGIN_SRC emacs-lisp
-
-       
-(defun prev-window ()
-    (interactive)
-    (other-window -1))
-
-   
-   #+END_SRC
-
-   #+RESULTS:
-   : prev-window
-
-** kill other buffer
-   #+BEGIN_SRC emacs-lisp
-   (defun kill-other-buffer ()
-   (interactive)
-   (other-window 1)
-   (kill-this-buffer)
-   (other-window 1)
-   )
-
-   
-   #+END_SRC
-
-   #+RESULTS:
-   : kill-other-buffer
-
-** clipboard-to-elfeed
-   #+BEGIN_SRC emacs-lisp :results output silent
-  (defun my-clipboard-to-elfeed ()
-    (interactive)
-    (let ((link (pbpaste)))
-      (elfeed-add-feed link)))
-   #+END_SRC
-   
-
-** backward and foward global mark jump
-   #+BEGIN_SRC emacs-lisp
-
-(defun marker-is-point-p (marker)
-  "test if marker is current point"
-  (and (eq (marker-buffer marker) (current-buffer))
-       (= (marker-position marker) (point))))
-
-(defun push-mark-maybe () 
-  "push mark onto `global-mark-ring' if mark head or tail is not current location"
-  (if (not global-mark-ring) (error "global-mark-ring empty")
-    (unless (or (marker-is-point-p (car global-mark-ring))
-		(marker-is-point-p (car (reverse global-mark-ring))))
-      (push-mark))))
-
-
-(defun backward-global-mark () 
-  "use `pop-global-mark', pushing current point if not on ring."
-  (interactive)
-  (push-mark-maybe)
-  (when (marker-is-point-p (car global-mark-ring))
-    (call-interactively 'pop-global-mark))
-  (call-interactively 'pop-global-mark))
-
-(defun forward-global-mark ()
-  "hack `pop-global-mark' to go in reverse, pushing current point if not on ring."
-  (interactive)
-  (push-mark-maybe)
-  (setq global-mark-ring (nreverse global-mark-ring))
-  (when (marker-is-point-p (car global-mark-ring))
-    (call-interactively 'pop-global-mark))
-  (call-interactively 'pop-global-mark)
-  (setq global-mark-ring (nreverse global-mark-ring)))
-   
-   #+END_SRC
-** which-key for this buffer
-   #+BEGIN_SRC emacs-lisp
-  ;; (defun which-key-this-buffer ()
-  ;; (interactive)
-  ;; (which-key-show-keymap   major-mode))
-  ;; 
-
-   #+END_SRC
-
-   #+RESULTS:
-   : which-key-this-buffer
-
-** save all, save all on on unfocus
-   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
-   #+BEGIN_SRC emacs-lisp
-  ;; Automatically save on loss of focus.
-  (defun save-all ()
-    "Save all file-visiting buffers without prompting."
-    (interactive)
-    (save-some-buffers t) ;; Do not prompt for confirmation.
-    )
-  ;; Automatically save all file-visiting buffers when Emacs loses focus.
-  (add-hook 'focus-out-hook 'save-all)
-  (add-hook 'focus-out-hook '(lambda () (message "ran focus out hook")))
-
-   #+END_SRC
-** enhanced window manip fns
-   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
-   #+BEGIN_SRC emacs-lisp
-(defun delete-window-balance ()
-  "Delete window and rebalance the remaining ones."
-  (interactive)
-  (delete-window)
-  (balance-windows))
-(defun split-window-below-focus ()
-  "Split window horizontally and move focus to other window."
-  (interactive)
-  (split-window-below)
-  (balance-windows)
-  (other-window 1))
- 
-(defun split-window-right-focus ()
-  "Split window vertically and move focus to other window."
-  (interactive)
-  (split-window-right)
-  (balance-windows)
-  (other-window 1))
-
-   
-   #+END_SRC
-
-   #+RESULTS:
-   : split-window-right-focus
-** package mode
-   #+BEGIN_SRC emacs-lisp
-  (eval-after-load "evil-mode"	'(progn
-				    (add-to-list 'evil-normal-state-modes 'package-menu-mode)
-
-				    ))
-
-  (general-define-key
-   :keymaps '(package-menu-mode-map )
-   "SPC" 'evil-scroll-page-down
-   "DEL" 'evil-scroll-page-up
-   "I" 'package-menu-mark-install
-   "X" 'package-menu-execute          	  
-   "D" 'package-menu-mark-delete
-   ;;"u" 'package-menu-mark-unmark
-   "RET" 'package-menu-describe-package 
-   "r" 'package-menu-refresh
-   )
-
-   #+END_SRC
-
-   #+RESULTS:
-
-** vertical and horizontal layout
-   taken from:  
-   https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-horizontal-split-to-a-vertical-split-in-one-move#14881250
-   #+BEGIN_SRC emacs-lisp
-
-
-(defun vertical-horizontal-swizzle ()
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-	 (next-win-buffer (window-buffer (next-window)))
-	 (this-win-edges (window-edges (selected-window)))
-	 (next-win-edges (window-edges (next-window)))
-	 (this-win-2nd (not (and (<= (car this-win-edges)
-		     (car next-win-edges))
-		     (<= (cadr this-win-edges)
-		     (cadr next-win-edges)))))
-	 (splitter
-	  (if (= (car this-win-edges)
-	     (car (window-edges (next-window))))
-	  'split-window-horizontally
-	'split-window-vertically)))
-    (delete-other-windows)
-    (let ((first-win (selected-window)))
-      (funcall splitter)
-      (if this-win-2nd (other-window 1))
-      (set-window-buffer (selected-window) this-win-buffer)
-      (set-window-buffer (next-window) next-win-buffer)
-      (select-window first-win)
-      (if this-win-2nd (other-window 1))))))
-
-   #+END_SRC
-** not anymore
-   #+BEGIN_SRC emacs-lisp
-
-
-(defun not-anymore ()
-""
-  (interactive)
-  (message "not anymore")
-)
-   #+END_SRC
-** "prose" mode
-   #+BEGIN_SRC emacs-lisp
-   
-    (defun prose-mode ()
-      (interactive)
-
-      (linum-mode 0)
-      (writeroom-mode 1)
-      (page-break-lines-mode 1)
-      (flyspell-mode 1)
-      (electric-quote-mode 1)
-      (abbrev-mode 1)
-      (setq buffer-face-mode-face
-	    '(:family "Times New Roman"
-		      :height 180
-		      :width semi-condensed))
-      (buffer-face-mode)
-      )
-   #+END_SRC
-
 * packages
 ** el-get
    #+BEGIN_SRC emacs-lisp
@@ -1388,6 +1017,377 @@
     (add-hook 'typescript-mode-hook #'setup-tide-mode)
     )   
 
+   #+END_SRC
+
+* itself
+  #+BEGIN_SRC emacs-lisp 
+    (blink-cursor-mode -1)
+    (delete-selection-mode 1)
+    (electric-pair-mode 1)
+    (global-linum-mode)
+    (global-visual-line-mode t)
+    (menu-bar-mode 0)
+    (prefer-coding-system 'utf-8)
+    (recentf-mode 1)
+    (scroll-bar-mode 0)
+    (set-keyboard-coding-system 'utf-8)
+    (set-selection-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8-unix)
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    (tool-bar-mode 0)
+    (tooltip-mode -1)
+    (show-paren-mode 1)
+
+    (setq
+     auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+     backup-directory-alist `((".*" . ,temporary-file-directory))
+     confirm-kill-processes nil
+     confirm-nonexistent-file-or-buffer nil
+     default-fill-column 80		; toggle wrapping text at the 80th character
+     delete-old-versions t 		; delete excess backup versions silently
+     history-length 250 
+     inhibit-startup-echo-area-message "lmohseni"
+     inhibit-startup-message t
+     inhibit-startup-screen t
+     initial-scratch-message "; happy hacking"
+     kill-ring-max 5000                     ;truncate kill ring after 5000 entries
+     load-prefer-newer t
+     locale-coding-system 'utf-8
+     mark-ring-max 5000 
+     recentf-max-saved-items 5000  
+     ring-bell-function 'ignore 	; silent bell when you make a mistake
+     sentence-end-double-space t	; 
+     show-paren-delay 0
+     show-paren-style 'parenthesis
+     show-paren-when-point-inside-paren t
+     switch-to-buffer-preserve-window-point t
+     tab-always-indent 'complete 
+     tooltip-use-echo-area t
+     use-dialog-box nil
+     user-full-name "Logan Mohseni"
+     user-mail-address "mohsenil85@gmail.com"
+     vc-follow-symlinks t 				       ; don't ask for confirmation when opening symlinked file
+     vc-make-backup-files t 		; make backups file even when in version controlled dir
+     version-control t 		; use version control
+     visible-bell t)
+
+
+    (require 'uniquify)
+    (setq uniquify-buffer-name-style 'forward)
+    (winner-mode 1)
+
+
+
+  #+END_SRC
+
+  #+RESULTS:
+  : t
+
+* functionaria
+** load-init file, plus other fun
+  
+   #+BEGIN_SRC emacs-lisp :results output silent
+
+
+     (require 'cl)
+
+     (defun copy-filename-to-clip ()
+       "Put the current file name on the clipboard"
+       (interactive)
+       (let ((filename (if (equal major-mode 'dired-mode)
+			   default-directory
+			 (buffer-file-name))))
+	 (when filename
+	   (with-temp-buffer
+	     (insert filename)
+	     (clipboard-kill-region (point-min) (point-max)))
+	   (message filename))))
+
+     (defun load-init-file ()
+       (interactive)
+       (load-file (concat "~/.emacs.d/init.el")))
+
+     (defun foobl (ak)
+       (let ((foo 'bar)
+	     (zip 'ping)
+	     ))
+       (print foo))
+
+     (defun edit-init-org-file ()
+       (interactive)
+       (if (string= buffer-file-name  (expand-file-name ".emacs.d/emacs-init.org" "~") ) ;; weirdness around the actual buffer file name of 
+	   (find-file (concat "~/.emacs.d/init.el"))
+	 (find-file (concat "~/.emacs.d/emacs-init.org"))))
+
+
+
+
+     (defun add-hook-to-modes (modes hook)
+       (dolist (mode modes)
+	 (add-hook (intern (concat (symbol-name mode) "-mode-hook"))
+		   hook)))
+
+     (defun halt ()
+       (interactive)
+       (save-some-buffers)
+       (kill-emacs))
+
+     (defun my-whitespace-mode-hook ()
+       (setq whitespace-action '(auto-cleanup)
+	     whitespace-style  '(face tabs trailing lines-tail empty)
+	     ;; use fill-column value instead
+	     whitespace-line-column nil)
+       (whitespace-mode))
+
+     (defun my-makefile-mode-hook ()
+       (setq indent-tabs-mode t
+	     tab-width 4))
+
+     (defun make-region-read-only (start end)
+       (interactive "*r")
+       (let ((inhibit-read-only t))
+	 (put-text-property start end 'read-only t)))
+
+     (defun make-region-read-write (start end)
+       (interactive "*r")
+       (let ((inhibit-read-only t))
+	 (put-text-property start end 'read-only nil)))
+
+
+   #+END_SRC
+  
+** swap buffers
+   taken from:  https://stackoverflow.com/questions/1774832/how-to-swap-the-buffers-in-2-windows-emacs
+   #+BEGIN_SRC emacs-lisp
+
+(defun swap-buffers ()
+  "Put the buffer from the selected window in next window, and vice versa"
+  (interactive)
+  (let* ((this (selected-window))
+     (other (next-window))
+     (this-buffer (window-buffer this))
+     (other-buffer (window-buffer other)))
+    (set-window-buffer other this-buffer)
+    (set-window-buffer this other-buffer)
+    )
+    (other-window 1) ;;keep focus on starting window
+  )
+
+   #+END_SRC
+
+   #+RESULTS:
+   : swap-buffers
+
+** previous window
+
+   #+BEGIN_SRC emacs-lisp
+
+       
+(defun prev-window ()
+    (interactive)
+    (other-window -1))
+
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : prev-window
+
+** kill other buffer
+   #+BEGIN_SRC emacs-lisp
+   (defun kill-other-buffer ()
+   (interactive)
+   (other-window 1)
+   (kill-this-buffer)
+   (other-window 1)
+   )
+
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : kill-other-buffer
+
+** clipboard-to-elfeed
+   #+BEGIN_SRC emacs-lisp :results output silent
+  (defun my-clipboard-to-elfeed ()
+    (interactive)
+    (let ((link (pbpaste)))
+      (elfeed-add-feed link)))
+   #+END_SRC
+   
+
+** backward and foward global mark jump
+   #+BEGIN_SRC emacs-lisp
+
+(defun marker-is-point-p (marker)
+  "test if marker is current point"
+  (and (eq (marker-buffer marker) (current-buffer))
+       (= (marker-position marker) (point))))
+
+(defun push-mark-maybe () 
+  "push mark onto `global-mark-ring' if mark head or tail is not current location"
+  (if (not global-mark-ring) (error "global-mark-ring empty")
+    (unless (or (marker-is-point-p (car global-mark-ring))
+		(marker-is-point-p (car (reverse global-mark-ring))))
+      (push-mark))))
+
+
+(defun backward-global-mark () 
+  "use `pop-global-mark', pushing current point if not on ring."
+  (interactive)
+  (push-mark-maybe)
+  (when (marker-is-point-p (car global-mark-ring))
+    (call-interactively 'pop-global-mark))
+  (call-interactively 'pop-global-mark))
+
+(defun forward-global-mark ()
+  "hack `pop-global-mark' to go in reverse, pushing current point if not on ring."
+  (interactive)
+  (push-mark-maybe)
+  (setq global-mark-ring (nreverse global-mark-ring))
+  (when (marker-is-point-p (car global-mark-ring))
+    (call-interactively 'pop-global-mark))
+  (call-interactively 'pop-global-mark)
+  (setq global-mark-ring (nreverse global-mark-ring)))
+   
+   #+END_SRC
+** which-key for this buffer
+   #+BEGIN_SRC emacs-lisp
+  ;; (defun which-key-this-buffer ()
+  ;; (interactive)
+  ;; (which-key-show-keymap   major-mode))
+  ;; 
+
+   #+END_SRC
+
+   #+RESULTS:
+   : which-key-this-buffer
+
+** save all, save all on on unfocus
+   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
+   #+BEGIN_SRC emacs-lisp
+  ;; Automatically save on loss of focus.
+  (defun save-all ()
+    "Save all file-visiting buffers without prompting."
+    (interactive)
+    (save-some-buffers t) ;; Do not prompt for confirmation.
+    )
+  ;; Automatically save all file-visiting buffers when Emacs loses focus.
+  (add-hook 'focus-out-hook 'save-all)
+  (add-hook 'focus-out-hook '(lambda () (message "ran focus out hook")))
+
+   #+END_SRC
+** enhanced window manip fns
+   taken from: https://www.bytedude.com/useful-emacs-shortcuts/
+   #+BEGIN_SRC emacs-lisp
+(defun delete-window-balance ()
+  "Delete window and rebalance the remaining ones."
+  (interactive)
+  (delete-window)
+  (balance-windows))
+(defun split-window-below-focus ()
+  "Split window horizontally and move focus to other window."
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+ 
+(defun split-window-right-focus ()
+  "Split window vertically and move focus to other window."
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+
+   
+   #+END_SRC
+
+   #+RESULTS:
+   : split-window-right-focus
+** package mode
+   #+BEGIN_SRC emacs-lisp
+  (eval-after-load "evil-mode"	'(progn
+				    (add-to-list 'evil-normal-state-modes 'package-menu-mode)
+
+				    ))
+
+  (general-define-key
+   :keymaps '(package-menu-mode-map )
+   "SPC" 'evil-scroll-page-down
+   "DEL" 'evil-scroll-page-up
+   "I" 'package-menu-mark-install
+   "X" 'package-menu-execute          	  
+   "D" 'package-menu-mark-delete
+   ;;"u" 'package-menu-mark-unmark
+   "RET" 'package-menu-describe-package 
+   "r" 'package-menu-refresh
+   )
+
+   #+END_SRC
+
+   #+RESULTS:
+
+** vertical and horizontal layout
+   taken from:  
+   https://stackoverflow.com/questions/14881020/emacs-shortcut-to-switch-from-a-horizontal-split-to-a-vertical-split-in-one-move#14881250
+   #+BEGIN_SRC emacs-lisp
+
+
+(defun vertical-horizontal-swizzle ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+	 (next-win-buffer (window-buffer (next-window)))
+	 (this-win-edges (window-edges (selected-window)))
+	 (next-win-edges (window-edges (next-window)))
+	 (this-win-2nd (not (and (<= (car this-win-edges)
+		     (car next-win-edges))
+		     (<= (cadr this-win-edges)
+		     (cadr next-win-edges)))))
+	 (splitter
+	  (if (= (car this-win-edges)
+	     (car (window-edges (next-window))))
+	  'split-window-horizontally
+	'split-window-vertically)))
+    (delete-other-windows)
+    (let ((first-win (selected-window)))
+      (funcall splitter)
+      (if this-win-2nd (other-window 1))
+      (set-window-buffer (selected-window) this-win-buffer)
+      (set-window-buffer (next-window) next-win-buffer)
+      (select-window first-win)
+      (if this-win-2nd (other-window 1))))))
+
+   #+END_SRC
+** not anymore
+   #+BEGIN_SRC emacs-lisp
+
+
+(defun not-anymore ()
+""
+  (interactive)
+  (message "not anymore")
+)
+   #+END_SRC
+** "prose" mode
+   #+BEGIN_SRC emacs-lisp
+   
+    (defun prose-mode ()
+      (interactive)
+
+      (linum-mode 0)
+      (writeroom-mode 1)
+      (page-break-lines-mode 1)
+      (flyspell-mode 1)
+      (electric-quote-mode 1)
+      (abbrev-mode 1)
+      (setq buffer-face-mode-face
+	    '(:family "Times New Roman"
+		      :height 180
+		      :width semi-condensed))
+      (buffer-face-mode)
+      )
    #+END_SRC
    
 * osx specific 
