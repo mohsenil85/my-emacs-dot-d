@@ -1,9 +1,18 @@
 (package-initialize)
+(unless (require 'quelpa nil t)
+  (with-temp-buffer
+    (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
+    (eval-buffer)))
 
-(let ((temp-custom (make-temp-file "~/.emacs.d/custom")))
-  (setq custom-file temp-custom )
-  (add-hook 'kill-emacs-hook
-	    '(lambda () (delete-file custom-file))))
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+
+
+(setq custom-file  "~/.emacs.d/var/custom" )
+   
 
 (setq package-enable-at-startup nil)
 
@@ -18,8 +27,9 @@
 (eval-when-compile
   (require 'use-package))
 
-;;used in debugging
 (use-package no-littering :ensure t)
+
+;;used in debugging
 ;;(use-package evil :ensure t :config (evil-mode 1))
 ;;(setq debug-on-error t)
 (use-package org :ensure org-plus-contrib)
