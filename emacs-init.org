@@ -88,17 +88,17 @@
       ;;     (evil-collection-init 'man)
 	   (evil-collection-init 'magit)
       ;;     (evil-collection-init 'magit-todos)
-      ;;     (evil-collection-init 'mu4e)
+	   (evil-collection-init 'mu4e)
       ;;     (evil-collection-init 'mu4e-conversation)
       ;;     (evil-collection-init 'neotree)
-           (evil-collection-init 'notmuch)
+	;;   (evil-collection-init 'notmuch)
       ;;     (evil-collection-init 'nov)
-           (evil-collection-init 'occur)
+	   (evil-collection-init 'occur)
       ;;     (evil-collection-init 'p4)
 	   ;; (evil-collection-init  'package-menu )
       ;;     (evil-collection-init 'paren)
       ;;     (evil-collection-init 'pass)
-           (evil-collection-init 'popup)
+	   (evil-collection-init 'popup)
 	   (evil-collection-init 'proced)
       ;;     (evil-collection-init 'prodigy)
       ;;     (evil-collection-init 'profiler)
@@ -123,7 +123,7 @@
       ;;     (evil-collection-init 'vdiff)
       ;;     (evil-collection-init 'view)
       ;;     (evil-collection-init 'vlf)
-           (evil-collection-init 'which-key)
+	   (evil-collection-init 'which-key)
       ;;     (evil-collection-init 'wdired)
       ;;     (evil-collection-init 'wgrep)
       ;;     (evil-collection-init 'woman )
@@ -1445,167 +1445,169 @@
   #+END_SRC
 * email via notmuch
   taken from https://kkatsuyuki.github.io/notmuch-conf/
-#+BEGIN_SRC emacs-lisp
-  (use-package notmuch :ensure t :defer t
-    :config
-    (setq mail-user-agent 'message-user-agent)
-    ;; smtp config
-    (setq smtpmail-smtp-server "smtp.gmail.com"
-	  message-send-mail-function 'message-smtpmail-send-it)
-
-    ;; report problems with the smtp server
-    (setq smtpmail-debug-info t)
-    ;; add Cc and Bcc headers to the message buffer
-    (setq message-default-mail-headers "Cc: \nBcc: \n")
-    ;; postponed message is put in the following draft directory
-    (setq message-auto-save-directory "~/Mail/draft")
-    (setq message-kill-buffer-on-exit t)
-    ;; change the directory to store the sent mail
-    (setq message-directory "~/Mail/")
-    )
-    
+  #+BEGIN_SRC emacs-lisp
+    (defun setup-mail ()
+      (setq  
+       mail-user-agent 'message-user-agent
+       message-auto-save-directory "~/Mail/draft"
+       message-default-mail-headers "Cc: \nBcc: \n"
+       message-directory "~/Mail/"
+       message-kill-buffer-on-exit t
+       message-send-mail-function 'message-smtpmail-send-it
+       smtpmail-debug-info t
+       smtpmail-smtp-server "smtp.gmail.com"
+       )
+      )
 
 
+    (defun exec-offlineimap ()
+      "execute offlineimap"
+      (interactive)
+      (set-process-sentinel
+       (start-process-shell-command "offlineimap"
+				    "*offlineimap*"
+				    "offlineimap -o")
+       '(lambda (process event)
+	  (notmuch-refresh-all-buffers)
+	  (let ((w (get-buffer-window "*offlineimap*")))
+	    (when w
+	      (with-selected-window w (recenter (window-end)))))))
+      (popwin:display-buffer "*offlineimap*"))
 
-(defun notmuch-exec-offlineimap ()
-    "execute offlineimap"
-    (interactive)
-    (set-process-sentinel
-     (start-process-shell-command "offlineimap"
-                                  "*offlineimap*"
-                                  "offlineimap -o")
-     '(lambda (process event)
-        (notmuch-refresh-all-buffers)
-        (let ((w (get-buffer-window "*offlineimap*")))
-          (when w
-            (with-selected-window w (recenter (window-end)))))))
-    (popwin:display-buffer "*offlineimap*"))
+    (add-to-list 'popwin:special-display-config
+		 '("*offlineimap*" :dedicated t :position bottom :stick t
+		   :height 0.4 :noselect t))
 
-(add-to-list 'popwin:special-display-config
-             '("*offlineimap*" :dedicated t :position bottom :stick t
-               :height 0.4 :noselect t))
+    (use-package notmuch :ensure t :defer t
+      :disabled 
+      :config (setup-mail)
+      )
+
+    ;; (defvar mu4e-local-recipe nil)
+    ;; (setq mu4e-local-recipe
+    ;;       ' )
+
+    (defun setup-mu4e-stuff ()
+      (let ((mu-bin (if (eq system-type 'darwin)
+			"/usr/local/bin/mu"
+		      "/usr/bin/mu")))
+	(setq
+	 mu4e-change-filenames-when-moving t
+	 mu4e-compose-format-flowed t
+	 mu4e-compose-signature-auto-include nil
+	 mu4e-confirm-quit nil
+	 mu4e-context-policy 'pick-first
+	 mu4e-drafts-folder  "/drafts"
+	 mu4e-get-mail-command "offlineimap"
+	 mu4e-headers-auto-update t
+	 mu4e-headers-skip-duplicates t
+	 mu4e-html2text-command "w3m -T text/html"
+	 mu4e-maildir (expand-file-name "~/Mail")
+	 ;;     	     mu4e-maildir-shortcuts '( 
+	 ;; ("/gmail/Inbox" . ?i)
+	 ;; ("/work/[Gmail]/Inbox" . ?w)
+	 ;; ("/gmail/[Gmail]/.Sent Mail" . ?s)
+	 ;; ("/gmail/[Gmail]/.Trash" . ?t) 				       ("/gmail/[Gmail]/.All Mail" . ?a) 				       ("/gmail/[Gmail]/.Drafts" . ?d)) 
+	 mu4e-mu-binary mu-bin 
+	 mu4e-reply-to-address  "mohsenil85@gmail.com"
+	 mu4e-sent-folder  "/sent"
+	 mu4e-sent-messages-behavior 'delete
+	 mu4e-show-images t
+	 mu4e-trash-folder  "/trash"
+	 mu4e-update-interval 120
+	 )))
+
+    (use-package mu4e  
+    :defer t
+    :quelpa (mu4e :path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/" :fetcher file)
+      :config
+      (setup-mail)
+      (setup-mu4e-stuff )
+
+		 (require 'mu4e-contrib)
+		 (use-package evil-mu4e :ensure t)
+		 (setq mu4e-contexts
+			`( 
+			  ,(make-mu4e-context
+			    :name "private"
+			    :enter-func (lambda ()
+					  (mu4e-message "Entering Private context"))
+			    :leave-func (lambda ()
+					  (mu4e-message "Leaving Private context"))
+			    ;; we match based on the contact-fields of the message
+			    :match-func (lambda (msg)
+					  (when msg 
+					    (mu4e-message-contact-field-matches 
+					     msg 
+					     :to "mohsenil85@gmail.com")))
+			    :vars '( 
+				    (mu4e-reply-to-address . "mohsenil85@gmail.com")
+				    (user-mail-address . "mohsenil85@gmail.com"  )
+				    (user-full-name   . "Logan Mohseni" )
+				    (mu4e-compose-signature . nil)
+				    ))
+			  ,(make-mu4e-context
+			    :name "work"
+			    :enter-func (lambda ()
+					  (mu4e-message "Entering Work context"))
+			    :leave-func (lambda ()
+					  (mu4e-message "Leaving Work context"))
+			    ;; we match based on the contact-fields of the message
+			    :match-func (lambda (msg)
+					  (when msg 
+					    (mu4e-message-contact-field-matches 
+					     msg 
+					     :to "logan.mohseni@singlemindconsulting.com")))
+			    :vars '( 
+				    (mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
+				    (user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
+				    (user-full-name   . "Logan Mohseni")
+				    (mu4e-compose-signature .
+							    "<#part type=text/html> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html\; charset=utf-8\"> <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"> <title></title> <meta name=\"Generator\" content=\"Cocoa HTML Writer\"> <meta name=\"CocoaVersion\" content=\"1504.81\"> <style type=\"text/css\"> p.p1 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 14.0px\; font: 12.0px Arial\; color: #38678f\; -webkit-text-stroke: #38678f} p.p2 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 15.0px\; font: 12.0px Arial\; color: #666666\; -webkit-text-stroke: #666666} span.s1 {font-kerning: none} span.s2 {font: 13.0px 'Trebuchet MS'\; font-kerning: none} span.s3 {font: 13.0px 'Trebuchet MS'\; font-kerning: none\; color: #ff931e\; -webkit-text-stroke: 0px #ff931e} span.s4 {font-kerning: none\; color: #000000\; -webkit-text-stroke: 0px #000000} span.s5 {font-kerning: none\; color: #666666\; -webkit-text-stroke: 0px #666666} </style> </head> <body> <p class=\"p1\"><span class=\"s1\">Logan Mohseni | <i>Software Developer</i></span></p> <p class=\"p2\"><span class=\"s2\"><b>single</b></span><span class=\"s3\"><b>mind |</b></span><span class=\"s4\"> </span><span class=\"s1\"><b><i>research • design • build • support</i></b></span></p> <p class=\"p1\"><span class=\"s1\">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p> <p class=\"p1\"><span class=\"s5\"><b>Tel</b></span><span class=\"s1\">: 503.342.8270 | </span><span class=\"s5\"><b>Mobile</b></span><span class=\"s1\">: 307.751.4050</span></p> <p class=\"p1\"><span class=\"s5\"><b>@</b></span><span class=\"s1\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\">logan.mohseni@singlemindconsulting.com</a></span><span class=\"s4\"><span class=\"Apple-converted-space\"> </span></span></p> </body> </html> <#/part>" 
+							    )
+				    )))) 
+
+
+
+      ) ;;end usep mu4e
 
 
 
 
-#+END_SRC
 
-#+RESULTS:
-| (*offlineimap* :dedicated t :position bottom :stick t :height 0.4 :noselect t) | (*Miniedit Help* :noselect t) | help-mode | (completion-list-mode :noselect t) | (compilation-mode :noselect t) | (grep-mode :noselect t) | (occur-mode :noselect t) | (*Pp Macroexpand Output* :noselect t) | *Shell Command Output* | *vc-diff* | *vc-change-log* | ( *undo-tree* :width 60 :position right) | (^\*anything.*\*$ :regexp t) | *slime-apropos* | *slime-macroexpansion* | *slime-description* | (*slime-compilation* :noselect t) | *slime-xref* | (sldb-mode :stick t) | slime-repl-mode | slime-connection-list-mode |
+  #+END_SRC
 
-* deleted
-** mu4e based email stuff
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;; (add-to-list 'load-path  "~/Projects/elisp/mu4e-multi/" )
-     ;;       (require 'mu4e-multi)
-   #+END_SRC
+  #+RESULTS:
+  : t
+
+* mu4e based email stuff
+  #+BEGIN_SRC emacs-lisp :results output silent
+    ;; (add-to-list 'load-path  "~/Projects/elisp/mu4e-multi/" )
+    ;;       (require 'mu4e-multi)
+  #+END_SRC
   
-   #+BEGIN_SRC emacs-lisp :results output silent
-     ;;(let ((mu-bin (if (eq system-type 'darwin)
-     ;;		  "/usr/local/bin/mu"
-     ;;		"/usr/bin/mu"))
-     ;;      (mu-load-path (if (eq system-type 'darwin)
-     ;;			"/usr/local/share/emacs/site-lisp/mu/mu4e/"
-     ;;		      "/usr/share/emacs/site-lisp/mu4e/") ))
-     ;;  (use-package mu4e  
-     ;;    ;;:load-path mu-load-path
-     ;;    :commands (make-mu4e-context)
-     ;;    :init (progn
-     ;;	    (setq
-     ;;	     mu4e-mu-binary mu-bin 
-     ;;	     mu4e-maildir (expand-file-name "~/.mail/")
-     ;;	     mu4e-context-policy 'pick-first
-     ;;	     mu4e-reply-to-address  "mohsenil85@gmail.com"
-     ;;	     user-mail-address  "mohsenil85@gmail.com"  
-     ;;	     user-full-name    "Logan Mohseni" 
-     ;;	     mu4e-drafts-folder  "/gmail/[Gmail]/.Drafts"
-     ;;	     mu4e-sent-folder  "/gmail/[Gmail]/.Sent Mail"
-     ;;	     mu4e-trash-folder  "/gmail/[Gmail]/.Trash"
-     ;;	     mu4e-maildir-shortcuts '( ("/gmail/Inbox" . ?i)
-     ;;				       ("/work/[Gmail]/Inbox" . ?w)
-     ;;				       ("/gmail/[Gmail]/.Sent Mail" . ?s)
-     ;;				       ("/gmail/[Gmail]/.Trash" . ?t)
-     ;;				       ("/gmail/[Gmail]/.All Mail" . ?a)
-     ;;				       ("/gmail/[Gmail]/.Drafts" . ?d)) 
-     ;;	     user-mail-address "mohsenil85@gmail.com"
-     ;;	     send-mail-function 'message-send-mail-with-sendmail
-     ;;	     message-send-mail-function 'message-send-mail-with-sendmail
-     ;;	     sendmail-program "/usr/local/bin/msmtp"
-     ;;	     mu4e-get-mail-command "mbsync -a"
-     ;;	     mu4e-html2text-command "w3m -T text/html"
-     ;;	     mu4e-update-interval 120
-     ;;	     mu4e-headers-auto-update t
-     ;;	     mu4e-compose-signature-auto-include nil
-     ;;	     mu4e-change-filenames-when-moving t
-     ;;	     mu4e-compose-format-flowed t
-     ;;	     message-kill-buffer-on-exit t
-     ;;	     mu4e-sent-messages-behavior 'delete
-     ;;	     mu4e-show-images t
-     ;;	     mu4e-confirm-quit nil
-     ;;	     mu4e-headers-skip-duplicates t)
-     ;;	    (when (fboundp 'imagemagick-register-types)
-     ;;	      (imagemagick-register-types))
-     ;;	    )
-     ;;    :config
-     ;;    (progn
-     ;;      (require 'mu4e-contrib)
-     ;;      (use-package evil-mu4e :ensure t)
-     ;;      (setq mu4e-contexts
-     ;;	    `( 
-     ;;	      ,(make-mu4e-context
-     ;;		:name "private"
-     ;;		:enter-func (lambda ()
-     ;;			      (mu4e-message "Entering Private context"))
-     ;;		:leave-func (lambda ()
-     ;;			      (mu4e-message "Leaving Private context"))
-     ;;		;; we match based on the contact-fields of the message
-     ;;		:match-func (lambda (msg)
-     ;;			      (when msg 
-     ;;				(mu4e-message-contact-field-matches 
-     ;;				 msg 
-     ;;				 :to "mohsenil85@gmail.com")))
-     ;;		:vars '( 
-     ;;			(mu4e-reply-to-address . "mohsenil85@gmail.com")
-     ;;			(user-mail-address . "mohsenil85@gmail.com"  )
-     ;;			(user-full-name   . "Logan Mohseni" )
-     ;;			(mu4e-drafts-folder . "/gmail/[Gmail]/.Drafts")
-     ;;			(mu4e-sent-folder . "/gmail/[Gmail]/.Sent Mail/")
-     ;;			(mu4e-trash-folder . "/gmail/[Gmail]/.Trash")
-     ;;			(mu4e-compose-signature . nil)
-     ;;			))
-     ;;	      ,(make-mu4e-context
-     ;;		:name "work"
-     ;;		:enter-func (lambda ()
-     ;;			      (mu4e-message "Entering Work context"))
-     ;;		:leave-func (lambda ()
-     ;;			      (mu4e-message "Leaving Work context"))
-     ;;		;; we match based on the contact-fields of the message
-     ;;		:match-func (lambda (msg)
-     ;;			      (when msg 
-     ;;				(mu4e-message-contact-field-matches 
-     ;;				 msg 
-     ;;				 :to "logan.mohseni@singlemindconsulting.com")))
-     ;;		:vars '( 
-     ;;			(mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
-     ;;			(user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
-     ;;			(user-full-name   . "Logan Mohseni")
-     ;;			(mu4e-drafts-folder . "/work/[Gmail]/.Drafts")
-     ;;			(mu4e-sent-folder . "/work/[Gmail]/.Sent Mail")
-     ;;			(mu4e-trash-folder . "/work/[Gmail]/.Trash")
-     ;;			(mu4e-compose-signature .
-     ;;						"<#part type=text/html> <!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> <html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html\; charset=utf-8\"> <meta http-equiv=\"Content-Style-Type\" content=\"text/css\"> <title></title> <meta name=\"Generator\" content=\"Cocoa HTML Writer\"> <meta name=\"CocoaVersion\" content=\"1504.81\"> <style type=\"text/css\"> p.p1 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 14.0px\; font: 12.0px Arial\; color: #38678f\; -webkit-text-stroke: #38678f} p.p2 {margin: 0.0px 0.0px 0.0px 0.0px\; line-height: 15.0px\; font: 12.0px Arial\; color: #666666\; -webkit-text-stroke: #666666} span.s1 {font-kerning: none} span.s2 {font: 13.0px 'Trebuchet MS'\; font-kerning: none} span.s3 {font: 13.0px 'Trebuchet MS'\; font-kerning: none\; color: #ff931e\; -webkit-text-stroke: 0px #ff931e} span.s4 {font-kerning: none\; color: #000000\; -webkit-text-stroke: 0px #000000} span.s5 {font-kerning: none\; color: #666666\; -webkit-text-stroke: 0px #666666} </style> </head> <body> <p class=\"p1\"><span class=\"s1\">Logan Mohseni | <i>Software Developer</i></span></p> <p class=\"p2\"><span class=\"s2\"><b>single</b></span><span class=\"s3\"><b>mind |</b></span><span class=\"s4\"> </span><span class=\"s1\"><b><i>research • design • build • support</i></b></span></p> <p class=\"p1\"><span class=\"s1\">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p> <p class=\"p1\"><span class=\"s5\"><b>Tel</b></span><span class=\"s1\">: 503.342.8270 | </span><span class=\"s5\"><b>Mobile</b></span><span class=\"s1\">: 307.751.4050</span></p> <p class=\"p1\"><span class=\"s5\"><b>@</b></span><span class=\"s1\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\">logan.mohseni@singlemindconsulting.com</a></span><span class=\"s4\"><span class=\"Apple-converted-space\"> </span></span></p> </body> </html> <#/part>" 
-     ;;						)
-     ;;			)))) 
-     ;;      (general-define-key
-     ;;       :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
-     ;;       "SPC" 'evil-scroll-page-down
-     ;;       "DEL" 'evil-scroll-page-up)
-     ;;      )
-     ;;    :bind ("C-c m" . mu4e)
-     ;;    ))
-     ;;
-     ;;;; 
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :results output silent
+	;;  (use-package mu4e  
+	;;    ;;:load-path mu-load-path
+	;;    :commands (make-mu4e-context)
+	;;    :init (progn
+
+	;;	    (when (fboundp 'imagemagick-register-types)
+	;;	      (imagemagick-register-types))
+	;;	    )
+	;;    :config
+	;;    (progn
+	;;      (general-define-key
+	;;       :keymaps '(mu4e-view-mode-map mu4e-headers-mode-map)
+	;;       "SPC" 'evil-scroll-page-down
+	;;       "DEL" 'evil-scroll-page-up)
+	;;      )
+	;;    :bind ("C-c m" . mu4e)
+	;;    ))
+	;;
+	;;;; 
+  #+END_SRC
+* deleted
 ** el-get
    #+BEGIN_SRC emacs-lisp
      ;;    (use-package el-get :ensure t
@@ -1889,48 +1891,48 @@
    #+END_SRC
 ** paren stuff
 
-     ;; (use-package lispy
-     ;;   :ensure t
-     ;;   :init
-     ;;   :config
-     ;;   (add-hook 'lispy-mode-hook #'lispyville-mode)
+   ;; (use-package lispy
+   ;;   :ensure t
+   ;;   :init
+   ;;   :config
+   ;;   (add-hook 'lispy-mode-hook #'lispyville-mode)
 
-     ;;      (add-hook 'eval-expression-minibuffer-setup-hook 'lispy-mode)
-     ;;      (add-hook 'lisp-mode-hook             'lispy-mode)
-     ;;      (add-hook 'slime-repl-mode-hook            'lispy-mode)
-     ;;      (add-hook 'lisp-interaction-mode-hook 'lispy-mode)
-     ;;      (add-hook 'scheme-mode-hook           'lispy-mode)
-     ;;      (add-hook 'emacs-lisp-mode-hook 'lispy-mode)
-     ;;      (add-hook 'clojure-mode-hook 'lispy-mode)
-     ;;      (add-hook 'clojurescript-mode-hook 'lispy-mode)
-     ;;      (add-hook 'clojurec-mode-hook 'lispy-mode)
-     ;;      )
+   ;;      (add-hook 'eval-expression-minibuffer-setup-hook 'lispy-mode)
+   ;;      (add-hook 'lisp-mode-hook             'lispy-mode)
+   ;;      (add-hook 'slime-repl-mode-hook            'lispy-mode)
+   ;;      (add-hook 'lisp-interaction-mode-hook 'lispy-mode)
+   ;;      (add-hook 'scheme-mode-hook           'lispy-mode)
+   ;;      (add-hook 'emacs-lisp-mode-hook 'lispy-mode)
+   ;;      (add-hook 'clojure-mode-hook 'lispy-mode)
+   ;;      (add-hook 'clojurescript-mode-hook 'lispy-mode)
+   ;;      (add-hook 'clojurec-mode-hook 'lispy-mode)
+   ;;      )
 
-     ;; (use-package paredit
-     ;;   :ensure t
-     ;;   :init
-     ;; ;;(unbind-key "C-'" paredit-mode-map)
-     ;; ;;(unbind-key "C-," pareditorg-mode-map)
-     ;;   :config 
-     ;;   (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
-     ;;   (add-hook 'lisp-mode-hook             'enable-paredit-mode)
-     ;;   (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
-     ;;   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-     ;;   (add-hook 'scheme-mode-hook           'enable-paredit-mode)
-     ;;   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-     ;;   (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-     ;;   (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
-     ;;   (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
-
-
-     ;;   (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
-     ;;   (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
-     ;;   (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
-     ;;   (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
+   ;; (use-package paredit
+   ;;   :ensure t
+   ;;   :init
+   ;; ;;(unbind-key "C-'" paredit-mode-map)
+   ;; ;;(unbind-key "C-," pareditorg-mode-map)
+   ;;   :config 
+   ;;   (add-hook 'eval-expression-minibuffer-setup-hook 'enable-paredit-mode)
+   ;;   (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+   ;;   (add-hook 'slime-repl-mode-hook            'enable-paredit-mode)
+   ;;   (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+   ;;   (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+   ;;   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+   ;;   (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+   ;;   (add-hook 'clojurescript-mode-hook 'enable-paredit-mode)
+   ;;   (add-hook 'clojurec-mode-hook 'enable-paredit-mode)
 
 
+   ;;   (evil-define-key 'normal paredit-mode ")" 'paredit-forward-up)
+   ;;   (evil-define-key 'normal paredit-mode "(" 'paredit-backward-up)
+   ;;   (evil-define-key 'normal paredit-mode (kbd "C-0") 'paredit-backward-down)
+   ;;   (evil-define-key 'normal paredit-mode (kbd "C-9") 'paredit-forward-down)
 
-     ;;   )
+
+
+   ;;   )
 * interface
 ** removed keys 
 ** 
