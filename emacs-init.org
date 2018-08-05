@@ -91,7 +91,7 @@
 	   (evil-collection-init 'mu4e)
       ;;     (evil-collection-init 'mu4e-conversation)
       ;;     (evil-collection-init 'neotree)
-	;;   (evil-collection-init 'notmuch)
+	 ;;  (evil-collection-init 'notmuch)
       ;;     (evil-collection-init 'nov)
 	   (evil-collection-init 'occur)
       ;;     (evil-collection-init 'p4)
@@ -1446,17 +1446,6 @@
 * email via notmuch
   taken from https://kkatsuyuki.github.io/notmuch-conf/
   #+BEGIN_SRC emacs-lisp
-	(defun setup-mail ()
-	  (setq  
-	   mail-user-agent 'message-user-agent
-	   message-default-mail-headers "Cc: \nBcc: \n"
-	   message-directory "~/Mail/"
-	   message-kill-buffer-on-exit t
-	   send-mail-function 'message-send-mail-with-sendmail
-	   message-send-mail-function 'message-send-mail-with-sendmail
-	   sendmail-program "/usr/local/bin/msmtp"
-	   )
-	  )
 
 
 	(defun exec-offlineimap ()
@@ -1476,20 +1465,40 @@
 		     '("*offlineimap*" :dedicated t :position bottom :stick t
 		       :height 0.4 :noselect t))
 
-	(use-package notmuch 
-	  :disabled 
-	  :config (setup-mail)
-	  )
+	(defun setup-mail-stuff ()
+	  (setq
+	   mail-user-agent 'message-user-agent
+	   message-default-mail-headers "Cc: \nBcc: \n"
+	   message-directory "~/.mail/"
+	   message-kill-buffer-on-exit t
+	   message-send-mail-function 'message-send-mail-with-sendmail
 
-	;; (defvar mu4e-local-recipe nil)
-	;; (setq mu4e-local-recipe
-	;;       ' )
+	   send-mail-function 'message-send-mail-with-sendmail
+	   sendmail-program "/usr/local/bin/msmtp"
+	   ))
 
-	(defun setup-mu4e-stuff ()
-	  (let ((mu-bin (if (eq system-type 'darwin)
+	(use-package notmuch
+	:disabled
+	  :config
+	  (setup-mail-stuff)
+	  (setq notmuch-search-oldest-first nil)
+    )
+
+	(defun setup-mu4e-stuff ( os-type )
+	  (let ((mu-bin (if (eq os-type 'darwin)
 			    "/usr/local/bin/mu"
 			  "/usr/bin/mu")))
 	    (setq
+
+	     mail-user-agent 'message-user-agent
+	     message-default-mail-headers "Cc: \nBcc: \n"
+	     message-directory "~/.mail/"
+	     message-kill-buffer-on-exit t
+	     message-send-mail-function 'message-send-mail-with-sendmail
+
+	     send-mail-function 'message-send-mail-with-sendmail
+	     sendmail-program "/usr/local/bin/msmtp"
+     
 	     mu4e-change-filenames-when-moving t
 	     mu4e-compose-format-flowed t
 	     mu4e-compose-signature-auto-include nil
@@ -1504,42 +1513,35 @@
 	     mu4e-show-images t
 	     mu4e-update-interval 120
 
-	     mu4e-maildir (expand-file-name "~/Mail/")
+
+	     mu4e-maildir (expand-file-name "~/.mail/")
 
 	     mu4e-trash-folder (lambda (msg)
 				 (if (and msg
 					  (mu4e-message-contact-field-matches
 					   msg
 					   :to "logan.mohseni@singlemindconsulting.com"))
-				     "/LocalWork/trash"
-				   "/LoganGmailLocal/trash"))  
+				     "/localSmc/[Gmail].Trash"
+				   "/localPersonal/[Gmail].Trash"))  
 
 	     mu4e-sent-folder (lambda (msg)
-				 (if (and msg
-					  (mu4e-message-contact-field-matches
-					   msg
-					   :to "logan.mohseni@singlemindconsulting.com"))
-				     "/LocalWork/sent"
-				   "/LoganGmailLocal/sent"))  
+				(if (and msg
+					 (mu4e-message-contact-field-matches
+					  msg
+					  :to "logan.mohseni@singlemindconsulting.com"))
+				    "/localSmc/[Gmail].Sent Mail"
+				  "/localPersonal/[Gmail].Sent Mail"))  
 
 	     mu4e-drafts-folder (lambda (msg)
-				 (if (and msg
-					  (mu4e-message-contact-field-matches
-					   msg
-					   :to "logan.mohseni@singlemindconsulting.com"))
-				     "/LocalWork/drafts"
-				   "/LoganGmailLocal/drafts"))  
-
+				  (if (and msg
+					   (mu4e-message-contact-field-matches
+					    msg
+					    :to "logan.mohseni@singlemindconsulting.com"))
+				      "/localSmc/[Gmail].Drafts"
+				    "/localPersonal/[Gmail].Drafts"))  
 	     )))
 
-	(use-package mu4e  
-	  :defer t
-	  :quelpa (mu4e :path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/" :fetcher file)
-	  :config
-	  (require 'mu4e)
-	  (setup-mail)
-	  (setup-mu4e-stuff )
-
+	(defun setup-contexts ()
 	  (require 'mu4e-contrib)
 	  (use-package evil-mu4e :ensure t)
 	  (setq mu4e-contexts
@@ -1561,7 +1563,16 @@
 			    (user-mail-address . "mohsenil85@gmail.com"  )
 			    (user-full-name   . "Logan Mohseni" )
 			    (mu4e-compose-signature . nil)
-			    
+
+			    (mu4e-maildir-shortcuts .
+						    (
+						     ("/localPersonal/INBOX" . ?i)
+						     ("/localPersonal/[Gmail].Sent Mail" . ?s)
+						     ("/localPersonal/[Gmail].Trash" . ?t)
+						     ("/localPersonal/[Gmail].All Mail" . ?a)
+						     ("/localPersonal/[Gmail].Drafts" . ?d)))
+
+
 			    ))
 
 		  ,(make-mu4e-context
@@ -1580,29 +1591,41 @@
 			    (mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
 			    (user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
 			    (user-full-name   . "Logan Mohseni")
+			    (mu4e-maildir-shortcuts .
+						    (
+						     ("/localSmc/INBOX" . ?i)
+						     ("/localSmc/[Gmail].Sent Mail" . ?s)
+						     ("/localSmc/[Gmail].Trash" . ?t)
+						     ("/localSmc/[Gmail].All Mail" . ?a)
+						     ("/localSmc/[Gmail].Drafts" . ?d)))
 
 
-     			(mu4e-compose-signature .
-     						"<#part type=text/html>
-     <html>
-     <head>
-       <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-     </head>
-     <body>
-     <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">Logan Mohseni | <i>Software Developer</i></span></p>
-     <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none\"><b>single</b></span><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none; color: #ff931e; -webkit-text-stroke: 0px #ff931e\"><b>mind |</b></span><span class=\"font-kerning: none; color: #222222; -webkit-text-stroke: 0px #222222\"> </span><span \"><b><i>research • design • build • support</i></b></span></p>
-     <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p>
-     <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font-kerning: none; color: #666666; -webkit-text-stroke: 0px #666666\"><b>@</b></span><span style=\"font-kerning: none; color: #38678f\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\"><span span=\"text-decoration: underline ; font-kerning: none; color: #0000ee\">logan.mohseni@singlemindconsulting.com</span></a></span></p>
-     </body>
-     </html>
-      <#/part>" 
-     									)
-			    ))
-    ) 
-    ) 
+			    (mu4e-compose-signature .
+						    "<#part type=text/html>
+		<html>
+		<head>
+		  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
+		</head>
+		<body>
+		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">Logan Mohseni | <i>Software Developer</i></span></p>
+		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none\"><b>single</b></span><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none; color: #ff931e; -webkit-text-stroke: 0px #ff931e\"><b>mind |</b></span><span class=\"font-kerning: none; color: #222222; -webkit-text-stroke: 0px #222222\"> </span><span \"><b><i>research • design • build • support</i></b></span></p>
+		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p>
+		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font-kerning: none; color: #666666; -webkit-text-stroke: 0px #666666\"><b>@</b></span><span style=\"font-kerning: none; color: #38678f\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\"><span span=\"text-decoration: underline ; font-kerning: none; color: #0000ee\">logan.mohseni@singlemindconsulting.com</span></a></span></p>
+		</body>
+		</html>
+		 <#/part>" 
+						    )
+			    )))))
 
-
-
+	(use-package mu4e  
+	  :if (memq window-system '(mac ns))
+	  :defer t
+	  :quelpa (mu4e :path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/" :fetcher file)
+	  :config
+	  (require 'mu4e)
+	  (setup-mail-stuff)
+	  (setup-mu4e-stuff 'darwin )
+	  (setup-contexts)
 	  ) ;;end usep mu4e
 
 
