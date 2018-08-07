@@ -329,7 +329,7 @@
        ;; configure regexp engine.
        (setq ivy-re-builders-alist
 	     ;; allow input not in order
-	     '(;(t   . ivy--regex-fuzzy)
+	     '((t   . ivy--regex-fuzzy)
 	       (t   . ivy--regex-ignore-order))))
 
      (use-package counsel :ensure t )
@@ -501,7 +501,7 @@
        :diminish ""
        :config
        (progn
-	 (setq org-M-RET-may-split-line t)
+	 (setq org-M-RET-may-split-line nil)
 	 (setq org-agenda-files (quote ("~/org")))
 	 (setq org-agenda-ndays 7)
 	 (setq org-agenda-show-all-dates t)
@@ -510,7 +510,7 @@
 	 (setq org-agenda-start-on-weekday nil)
 	 (setq org-catch-invisible-edits t)
 	 (setq org-deadline-warning-days 14)
-	 (setq org-default-notes-file "~/org/organizer.org")
+	 (setq org-default-notes-file "~/org/index.org")
 	 (setq org-edit-src-persistent-message nil)
 	 (setq org-hide-leading-stars t)
 	 (setq org-indent-mode t)
@@ -541,18 +541,18 @@
 	 ;;(setq org-agenda-start-with-follow-mode t)
 	 (setq org-use-tag-inheritance t)
 	 (setq org-capture-templates
-	       (quote (("t" "todo" entry (file+headline "~/org/organizer.org" "inbox")
+	       (quote (("t" "todo" entry (file+headline "~/org/index.org" "inbox")
 			"* TODO %?\n%U\n%a\n" )
-		       ("n" "note" entry (file+headline "~/org/organizer.org" "inbox")
+		       ("n" "note" entry (file+headline "~/org/index.org" "inbox")
 			"* %? :NOTE:\n%U\n%a\n" )
-		       ("i" "idea" entry (file+headline "~/org/organizer.org" "ideas")
+		       ("i" "idea" entry (file+headline "~/org/index.org" "ideas")
 			"* %?\n" )
-		       ("n" "information" entry (file+headline "~/org/organizer.org" "information")
+		       ("n" "information" entry (file+headline "~/org/index.org" "information")
 			"* %?\n" )
 		       ("s" "shopping" checkitem
-			(file+headline "~/org/organizer.org" "shopping")
+			(file+headline "~/org/index.org" "shopping ")
 			"- [ ] %?\n")
-		       ("j" "journal" entry (file+datetree "~/org/organizer.org")
+		       ("j" "journal" entry (file+datetree "~/org/index.org")
 			"* %?\n %U\n  %i\n  %a")
 		       )))  
 
@@ -568,12 +568,12 @@
 	 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
 
-	 (setq org-mobile-inbox-for-pull "~/org/flagged.org")
+	;; (setq org-mobile-inbox-for-pull "~/org/flagged.org")
 
-	 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
-	 (defvar my-org-mobile-sync-timer nil)
+	 ;;(setq org-mobile-directory "~/Dropbox/Apps/MobileOrg/")
+	;; (defvar my-org-mobile-sync-timer nil)
 
-	 (defvar my-org-mobile-sync-secs (* 60 20))
+	 ;;(defvar my-org-mobile-sync-secs (* 60 20))
 
 	 (defun my-org-mobile-sync-pull-and-push ()
 	   (org-mobile-pull)
@@ -593,7 +593,7 @@
 	   (interactive)
 	   (cancel-timer my-org-mobile-sync-timer))
 
-	 (my-org-mobile-sync-start)
+	;; (my-org-mobile-sync-start)
 
 	 )
 
@@ -1478,7 +1478,6 @@
 	   ))
 
 	(use-package notmuch
-	:disabled
 	  :config
 	  (setup-mail-stuff)
 	  (setq notmuch-search-oldest-first nil)
@@ -2047,8 +2046,8 @@
 	    (global-set-key (kbd "M-O") 'counsel-find-file)  ;;open file
 	    (global-set-key (kbd "C-M-o") 'projectile-switch-project)
 	    (global-set-key (kbd "C-M-q") 'save-buffers-kill-emacs)
-	    (global-set-key (kbd "M-r") 'counsel-recentf) ;;recent
-	    (global-set-key (kbd "C-M-r")  'revert-buffer)
+	    (global-set-key (kbd "C-M-r") 'counsel-recentf) ;;recent
+	    (global-set-key (kbd "M-r")  'revert-buffer)
 	    (global-set-key (kbd "M-n") 'next-error)
 	    (global-set-key (kbd "M-p") 'previous-error)
 	    (global-set-key (kbd "M-N") 'git-gutter:next-hunk)
