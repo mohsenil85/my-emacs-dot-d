@@ -91,7 +91,7 @@
 	   (evil-collection-init 'mu4e)
       ;;     (evil-collection-init 'mu4e-conversation)
       ;;     (evil-collection-init 'neotree)
-	 ;;  (evil-collection-init 'notmuch)
+	   (evil-collection-init 'notmuch)
       ;;     (evil-collection-init 'nov)
 	   (evil-collection-init 'occur)
       ;;     (evil-collection-init 'p4)
@@ -501,9 +501,13 @@
 	    :diminish ""
 	    :config
 	    (progn
+
+	      (add-to-list 'org-modules 'org-habit)
+
+
 	      (setq org-M-RET-may-split-line nil)
 	      (setq org-agenda-files (quote ("~/org")))
-	      (setq org-agenda-ndays 7)
+	      (setq org-agenda-ndays 1)
 	      (setq org-agenda-show-all-dates t)
 	      (setq org-agenda-skip-deadline-if-done t)
 	      (setq org-agenda-skip-scheduled-if-done t)
@@ -519,13 +523,12 @@
 	      (setq org-reverse-note-order t)
 	      (setq org-show-hierarchy-above (quote ((default . t))))
 	      (setq org-show-siblings (quote ((default) (isearch) (bookmark-jump))))
-	      ;;(setq org-log-done 'note)
+	      (setq org-log-done 'time)
 
 	      (setq org-todo-keywords
-		    (quote ((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d)" "SOMEDAY(s)")
-			    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+		    (quote ((sequence "TODO(t)" "NEXT(n)" "|"  "DONE(d!)")
+			    (sequence "HOLD(h@/!)" "SOMEDAY(s)" "|" "CANCELLED(c@/!)")
 			    (sequence "BUY(b)" "OWE(o)" "BOUGHT(B)")
-			    (sequence "HABIT(h)")
 
      )))
 
@@ -535,10 +538,10 @@
 	      (setq org-agenda-start-with-follow-mode t)
 	      (setq org-use-tag-inheritance t)
 	      (setq org-capture-templates
-		    (quote (("t" "todo" entry (file+headline "~/org/index.org" "inbox")
-			     "* TODO %?\n%U\n%a\n" )
-			    ("n" "note" entry (file+headline "~/org/index.org" "inbox")
-			     "* %? :NOTE:\n%U\n%a\n" )
+		    (quote (("t" "todo" entry (file "~/org/inbox.org" )
+			     "* TODO  %?\n%U\n%a\n" )
+			    ;; ("n" "note" entry (file+headline "~/org/index.org" "inbox")
+			    ;; 	"* %? :NOTE:\n%U\n%a\n" )
 			    ("i" "idea" entry (file+headline "~/org/index.org" "ideas")
 			     "* %?\n" )
 			    ("n" "information" entry (file+headline "~/org/index.org" "information")
@@ -547,6 +550,8 @@
 			     (file+headline "~/org/index.org" "shopping ")
 			     "- [ ] %?\n")
 			    ("j" "journal" entry (file+datetree "~/org/index.org")
+			     "* %?\n %U\n  %i\n  %a")
+			    ("w" "work" entry (file+datetree "~/org/work.org")
 			     "* %?\n %U\n  %i\n  %a")
 			    )))  
 
@@ -558,7 +563,7 @@
 	      (setq org-refile-use-outline-path t)
 	      ;; Targets complete directly with IDO
 
-						  ;(setq org-outline-path-complete-in-steps nil)
+	      (setq org-outline-path-complete-in-steps nil)
 	      ;; Allow refile to create parent tasks with confirmation
 	      (setq org-refile-allow-creating-parent-nodes (quote confirm))
 
@@ -610,6 +615,7 @@
 		   ("C-c l" . org-store-link)
 		   ("C-c a" . org-agenda)
 		   ("C-c c" . org-capture)
+		   ("C-c b" . org-switchb)
 		   ))
 
 	  ;;put all DONE into archive
@@ -1488,7 +1494,10 @@
 	(use-package notmuch
 	  :config
 	  (setup-mail-stuff)
-	  (setq notmuch-search-oldest-first nil)
+	  (setq
+	  notmuch-show-all-tags-list t
+	  notmuch-show-logo nil
+	  notmuch-search-oldest-first nil)
     )
 
 	(defun setup-mu4e-stuff ( os-type )
