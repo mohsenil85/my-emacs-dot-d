@@ -62,3 +62,4 @@ url*
 /games/*
 /org-id-locations
 /var/*
+/oauth2.plstore
