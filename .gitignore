@@ -55,7 +55,6 @@ url*
 /async-bytecomp.log
 /irony/bin/irony-server
 /meghanada/meghanada-0.6.0.jar
-*.gpg
 /emojis/*
 /session.*
 /custom*
