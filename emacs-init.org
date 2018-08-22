@@ -1424,7 +1424,18 @@
       (buffer-face-mode)
       )
    #+END_SRC
+** chuck into next week
+   #+BEGIN_SRC emacs-lisp
+
+(defun chuck-into-next-weekish ()
+  "sloppily reschedule current item into next week"
+  (interactive)
+  (org-schedule nil (format "+%dd"(+ 11 (random 9))) )
+  (org-set-tags-to ":chucked:")
+  )
+
    
+   #+END_SRC
 * osx specific 
   handle meta as command
   toggle fullscreen
