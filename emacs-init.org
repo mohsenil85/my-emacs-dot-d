@@ -17,135 +17,136 @@
     
     #+BEGIN_SRC emacs-lisp :results output silent
 
-      ;;done in the earlier init.el
-      ;;(use-package evil :ensure t :config (evil-mode 1))
+	    ;;done in the earlier init.el
+	    ;;(use-package evil :ensure t :config (evil-mode 1))
 
-      (use-package evil
-	:ensure t
-	:init
-	;;turn on for evil collection
-	(setq evil-want-integration nil)
-	:config
-	(evil-mode 1)
-;	(add-to-list 'evil-emacs-state-modes 'dired)
-)
+	    (use-package evil
+	      :ensure t
+	      :init
+	      ;;turn on for evil collection
+	      (setq evil-want-integration t)
+	      (setq evil-want-keybinding nil)
+	      :config
+	      (evil-mode 1)
+      ;	(add-to-list 'evil-emacs-state-modes 'dired)
+      )
 
-	(use-package evil-collection
-	  :after evil
-	  :ensure t
-	  :config 
-      ;;     (evil-collection-init 'ace-jump-mode)
-	   (evil-collection-init 'ag)
-      ;;     (evil-collection-init 'alchemist)
-      ;;     (evil-collection-init 'anaconda-mode)
-      ;;     (evil-collection-init 'arc-mode)
-	   (evil-collection-init 'avy)
-	   (evil-collection-init 'bookmark)
-	   (evil-collection-init 'buff-menu)
-	   (evil-collection-init 'calc)
-	   (evil-collection-init 'calendar)
-      ;;     (evil-collection-init 'cider)
-      ;;     (evil-collection-init 'cmake-mode)
-      ;;     (evil-collection-init 'comint)
-      ;;     (evil-collection-init 'company)
-	   (evil-collection-init 'compile)
-      ;;     (evil-collection-init 'custom)
-      ;;     (evil-collection-init 'cus-theme)
-      ;;     (evil-collection-init 'daemons)
-      ;;     (evil-collection-init 'deadgrep)
-      ;;     (evil-collection-init 'debbugs)
-	   (evil-collection-init 'debug)
-      ;;     (evil-collection-init 'diff-mode)
-	   (evil-collection-init 'doc-view)
-      ;;     (evil-collection-init 'edebug)
-	   (evil-collection-init 'ediff)
-	   (evil-collection-init 'eldoc)
-	   (evil-collection-init 'elfeed)
-	   (evil-collection-init 'elisp-mode)
-	   (evil-collection-init 'elisp-refs)
-      ;;     (evil-collection-init 'emms)
-      ;;     (evil-collection-init 'epa)
-      ;;     (evil-collection-init 'ert)
-      ;;     (evil-collection-init 'eshell)
-      ;;     (evil-collection-init 'eval-sexp-fu)
-      ;;     (evil-collection-init 'etags-select)
-	   (evil-collection-init 'eww)
-	   (evil-collection-init 'flycheck)
-      ;;     (evil-collection-init 'free-keys)
-      ;;     (evil-collection-init 'geiser)
-      ;;     (evil-collection-init 'ggtags)
-      ;;     (evil-collection-init 'git-timemachine)
-      ;;     (evil-collection-init 'go-mode)
-      ;;     (evil-collection-init 'grep)
-      ;;     (evil-collection-init 'help)
-      ;;     (evil-collection-init 'guix)
-      ;;     (evil-collection-init 'helm)
-	   (evil-collection-init 'ibuffer)
-      ;;     (evil-collection-init 'image)
-      ;;     (evil-collection-init 'image+)
-	   (evil-collection-init 'imenu-list)
-      ;;     (evil-collection-init 'indium)
-	   (evil-collection-init 'info)
-	   (evil-collection-init 'ivy)
-      ;;     (evil-collection-init 'js2-mode)
-      ;;     (evil-collection-init 'log-view)
-      ;;     (evil-collection-init 'lsp-ui-imenu)
-      ;;     (evil-collection-init 'lua-mode)
-      ;;     (evil-collection-init 'kotlin-mode)
-      ;;     (evil-collection-init 'macrostep)
-      ;;     (evil-collection-init 'man)
-	   (evil-collection-init 'magit)
-      ;;     (evil-collection-init 'magit-todos)
-	   (evil-collection-init 'mu4e)
-      ;;     (evil-collection-init 'mu4e-conversation)
-      ;;     (evil-collection-init 'neotree)
-	   (evil-collection-init 'notmuch)
-      ;;     (evil-collection-init 'nov)
-	   (evil-collection-init 'occur)
-      ;;     (evil-collection-init 'p4)
-	   ;; (evil-collection-init  'package-menu )
-      ;;     (evil-collection-init 'paren)
-      ;;     (evil-collection-init 'pass)
-	   (evil-collection-init 'popup)
-	   (evil-collection-init 'proced)
-      ;;     (evil-collection-init 'prodigy)
-      ;;     (evil-collection-init 'profiler)
-      ;;     (evil-collection-init 'python)
-      ;;     (evil-collection-init 'quickrun)
-      ;;     (evil-collection-init 'racer)
-      ;;     (evil-collection-init 'realgud)
-      ;;     (evil-collection-init 'reftex)
-      ;;     (evil-collection-init 'rjsx-mode)
-      ;;     (evil-collection-init 'robe)
-      ;;     (evil-collection-init 'ruby-mode)
-      ;;     (evil-collection-init 'rtags)
-      ;;     (evil-collection-init 'simple)
-      ;;     (evil-collection-init 'slime)
-	   (evil-collection-init 'term)
-      ;;     (evil-collection-init 'ansi-term)
-      ;;     (evil-collection-init 'multi-term)
-      ;;     (evil-collection-init 'tide)
-      ;;     (evil-collection-init 'transmission)
-      ;;     (evil-collection-init 'typescript-mode)
-      ;;     (evil-collection-init 'vc-annotate)
-      ;;     (evil-collection-init 'vdiff)
-      ;;     (evil-collection-init 'view)
-      ;;     (evil-collection-init 'vlf)
-	   (evil-collection-init 'which-key)
-      ;;     (evil-collection-init 'wdired)
-      ;;     (evil-collection-init 'wgrep)
-      ;;     (evil-collection-init 'woman )
-      ;;     (evil-collection-init 'term )
-      ;;     (evil-collection-init 'xref)
-      ;;     (evil-collection-init 'ztree)
-      ;;     (evil-collection-init 'ztree-diff)
-	 )
+	      (use-package evil-collection
+		:after evil
+		:ensure t
+		:config 
+	    ;;     (evil-collection-init 'ace-jump-mode)
+		 (evil-collection-init 'ag)
+	    ;;     (evil-collection-init 'alchemist)
+	    ;;     (evil-collection-init 'anaconda-mode)
+	    ;;     (evil-collection-init 'arc-mode)
+		 (evil-collection-init 'avy)
+		 (evil-collection-init 'bookmark)
+		 (evil-collection-init 'buff-menu)
+		 (evil-collection-init 'calc)
+		 (evil-collection-init 'calendar)
+	    ;;     (evil-collection-init 'cider)
+	    ;;     (evil-collection-init 'cmake-mode)
+	    ;;     (evil-collection-init 'comint)
+	    ;;     (evil-collection-init 'company)
+		 (evil-collection-init 'compile)
+	    ;;     (evil-collection-init 'custom)
+	    ;;     (evil-collection-init 'cus-theme)
+	    ;;     (evil-collection-init 'daemons)
+	    ;;     (evil-collection-init 'deadgrep)
+	    ;;     (evil-collection-init 'debbugs)
+		 (evil-collection-init 'debug)
+	    ;;     (evil-collection-init 'diff-mode)
+		 (evil-collection-init 'doc-view)
+	    ;;     (evil-collection-init 'edebug)
+		 (evil-collection-init 'ediff)
+		 ;; (evil-collection-init 'eldoc)
+		 (evil-collection-init 'elfeed)
+		 (evil-collection-init 'elisp-mode)
+		 (evil-collection-init 'elisp-refs)
+	    ;;     (evil-collection-init 'emms)
+	    ;;     (evil-collection-init 'epa)
+	    ;;     (evil-collection-init 'ert)
+	    ;;     (evil-collection-init 'eshell)
+	    ;;     (evil-collection-init 'eval-sexp-fu)
+	    ;;     (evil-collection-init 'etags-select)
+		 (evil-collection-init 'eww)
+		 (evil-collection-init 'flycheck)
+	    ;;     (evil-collection-init 'free-keys)
+	    ;;     (evil-collection-init 'geiser)
+	    ;;     (evil-collection-init 'ggtags)
+	    ;;     (evil-collection-init 'git-timemachine)
+	    ;;     (evil-collection-init 'go-mode)
+	    ;;     (evil-collection-init 'grep)
+	    ;;     (evil-collection-init 'help)
+	    ;;     (evil-collection-init 'guix)
+	    ;;     (evil-collection-init 'helm)
+		 (evil-collection-init 'ibuffer)
+	    ;;     (evil-collection-init 'image)
+	    ;;     (evil-collection-init 'image+)
+		 (evil-collection-init 'imenu-list)
+	    ;;     (evil-collection-init 'indium)
+		 (evil-collection-init 'info)
+		 (evil-collection-init 'ivy)
+	    ;;     (evil-collection-init 'js2-mode)
+	    ;;     (evil-collection-init 'log-view)
+	    ;;     (evil-collection-init 'lsp-ui-imenu)
+	    ;;     (evil-collection-init 'lua-mode)
+	    ;;     (evil-collection-init 'kotlin-mode)
+	    ;;     (evil-collection-init 'macrostep)
+	    ;;     (evil-collection-init 'man)
+		 (evil-collection-init 'magit)
+	    ;;     (evil-collection-init 'magit-todos)
+		 (evil-collection-init 'mu4e)
+	    ;;     (evil-collection-init 'mu4e-conversation)
+	    ;;     (evil-collection-init 'neotree)
+		 (evil-collection-init 'notmuch)
+	    ;;     (evil-collection-init 'nov)
+		 (evil-collection-init 'occur)
+	    ;;     (evil-collection-init 'p4)
+		 ;; (evil-collection-init  'package-menu )
+	    ;;     (evil-collection-init 'paren)
+	    ;;     (evil-collection-init 'pass)
+		 (evil-collection-init 'popup)
+		 (evil-collection-init 'proced)
+	    ;;     (evil-collection-init 'prodigy)
+	    ;;     (evil-collection-init 'profiler)
+	    ;;     (evil-collection-init 'python)
+	    ;;     (evil-collection-init 'quickrun)
+	    ;;     (evil-collection-init 'racer)
+	    ;;     (evil-collection-init 'realgud)
+	    ;;     (evil-collection-init 'reftex)
+	    ;;     (evil-collection-init 'rjsx-mode)
+	    ;;     (evil-collection-init 'robe)
+	    ;;     (evil-collection-init 'ruby-mode)
+	    ;;     (evil-collection-init 'rtags)
+	    ;;     (evil-collection-init 'simple)
+	    ;;     (evil-collection-init 'slime)
+		 (evil-collection-init 'term)
+	    ;;     (evil-collection-init 'ansi-term)
+	    ;;     (evil-collection-init 'multi-term)
+	    ;;     (evil-collection-init 'tide)
+	    ;;     (evil-collection-init 'transmission)
+	    ;;     (evil-collection-init 'typescript-mode)
+	    ;;     (evil-collection-init 'vc-annotate)
+	    ;;     (evil-collection-init 'vdiff)
+	    ;;     (evil-collection-init 'view)
+	    ;;     (evil-collection-init 'vlf)
+		 (evil-collection-init 'which-key)
+	    ;;     (evil-collection-init 'wdired)
+	    ;;     (evil-collection-init 'wgrep)
+	    ;;     (evil-collection-init 'woman )
+	    ;;     (evil-collection-init 'term )
+	    ;;     (evil-collection-init 'xref)
+	    ;;     (evil-collection-init 'ztree)
+	    ;;     (evil-collection-init 'ztree-diff)
+	       )
 
 
-      (use-package evil-visual-mark-mode
-	:ensure t
-	:config
-	(evil-visual-mark-mode 1))
+	    (use-package evil-visual-mark-mode
+	      :ensure t
+	      :config
+	      (evil-visual-mark-mode 1))
 
     #+END_SRC
 ** general
@@ -345,101 +346,6 @@
      (use-package ivy-hydra :ensure t :defer t)
    #+END_SRC
    
-** helm
-   taken from http://tuhdo.github.io/helm-intro.html
-   things i need to remember
-   - C-h f, which runs describe-function
-   - C-h v, which runs describe-variable
-   - C-h w, which runs where-is
-*** helm proper
-    #+BEGIN_SRC emacs-lisp :results output silent
-	    ;; 	  (use-package helm
-	    ;; 	    :ensure t
-	    ;; 	    :diminish ""
-	    ;; 	    :config
-	    ;; 	    (progn
-	    ;; 	      (require 'helm)
-	    ;; 	      (require 'helm-config)
-	    ;; 	      (setq helm-ff-transformer-show-only-basename nil)
-	    ;; 	      (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
-      
-      
-	    ;; 	      (setq helm-M-x-fuzzy-match t)
-	    ;; 	      (setq helm-recentf-fuzzy-match t)
-	    ;; 	      (setq helm-mode-fuzzy-match t)
-	    ;; 	      (setq helm-buffers-fuzzy-matching t)
-	    ;; 	      (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
-	    ;; 	      (setq helm-move-to-line-cycle-in-source t)
-      
-	      
-	    ;; 	      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-	    ;; 	      (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-	    ;; 	      (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-	    ;; 	      ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-	    ;; 	      (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
-      
-	    ;; 	      (autoload 'helm-descbinds      "helm-descbinds" t)
-	    ;; 	      (autoload 'helm-eshell-history "helm-eshell"    t)
-	    ;; 	      (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
-      
-	    ;; 	      (setq helm-autoresize-mode t)
-	    ;; 	      (setq helm-split-window-in-side-p t)
-	    ;; 	      (setq helm-ff-file-name-history-use-recentf t)
-	    ;; 	      (setq helm-autoresize-mode t)
-      
-	    ;;       (global-set-key (kbd "C-c h g") 'helm-google-suggest)
-	    ;;       (global-set-key (kbd "C-c h r") 'helm-register)
-	    ;; 	      (helm-mode 1))
-	    ;; )
-      
-	    ;; 	  (use-package helm-descbinds :ensure t :defer t :config
-	    ;; 	    (progn
-	    ;; 	      (require 'helm-descbinds)
-	    ;; 	      (helm-descbinds-mode)
-	    ;; 	      )
-	    ;; 	    )
-
-      ;;(use-package helm-ag :ensure t :defer t)
-	    ;; (use-package helm-ack :ensure t :defer t)
-    #+END_SRC
-    
-*** helm-gtags 
-    #+BEGIN_SRC emacs-lisp :results output silent
-      ;;     (use-package helm-gtags
-      ;;       :ensure t
-      ;;       :defer t
-      ;;       :config
-      ;;       (progn
-      ;; 	;;; Enable helm-gtags-mode
-      ;; 	(add-hook 'c-mode-hook 'helm-gtags-mode)
-      ;; 	(add-hook 'c++-mode-hook 'helm-gtags-mode)
-      ;; 	(add-hook 'asm-mode-hook 'helm-gtags-mode)
-      ;; 	(add-hook 'java-mode-hook 'helm-gtags-mode)
-
-      ;; 	;; customize
-      ;; 	(setq
-      ;; 	 helm-gtags-path-style 'relative)
-      ;;   (setq  
-      ;; 	 helm-gtags-auto-update t) 
-
-      ;;       (setq helm-gtags-prefix-key "C-t")
-      ;; ;      (helm-gtags-suggested-key-mapping t)
-      ;; 	;; key bindings
-      ;; 	(eval-after-load "helm-gtags"
-      ;; 	  '(progn
-      ;; 	     (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-      ;; 	     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
-
-
-      ;;       )
-
-    #+END_SRC
-    
 ** image+
    #+BEGIN_SRC emacs-lisp :results output silent
 	  (use-package image+
@@ -510,6 +416,7 @@
        :config
        (progn
 	 (add-to-list 'org-modules 'org-habit)
+	 (add-to-list 'org-modules 'org-crypt)
 
 	 (setq org-M-RET-may-split-line nil)
 	 (setq org-agenda-files '("~/org/"))
@@ -519,6 +426,7 @@
 	 (setq org-agenda-skip-deadline-if-done t)
 	 (setq org-agenda-skip-scheduled-if-done t)
 	 (setq org-agenda-start-on-weekday nil)
+	 (setq org-agenda-todo-ignore-with-date t) ;hide shed. and deadlined from global todo 
 	 (setq org-agenda-start-with-follow-mode nil)
 	 (setq org-agenda-text-search-extra-files '(agenda-archives))
 	 (setq org-catch-invisible-edits t)
@@ -534,8 +442,9 @@
 	 (setq org-log-reschedule (quote time))
 	 (setq org-mobile-directory "~/Dropbox/Apps/MobileOrg")
 	 (setq org-mobile-inbox-for-pull "~/org/inbox.org")
-	 (setq org-mobile-use-encryption t  )
-	 (setq org-mobile-encryption-password (shell-command-to-string "pass show MobileOrg")  )
+	 ;;; interfered with dropbox sync
+	 ;;;(setq org-mobile-use-encryption t  )
+	 ;; org-mobile-encryption-password  set in secrets.el.gpg
 	 (setq org-outline-path-complete-in-steps nil)
 	 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 	 (setq org-refile-targets (quote ((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9))))
@@ -557,7 +466,7 @@
 
 	 (setq org-capture-templates
 	       (quote (("t" "todo" entry (file "~/org/inbox.org" )
-			"* TODO  %?\n%U\n%a\n" )
+			"* TODO  %? :FLAGGED:\n%U\n%a\n" )
 
 		       ("f" "fiction" entry (file+headline "~/org/serial-structure.org" "ideas")
 			"* %? :NOTE:\n%U\n%a\n" )
@@ -613,8 +522,8 @@
        :bind (
 	      ("C-c l" . org-store-link)
 	      ("C-c a" . org-agenda)
-	      ("C-c c" . org-capture)
 	      ("C-c b" . org-switchb)
+	      ("C-c c" . org-capture)
 	      ))
 
 
@@ -756,6 +665,7 @@
 
 
    #+END_SRC
+** pass?
 
 * languages
 ** java
@@ -1436,6 +1346,32 @@
 
    
    #+END_SRC
+** big escape
+   #+BEGIN_SRC emacs-lisp
+   ;;taken from: https://www.reddit.com/r/emacs/comments/98w150/yet_another_emacs_convert/e4kf1y3/
+  ;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+  In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state) 
+   #+END_SRC
+
+   #+RESULTS:
+   : evil-exit-emacs-state
+
 * osx specific 
   handle meta as command
   toggle fullscreen
@@ -1561,7 +1497,7 @@
 	     mu4e-confirm-quit nil
 	     mu4e-context-policy 'pick-first
 	     mu4e-get-mail-command "offlineimap"
-	     mu4e-headers-auto-update t
+	     mu4e-headers-auto-update nil
 	     mu4e-headers-skip-duplicates t
 	     mu4e-mu-binary mu-bin 
 	     mu4e-reply-to-address  "mohsenil85@gmail.com"
@@ -1694,6 +1630,101 @@
   : t
 
 * deleted
+** helm
+   taken from http://tuhdo.github.io/helm-intro.html
+   things i need to remember
+   - C-h f, which runs describe-function
+   - C-h v, which runs describe-variable
+   - C-h w, which runs where-is
+*** helm proper
+    #+BEGIN_SRC emacs-lisp :results output silent
+	    ;; 	  (use-package helm
+	    ;; 	    :ensure t
+	    ;; 	    :diminish ""
+	    ;; 	    :config
+	    ;; 	    (progn
+	    ;; 	      (require 'helm)
+	    ;; 	      (require 'helm-config)
+	    ;; 	      (setq helm-ff-transformer-show-only-basename nil)
+	    ;; 	      (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+      
+      
+	    ;; 	      (setq helm-M-x-fuzzy-match t)
+	    ;; 	      (setq helm-recentf-fuzzy-match t)
+	    ;; 	      (setq helm-mode-fuzzy-match t)
+	    ;; 	      (setq helm-buffers-fuzzy-matching t)
+	    ;; 	      (setq helm-ff-auto-update-initial-value t) ;; use c-backspact
+	    ;; 	      (setq helm-move-to-line-cycle-in-source t)
+      
+	      
+	    ;; 	      (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+	    ;; 	      (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+	    ;; 	      (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+	    ;; 	      ;;(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+	    ;; 	      (define-key minibuffer-local-map (kbd "C-c C-l") 'helm-minibuffer-history) 
+      
+	    ;; 	      (autoload 'helm-descbinds      "helm-descbinds" t)
+	    ;; 	      (autoload 'helm-eshell-history "helm-eshell"    t)
+	    ;; 	      (autoload 'helm-esh-pcomplete  "helm-eshell"    t)
+      
+	    ;; 	      (setq helm-autoresize-mode t)
+	    ;; 	      (setq helm-split-window-in-side-p t)
+	    ;; 	      (setq helm-ff-file-name-history-use-recentf t)
+	    ;; 	      (setq helm-autoresize-mode t)
+      
+	    ;;       (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+	    ;;       (global-set-key (kbd "C-c h r") 'helm-register)
+	    ;; 	      (helm-mode 1))
+	    ;; )
+      
+	    ;; 	  (use-package helm-descbinds :ensure t :defer t :config
+	    ;; 	    (progn
+	    ;; 	      (require 'helm-descbinds)
+	    ;; 	      (helm-descbinds-mode)
+	    ;; 	      )
+	    ;; 	    )
+
+      ;;(use-package helm-ag :ensure t :defer t)
+	    ;; (use-package helm-ack :ensure t :defer t)
+    #+END_SRC
+    
+*** helm-gtags 
+    #+BEGIN_SRC emacs-lisp :results output silent
+      ;;     (use-package helm-gtags
+      ;;       :ensure t
+      ;;       :defer t
+      ;;       :config
+      ;;       (progn
+      ;; 	;;; Enable helm-gtags-mode
+      ;; 	(add-hook 'c-mode-hook 'helm-gtags-mode)
+      ;; 	(add-hook 'c++-mode-hook 'helm-gtags-mode)
+      ;; 	(add-hook 'asm-mode-hook 'helm-gtags-mode)
+      ;; 	(add-hook 'java-mode-hook 'helm-gtags-mode)
+
+      ;; 	;; customize
+      ;; 	(setq
+      ;; 	 helm-gtags-path-style 'relative)
+      ;;   (setq  
+      ;; 	 helm-gtags-auto-update t) 
+
+      ;;       (setq helm-gtags-prefix-key "C-t")
+      ;; ;      (helm-gtags-suggested-key-mapping t)
+      ;; 	;; key bindings
+      ;; 	(eval-after-load "helm-gtags"
+      ;; 	  '(progn
+      ;; 	     (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+      ;; 	     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))))
+
+
+      ;;       )
+
+    #+END_SRC
+    
 ** mu4e based email stuff
    #+BEGIN_SRC emacs-lisp :results output silent
      ;; (add-to-list 'load-path  "~/Projects/elisp/mu4e-multi/" )
@@ -2172,7 +2203,9 @@
 (set-register ?z (cons 'file "~/.zshrc"))
 (set-register ?d (cons 'file "~/Projects/lisp/drogue/drogue.lisp"))
 (set-register ?p (cons 'file "~/Projects/"))
+(set-register ?e (cons 'file "~/Dropbox/elfeed.org"))
 (set-register ?s (cons 'file "~/org/stories/ideas.org"))
+(set-register ?k (cons 'file "~/builds/qmk_firmware/keyboards/ergodox_ez/keymaps/mohsenil85/keymap.c"))
    #+END_SRC
 * secrets??
   #+BEGIN_SRC emacs-lisp
