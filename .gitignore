@@ -62,3 +62,4 @@ url*
 /org-id-locations
 /var/*
 /oauth2.plstore
+/quelpa/*
