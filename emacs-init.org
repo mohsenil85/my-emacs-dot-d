@@ -100,7 +100,7 @@
 		 (evil-collection-init 'mu4e)
 	    ;;     (evil-collection-init 'mu4e-conversation)
 	    ;;     (evil-collection-init 'neotree)
-		 (evil-collection-init 'notmuch)
+		 ;;(evil-collection-init 'notmuch)
 	    ;;     (evil-collection-init 'nov)
 		 (evil-collection-init 'occur)
 	    ;;     (evil-collection-init 'p4)
@@ -981,6 +981,7 @@
     (tool-bar-mode 0)
     (tooltip-mode -1)
     (show-paren-mode 1)
+    (load-theme 'adwaita)
 
     (setq
      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
@@ -990,10 +991,10 @@
      default-fill-column 80		; toggle wrapping text at the 80th character
      delete-old-versions t 		; delete excess backup versions silently
      history-length 250 
-     inhibit-startup-echo-area-message "lmohseni"
+     inhibit-startup-echo-area-message "loganmohseni"
      inhibit-startup-message t
      inhibit-startup-screen t
-     initial-scratch-message "; happy hacking"
+     initial-scratch-message ";         :D"
      kill-ring-max 5000                     ;truncate kill ring after 5000 entries
      load-prefer-newer t
      locale-coding-system 'utf-8
@@ -1021,12 +1022,14 @@
     (setq uniquify-buffer-name-style 'forward)
     (winner-mode 1)
 
+    ;;bigger font size for my poor old aching occulars
+    (set-frame-font "-*-Monaco-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+
 
 
   #+END_SRC
 
   #+RESULTS:
-  : t
 
 * functionaria
 ** load-init file, plus other fun
@@ -1327,7 +1330,7 @@
       (flyspell-mode 1)
       (electric-quote-mode 1)
       (abbrev-mode 1)
-      (word-wrap 1)
+      (word-wrap-mode 1)
       (setq buffer-face-mode-face
 	    '(:family "Times New Roman"
 		      :height 180
@@ -1421,6 +1424,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 )
 
+
   #+END_SRC
   
 * zig specific
@@ -1472,14 +1476,14 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 	   sendmail-program "/usr/local/bin/msmtp"
 	   ))
 
-	(use-package notmuch
-	  :config
-	  (setup-mail-stuff)
-	  (setq
-	  notmuch-show-all-tags-list t
-	  notmuch-show-logo nil
-	  notmuch-search-oldest-first nil)
-    )
+    ;;     (use-package notmuch
+    ;;       :config
+    ;;       (setup-mail-stuff)
+    ;;       (setq
+    ;;       notmuch-show-all-tags-list t
+    ;;       notmuch-show-logo nil
+    ;;       notmuch-search-oldest-first nil)
+    ;; )
 
 	(defun setup-mu4e-stuff ( os-type )
 	  (let ((mu-bin (if (eq os-type 'darwin)
@@ -1495,7 +1499,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 	     send-mail-function 'message-send-mail-with-sendmail
 	     sendmail-program "/usr/local/bin/msmtp"
-     
+
 	     mu4e-change-filenames-when-moving t
 	     mu4e-compose-format-flowed t
 	     mu4e-compose-signature-auto-include nil
@@ -1617,16 +1621,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 						    )
 			    )))))
 
-	(use-package mu4e  
-	  :if (memq window-system '(mac ns))
-	  :defer t
-	  :quelpa (mu4e :path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e/" :fetcher file)
-	  :config
-	  (require 'mu4e)
-	  (setup-mail-stuff)
-	  (setup-mu4e-stuff 'darwin )
+
+	 (use-package mu4e  
+	;;   :if (memq window-system '(mac ns))
+	 ;;  :defer t
+	    :load-path "~/builds/mu/mu4e"
+	   ;;;:quelpa (mu4e :path "~/builds/mu/mu4e" :fetcher file)
+	   :config
+	   (require 'mu4e)
+	   (setup-mail-stuff)
+	   (setup-mu4e-stuff 'darwin )
 	  (setup-contexts)
-	  ) ;;end usep mu4e
+	   ) ;;end usep mu4e
 
 
 
@@ -1648,13 +1654,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     #+BEGIN_SRC emacs-lisp :results output silent
 	    ;; 	  (use-package helm
 	    ;; 	    :ensure t
-	    ;; 	    :diminish ""
-	    ;; 	    :config
-	    ;; 	    (progn
-	    ;; 	      (require 'helm)
-	    ;; 	      (require 'helm-config)
-	    ;; 	      (setq helm-ff-transformer-show-only-basename nil)
-	    ;; 	      (setq helm-adaptive-history-file "~/.emacs/data/helm-history")
+	    ;; 	    :diminish """~/.emacs/data/helm-history")
       
       
 	    ;; 	      (setq helm-M-x-fuzzy-match t)
