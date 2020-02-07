@@ -97,7 +97,7 @@
 	    ;;     (evil-collection-init 'man)
 		 (evil-collection-init 'magit)
 	    ;;     (evil-collection-init 'magit-todos)
-		 (evil-collection-init 'mu4e)
+		 ;;(evil-collection-init 'mu4e)
 	    ;;     (evil-collection-init 'mu4e-conversation)
 	    ;;     (evil-collection-init 'neotree)
 		 ;;(evil-collection-init 'notmuch)
@@ -188,14 +188,15 @@
        :init
        (add-to-list 'evil-emacs-state-modes 'dired-mode)
        :config
-       (use-package dired+
-	 :quelpa (dired+ :fetcher url :url "https://www.emacswiki.org/emacs/download/dired+.el")
-	 :defer 1
-	 :init
-	 (setq diredp-hide-details-initially-flag t)
-	 (setq diredp-hide-details-propagate-flag t)
-	 :config
-	 (diredp-toggle-find-file-reuse-dir 1))
+       ;; (use-package dired+
+       ;;   :quelpa (dired+ :fetcher url :url "https://www.emacswiki.org/emacs/download/dired+.el")
+       ;;   :defer 1
+       ;;   :init
+       ;;   (setq diredp-hide-details-initially-flag t)
+       ;;   (setq diredp-hide-details-propagate-flag t)
+       ;;   :config
+       ;;   (diredp-toggle-find-file-reuse
+	;;  -dir 1))
 
        )
 
@@ -833,23 +834,24 @@
 
 ** elisp
    #+BEGIN_SRC emacs-lisp 
-(use-package eldoc
-  :diminish
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'eldoc-mode))
+     (use-package eldoc
+       :diminish
+       :init
+       (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+       (add-hook 'lisp-interaction-mode-hook 'eldoc-mode))
 
 
-   ;;;; elisp-slime-nav
-;; jump to elisp definition (function, symbol etc.) and back, show doc
-(use-package elisp-slime-nav
-  :demand
-  :quelpa (elisp-slime-nav :repo "purcell/elisp-slime-nav" :fetcher github)
-  :bind
-  ("<f1> <f1>" . elisp-slime-nav-describe-elisp-thing-at-point)
-  :diminish
-  :hook ((emacs-lisp-mode ielm-mode lisp-interaction-mode) . elisp-slime-nav-mode))
-
+	;;;; elisp-slime-nav
+     ;; jump to elisp definition (function, symbol etc.) and back, show doc
+;;;     (use-pack;; age elisp-slime-nav
+       ;; :demand
+       ;; :quelpa (elisp-slime-nav :repo "purcell/elisp-slime-nav" :fetcher github)
+       ;; :bind
+       ;; ("<f1> <f1>" . elisp-slime-nav-describe-elisp-thing-at-point)
+       ;; :diminish
+       ;; :hook (
+	;;;      (emacs-lisp-mode ielm-mode lisp-interaction-mode) . elisp-slime-nav-mode))
+	
    
    
    #+END_SRC
@@ -1023,7 +1025,7 @@
     (winner-mode 1)
 
     ;;bigger font size for my poor old aching occulars
-    (set-frame-font "-*-Monaco-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+    ;;;(set-frame-font "-*-Deja Vu-mono-*-*-*-24-*-*-*-*-*-*-1")
 
 
 
@@ -1485,154 +1487,154 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     ;;       notmuch-search-oldest-first nil)
     ;; )
 
-	(defun setup-mu4e-stuff ( os-type )
-	  (let ((mu-bin (if (eq os-type 'darwin)
-			    "/usr/local/bin/mu"
-			  "/usr/bin/mu")))
-	    (setq
+	;; (defun setup-mu4e-stuff ( os-type )
+	;;   (let ((mu-bin (if (eq os-type 'darwin)
+	;; 			"/usr/local/bin/mu"
+	;; 		      "/usr/bin/mu")))
+	;; 	(setq
 
-	     mail-user-agent 'message-user-agent
-	     message-default-mail-headers "Cc: \nBcc: \n"
-	     message-directory "~/.mail/"
-	     message-kill-buffer-on-exit t
-	     message-send-mail-function 'message-send-mail-with-sendmail
+	;; 	 mail-user-agent 'message-user-agent
+	;; 	 message-default-mail-headers "Cc: \nBcc: \n"
+	;; 	 message-directory "~/.mail/"
+	;; 	 message-kill-buffer-on-exit t
+	;; 	 message-send-mail-function 'message-send-mail-with-sendmail
 
-	     send-mail-function 'message-send-mail-with-sendmail
-	     sendmail-program "/usr/local/bin/msmtp"
+	;; 	 send-mail-function 'message-send-mail-with-sendmail
+	;; 	 sendmail-program "/usr/local/bin/msmtp"
 
-	     mu4e-change-filenames-when-moving t
-	     mu4e-compose-format-flowed t
-	     mu4e-compose-signature-auto-include nil
-	     mu4e-confirm-quit nil
-	     mu4e-context-policy 'pick-first
-	     mu4e-get-mail-command "offlineimap"
-	     mu4e-headers-auto-update t
-	     mu4e-index-update-in-background nil
-	     mu4e-update-interval nil
-	     mu4e-hide-index-messages t
-	     mu4e-headers-skip-duplicates t
-	     mu4e-mu-binary mu-bin 
-	     mu4e-reply-to-address  "mohsenil85@gmail.com"
-	     mu4e-sent-messages-behavior 'delete
-	     mu4e-show-images t
-	     mu4e-update-interval 120
-
-
-	     mu4e-maildir (expand-file-name "~/.mail/")
-
-	     mu4e-trash-folder (lambda (msg)
-				 (if (and msg
-					  (mu4e-message-contact-field-matches
-					   msg
-					   :to "logan.mohseni@singlemindconsulting.com"))
-				     "/localSmc/[Gmail].Trash"
-				   "/localPersonal/[Gmail].Trash"))  
-
-	     mu4e-sent-folder (lambda (msg)
-				(if (and msg
-					 (mu4e-message-contact-field-matches
-					  msg
-					  :to "logan.mohseni@singlemindconsulting.com"))
-				    "/localSmc/[Gmail].Sent Mail"
-				  "/localPersonal/[Gmail].Sent Mail"))  
-
-	     mu4e-drafts-folder (lambda (msg)
-				  (if (and msg
-					   (mu4e-message-contact-field-matches
-					    msg
-					    :to "logan.mohseni@singlemindconsulting.com"))
-				      "/localSmc/[Gmail].Drafts"
-				    "/localPersonal/[Gmail].Drafts"))  
-	     )))
-
-	(defun setup-contexts ()
-	  (require 'mu4e-contrib)
-	  (use-package evil-mu4e :ensure t)
-	  (setq mu4e-contexts
-		`( 
-		  ,(make-mu4e-context
-		    :name "private"
-		    :enter-func (lambda ()
-				  (mu4e-message "Entering Private context"))
-		    :leave-func (lambda ()
-				  (mu4e-message "Leaving Private context"))
-		    ;; we match based on the contact-fields of the message
-		    :match-func (lambda (msg)
-				  (when msg 
-				    (mu4e-message-contact-field-matches 
-				     msg 
-				     :to "mohsenil85@gmail.com")))
-		    :vars '(
-			    (mu4e-reply-to-address . "mohsenil85@gmail.com")
-			    (user-mail-address . "mohsenil85@gmail.com"  )
-			    (user-full-name   . "Logan Mohseni" )
-			    (mu4e-compose-signature . nil)
-
-			    (mu4e-maildir-shortcuts .
-						    (
-						     ("/localPersonal/INBOX" . ?i)
-						     ("/localPersonal/[Gmail].Sent Mail" . ?s)
-						     ("/localPersonal/[Gmail].Trash" . ?t)
-						     ("/localPersonal/[Gmail].All Mail" . ?a)
-						     ("/localPersonal/[Gmail].Drafts" . ?d)))
+	;; 	 mu4e-change-filenames-when-moving t
+	;; 	 mu4e-compose-format-flowed t
+	;; 	 mu4e-compose-signature-auto-include nil
+	;; 	 mu4e-confirm-quit nil
+	;; 	 mu4e-context-policy 'pick-first
+	;; 	 mu4e-get-mail-command "offlineimap"
+	;; 	 mu4e-headers-auto-update t
+	;; 	 mu4e-index-update-in-background nil
+	;; 	 mu4e-update-interval nil
+	;; 	 mu4e-hide-index-messages t
+	;; 	 mu4e-headers-skip-duplicates t
+	;; 	 mu4e-mu-binary mu-bin 
+	;; 	 mu4e-reply-to-address  "mohsenil85@gmail.com"
+	;; 	 mu4e-sent-messages-behavior 'delete
+	;; 	 mu4e-show-images t
+	;; 	 mu4e-update-interval 120
 
 
-			    ))
+	;; 	 mu4e-maildir (expand-file-name "~/.mail/")
 
-		  ,(make-mu4e-context
-		    :name "work"
-		    :enter-func (lambda ()
-				  (mu4e-message "Entering Work context"))
-		    :leave-func (lambda ()
-				  (mu4e-message "Leaving Work context"))
-		    ;; we match based on the contact-fields of the message
-		    :match-func (lambda (msg)
-				  (when msg 
-				    (mu4e-message-contact-field-matches 
-				     msg 
-				     :to "logan.mohseni@singlemindconsulting.com")))
-		    :vars '( 
-			    (mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
-			    (user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
-			    (user-full-name   . "Logan Mohseni")
-			    (mu4e-maildir-shortcuts .
-						    (
-						     ("/localSmc/INBOX" . ?i)
-						     ("/localSmc/[Gmail].Sent Mail" . ?s)
-						     ("/localSmc/[Gmail].Trash" . ?t)
-						     ("/localSmc/[Gmail].All Mail" . ?a)
-						     ("/localSmc/[Gmail].Drafts" . ?d)))
+	;; 	 mu4e-trash-folder (lambda (msg)
+	;; 			     (if (and msg
+	;; 				      (mu4e-message-contact-field-matches
+	;; 				       msg
+	;; 				       :to "logan.mohseni@singlemindconsulting.com"))
+	;; 				 "/localSmc/[Gmail].Trash"
+	;; 			       "/localPersonal/[Gmail].Trash"))  
+
+	;; 	 mu4e-sent-folder (lambda (msg)
+	;; 			    (if (and msg
+	;; 				     (mu4e-message-contact-field-matches
+	;; 				      msg
+	;; 				      :to "logan.mohseni@singlemindconsulting.com"))
+	;; 				"/localSmc/[Gmail].Sent Mail"
+	;; 			      "/localPersonal/[Gmail].Sent Mail"))  
+
+	;; 	 mu4e-drafts-folder (lambda (msg)
+	;; 			      (if (and msg
+	;; 				       (mu4e-message-contact-field-matches
+	;; 					msg
+	;; 					:to "logan.mohseni@singlemindconsulting.com"))
+	;; 				  "/localSmc/[Gmail].Drafts"
+	;; 				"/localPersonal/[Gmail].Drafts"))  
+	;; 	 )))
+
+	;; (defun setup-contexts ()
+	;;   (require 'mu4e-contrib)
+	;;   (use-package evil-mu4e :ensure t)
+	;;   (setq mu4e-contexts
+	;; 	    `( 
+	;; 	      ,(make-mu4e-context
+	;; 		:name "private"
+	;; 		:enter-func (lambda ()
+	;; 			      (mu4e-message "Entering Private context"))
+	;; 		:leave-func (lambda ()
+	;; 			      (mu4e-message "Leaving Private context"))
+	;; 		;; we match based on the contact-fields of the message
+	;; 		:match-func (lambda (msg)
+	;; 			      (when msg 
+	;; 				(mu4e-message-contact-field-matches 
+	;; 				 msg 
+	;; 				 :to "mohsenil85@gmail.com")))
+	;; 		:vars '(
+	;; 			(mu4e-reply-to-address . "mohsenil85@gmail.com")
+	;; 			(user-mail-address . "mohsenil85@gmail.com"  )
+	;; 			(user-full-name   . "Logan Mohseni" )
+	;; 			(mu4e-compose-signature . nil)
+
+	;; 			(mu4e-maildir-shortcuts .
+	;; 						(
+	;; 						 ("/localPersonal/INBOX" . ?i)
+	;; 						 ("/localPersonal/[Gmail].Sent Mail" . ?s)
+	;; 						 ("/localPersonal/[Gmail].Trash" . ?t)
+	;; 						 ("/localPersonal/[Gmail].All Mail" . ?a)
+	;; 						 ("/localPersonal/[Gmail].Drafts" . ?d)))
 
 
-			    (mu4e-compose-signature .
-						    "<#part type=text/html>
-		<html>
-		<head>
-		  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
-		</head>
-		<body>
-		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">Logan Mohseni | <i>Software Developer</i></span></p>
-		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none\"><b>single</b></span><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none; color: #ff931e; -webkit-text-stroke: 0px #ff931e\"><b>mind |</b></span><span class=\"font-kerning: none; color: #222222; -webkit-text-stroke: 0px #222222\"> </span><span \"><b><i>research • design • build • support</i></b></span></p>
-		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p>
-		<p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font-kerning: none; color: #666666; -webkit-text-stroke: 0px #666666\"><b>@</b></span><span style=\"font-kerning: none; color: #38678f\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\"><span span=\"text-decoration: underline ; font-kerning: none; color: #0000ee\">logan.mohseni@singlemindconsulting.com</span></a></span></p>
-		</body>
-		</html>
-		 <#/part>" 
-						    )
-			    )))))
+	;; 			))
+
+	;; 	      ,(make-mu4e-context
+	;; 		:name "work"
+	;; 		:enter-func (lambda ()
+	;; 			      (mu4e-message "Entering Work context"))
+	;; 		:leave-func (lambda ()
+	;; 			      (mu4e-message "Leaving Work context"))
+	;; 		;; we match based on the contact-fields of the message
+	;; 		:match-func (lambda (msg)
+	;; 			      (when msg 
+	;; 				(mu4e-message-contact-field-matches 
+	;; 				 msg 
+	;; 				 :to "logan.mohseni@singlemindconsulting.com")))
+	;; 		:vars '( 
+	;; 			(mu4e-reply-to-address . "logan.mohseni@singlemindconsulting.com")
+	;; 			(user-mail-address . "logan.mohseni@singlemindconsulting.com"  )
+	;; 			(user-full-name   . "Logan Mohseni")
+	;; 			(mu4e-maildir-shortcuts .
+	;; 						(
+	;; 						 ("/localSmc/INBOX" . ?i)
+	;; 						 ("/localSmc/[Gmail].Sent Mail" . ?s)
+	;; 						 ("/localSmc/[Gmail].Trash" . ?t)
+	;; 						 ("/localSmc/[Gmail].All Mail" . ?a)
+	;; 						 ("/localSmc/[Gmail].Drafts" . ?d)))
 
 
-	 (use-package mu4e  
-	;;   :if (memq window-system '(mac ns))
-	 ;;  :defer t
-	    :load-path "~/builds/mu/mu4e"
-	   ;;;:quelpa (mu4e :path "~/builds/mu/mu4e" :fetcher file)
-	   :config
-	   (require 'mu4e)
-	   (setup-mail-stuff)
-	   (setup-mu4e-stuff 'darwin )
-	  (setup-contexts)
-	   ) ;;end usep mu4e
+	;; 			(mu4e-compose-signature .
+	;; 						"<#part type=text/html>
+	;; 	    <html>
+	;; 	    <head>
+	;; 	      <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
+	;; 	    </head>
+	;; 	    <body>
+	;; 	    <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">Logan Mohseni | <i>Software Developer</i></span></p>
+	;; 	    <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none\"><b>single</b></span><span style=\"font: 13.0px 'Trebuchet MS'; font-kerning: none; color: #ff931e; -webkit-text-stroke: 0px #ff931e\"><b>mind |</b></span><span class=\"font-kerning: none; color: #222222; -webkit-text-stroke: 0px #222222\"> </span><span \"><b><i>research • design • build • support</i></b></span></p>
+	;; 	    <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 14.0px; font: 12.0px Arial; color: #38678f; -webkit-text-stroke: #38678f; background-color: #ffffff\"><span \">2100 NW 22nd Ave | Suite A | Portland | Oregon | 97210</span></p>
+	;; 	    <p style=\"margin: 0.0px 0.0px 0.0px 0.0px; line-height: 15.0px; font: 12.0px Arial; color: #666666; -webkit-text-stroke: #666666; background-color: #ffffff\"><span style=\"font-kerning: none; color: #666666; -webkit-text-stroke: 0px #666666\"><b>@</b></span><span style=\"font-kerning: none; color: #38678f\">: <a href=\"mailto:logan.mohseni@singlemindconsulting.com\"><span span=\"text-decoration: underline ; font-kerning: none; color: #0000ee\">logan.mohseni@singlemindconsulting.com</span></a></span></p>
+	;; 	    </body>
+	;; 	    </html>
+	;; 	     <#/part>" 
+	;; 						)
+	;; 			)))))
+
+
+	;;  (use-package mu4e  
+	;; ;;   :if (memq window-system '(mac ns))
+	;;  ;;  :defer t
+	;; 	:load-path "~/builds/mu/mu4e"
+	;;    ;;;:quelpa (mu4e :path "~/builds/mu/mu4e" :fetcher file)
+	;;    :config
+	;;    (require 'mu4e)
+	;;    (setup-mail-stuff)
+	;;    (setup-mu4e-stuff 'darwin )
+	;;   (setup-contexts)
+	;;    ) ;;end usep mu4e
 
 
 
@@ -2157,7 +2159,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
      (global-set-key (kbd "s-b") 'ibuffer)
      (global-set-key (kbd "s-c") 'cfw:open-org-calendar)
      (global-set-key (kbd "s-f")  'elfeed)
-     (global-set-key (kbd "s-m") 'mu4e) ;;mark rings
+     ;;(global-set-key (kbd "s-m") 'mu4e) ;;mark rings
      (global-set-key (kbd "s-p") 'package-list-packages-no-fetch)
      (global-set-key (kbd "s-q") 'visual-fill-column-mode)
      (global-set-key (kbd "s-s")  'sort-lines)
@@ -2201,7 +2203,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
    #+END_SRC
 * secrets??
   #+BEGIN_SRC emacs-lisp
-    (load-file "~/.emacs.d/secrets.el.gpg")
+  ;;;  (load-file "~/.emacs.d/secrets.el.gpg")
   #+END_SRC
 
   #+RESULTS:
